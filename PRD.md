@@ -135,7 +135,7 @@ Full Send is an original game **in the genre** SkiFree defined (endless downhill
 | M0 | **Feel prototype** 🟢 built Nov 19, being tuned | A rough playable build with placeholder shapes, tested on Jordan's phone: steering, ollie, spray and crashing feel right (decided Nov 19: prototype before any mock) |
 | M1 | **Core loop** 🟢 built Nov 19 | A rider steers down an endless slope on phone and desktop, trees/rocks/people cause crashes, distance counts, the chaser ends the run, end screen + Again. Live on GitHub Pages |
 | M2 | **Snowboarding** 🟢 built Nov 20 | Edges, stance and switch, ollie, kickers with spins and grabs, rails, flats and skating, powder, tree wells, ice |
-| M3 | **Content pass 1** | 30+ items from CONTENT.md with sprites, behaviors and captions; zones by distance; crew playtest notes recorded |
+| M3 | **Content pass 1** 🟢 built Nov 20 (crew playtest still to do) | 30+ items from CONTENT.md with sprites, behaviors and captions; zones by distance; crew playtest notes recorded |
 | M4 | **Open Slop link + embed** | Open Slop has a way into the game (a link first, then an `/arcade` page that embeds it) |
 | M5 | **Daily send + crew leaderboard** | Seeded daily mountain; scores from inside Open Slop save to its database and show a crew board |
 | M6 | **Modes** | Park session and Boardercross (Pow day if time) |

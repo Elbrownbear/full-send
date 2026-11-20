@@ -24,18 +24,18 @@ The living list of everything that can show up on the mountain. **Content is the
 | **Ski school snake** | skier | A line of tiny kids in pizza wedge following an instructor, swaying side to side | Crash; big heat | + clout, big heat (it's kids) | "Pizza! French fries!" Everyone has nearly taken one out | Groomer | common | 🟢 |
 | **Park rat** | snowboarder | Hangs near kickers in an oversized hoodie, energy drink in hand, occasionally hucks a jump in front of you | Crash; he says "my bad, bro" | − clout | Every park has them | Park | common | 🟢 |
 | **The influencer** | either | Stopped, filming herself on a selfie stick or 360 cam | Crash; caption "you're in my shot" / "+10k views" | Skier: + clout and "you're famous now". Snowboarder: − clout | Lift-line TikTok is a whole genre now | Groomer | uncommon | 🟢 |
-| **Drone guy** | none | A drone hovers over you for a while, then crashes into a tree | Pass under it for bonus clout | n/a | Every resort has a "no drones" sign for a reason | Bowl | uncommon | 💡 |
-| **Bluetooth speaker guy** | either | Rides slow with music notes floating behind him | Crash | By who's riding | You hear him before you see him | Groomer | uncommon | 💡 |
+| **Drone guy** | none | A drone hovers over you for a while, then crashes into a tree | Pass under it for bonus clout | n/a | Every resort has a "no drones" sign for a reason | Bowl | uncommon| 🟢 |
+| **Bluetooth speaker guy** | either | Rides slow with music notes floating behind him | Crash | By who's riding | You hear him before you see him | Groomer | uncommon| 🟢 |
 | **Dad yelling "SKI PATROL!"** | skier | Stands still, yells at you as you pass | No crash; +heat if you pass close | + clout, + heat (and he yells louder) | He is not ski patrol | Groomer | common | 🟢 |
-| **Splitboarder** | snowboarder | Skinning up with a board split in half | Crash; he gives a lecture about avalanche gear | − clout | The backcountry snowboarder stereotype | Pow | rare | 💡 |
-| **Tele skier** | skier | Drops a knee every turn; "free the heel" caption | Crash | + clout, + heat | Telemark is a beloved cult | Glades | uncommon | 💡 |
-| **Euro in a one-piece** | skier | Fast, perfect carves, neon one-piece suit | Crash; he's unbothered | + clout, + heat | Retro one-pieces are back | Bowl | uncommon | 💡 |
-| **Gaper Day costume crew** | either | Group in onesies, tutus, a banana suit, a Speedo | Crash; confetti | Per person in the group | April 1 tradition at mountain towns | any | rare | 💡 |
-| **Shotski line** | skier | Six people across the run sharing one ski of shots | Ollie it for huge bonus, or crash | Spray the whole line: big clout, big heat | A classic après set piece | Groomer | rare | 💡 |
-| **Lost kid with one pole** | skier | Wanders | Crash; big heat | Small clout, big heat | Everyone has seen this kid | Groomer | uncommon | 💡 |
+| **Splitboarder** | snowboarder | Skinning up with a board split in half | Crash; he gives a lecture about avalanche gear | − clout | The backcountry snowboarder stereotype | Pow | rare| 🟢 |
+| **Tele skier** | skier | Drops a knee every turn; "free the heel" caption | Crash | + clout, + heat | Telemark is a beloved cult | Glades | uncommon| 🟢 |
+| **Euro in a one-piece** | skier | Fast, perfect carves, neon one-piece suit | Crash; he's unbothered | + clout, + heat | Retro one-pieces are back | Bowl | uncommon| 🟢 |
+| **Gaper Day costume crew** | either | Group in onesies, tutus, a banana suit, a Speedo | Crash; confetti | Per person in the group | April 1 tradition at mountain towns | any | rare| 🟢 |
+| **Shotski line** | skier | Six people across the run sharing one ski of shots | Ollie it for huge bonus, or crash | Spray the whole line: big clout, big heat | A classic après set piece | Groomer | rare| 🟢 |
+| **Lost kid with one pole** | skier | Wanders | Crash; big heat | Small clout, big heat | Everyone has seen this kid | Groomer | uncommon| 🟢 |
 | **Ski patrol** (on foot) | skier | Stands by Slow Zone signs, waves arms | Crash = instant max heat | Huge clout, instant max heat | Foreshadows the chaser | any | common | 🟢 |
-| **Unstrapped hopper** (added Nov 19) | snowboarder | One foot out of the binding, hopping and skating across the run, sometimes falling over | Crash; caption "just strap in, man" | − clout | Everyone has been this guy getting off the lift | Groomer | common | 💡 |
-| **Sideslipper** (added Nov 19) | snowboarder | Scraping down the steep pitch on their heel edge, side to side, blocking most of the run and scraping it to ice behind them | Crash; leaves an ice strip | − clout | The beginner snowboarder on every steep pitch | Bowl | common | 💡 |
+| **Unstrapped hopper** (added Nov 19) | snowboarder | One foot out of the binding, hopping and skating across the run, sometimes falling over | Crash; caption "just strap in, man" | − clout | Everyone has been this guy getting off the lift | Groomer | common| 🟢 |
+| **Sideslipper** (added Nov 19) | snowboarder | Scraping down the steep pitch on their heel edge, side to side, blocking most of the run and scraping it to ice behind them | Crash; leaves an ice strip | − clout | The beginner snowboarder on every steep pitch | Bowl | common| 🟢 |
 | **Gear snob** (added Nov 19) | snowboarder | Waves you down to talk about his board's camber profile (a parody brand). Get close and a speech bubble slows you | Crash; caption "it's a directional twin, bro" | − clout | The lift-line gear lecture | Park | uncommon | 💡 |
 | **The Moto Gunslinger** (added Nov 19) | none (on foot) | A cowboy with a six-shooter, dressed head to toe in motocross armor (roost guard, MX helmet and goggles, knee braces) for no reason anyone knows. Pass too close and he draws, fires a few slow, dodgeable shots, and chases you on foot for a few seconds before giving up | Hit by a shot or by him: crash | Spraying him sets him off, even from farther away | Pure absurdity; the armor makes him readable at a glance | Glades | rare | 🟢 |
 
@@ -54,27 +54,27 @@ The living list of everything that can show up on the mountain. **Content is the
 | **Catwalk / flats** | Near-flat traverse | Speed bleeds; at zero you unstrap and skate while skiers pole past | The universal snowboarder pain | Catwalk | common| 🟢 |
 | **Slow Zone sign** | Still; blasting past raises heat | +heat | Resorts are covered in them | Groomer | common | 🟢 |
 | **Rope line / closed sign** | Edge of the course | Duck it for a secret stash, +big heat | "Ducking ropes" gets passes pulled | Pow | uncommon | 🟢 |
-| **Snowmaking gun** | Blasts a cone of snow sideways | Pushes you; blinds the screen briefly | Early-season resorts are all snow guns | Groomer | uncommon | 💡 |
-| **Snowcat / groomer** | Moves slowly across the run | Crash; leaves corduroy (speed bonus) behind it | First-chair corduroy is sacred | Groomer | uncommon | 💡 |
-| **Lift tower** | Still, in a line | Crash | Staple | all | common | 💡 |
-| **Chairlift overhead** | Chairs pass over; riders heckle ("SEND IT!", "huck it!") | Doing a trick under it earns double clout | The lift-line peanut gallery | any | common | 💡 |
+| **Snowmaking gun** | Blasts a cone of snow sideways | Pushes you; blinds the screen briefly | Early-season resorts are all snow guns | Groomer | uncommon| 🟢 |
+| **Snowcat / groomer** | Moves slowly across the run | Crash; leaves corduroy (speed bonus) behind it | First-chair corduroy is sacred | Groomer | uncommon| 🟢 |
+| **Lift tower** | Still, in a line | Crash | Staple | all | common| 🟢 |
+| **Chairlift overhead** | Chairs pass over; riders heckle ("SEND IT!", "huck it!") | Doing a trick under it earns double clout | The lift-line peanut gallery | any | common| 🟢 |
 | **Kicker** | Ramp | Launch; spins/grabs scored | Freestyle core | Park | common | 🟢 |
 | **Rail / box** | Ollie on to slide | Slide points; miss = crash | Park core | Park | common| 🟢 |
 | **Jerry gap jump** | A sketchy homemade jump built by kids | Huge air, sketchy landing | Backyard-built booters | Glades | rare | 💡 |
-| **Lodge burger stand** | Still, with a "$28 BURGER" sign | Crash: lose 28 clout | Resort food prices | Groomer | uncommon | 💡 |
+| **Lodge burger stand** | Still, with a "$28 BURGER" sign | Crash: lose 28 clout | Resort food prices | Groomer | uncommon| 🟢 |
 | **Lift line** | A wall of people across the run with a "WAIT 45 MIN" sign | Slows you to a crawl; Epik/Ikahn pass item skips it | Lift lines are the #1 complaint | Bowl | rare | 💡 |
 
 ## Pickups
 
 | Item | Effect | Why it's funny | Zone | Rarity | Status |
 |---|---|---|---|---|---|
-| **Hot wax** | Speed up for a while | Wax nerds; Open Slop's Purl wax picks | any | uncommon | 💡 |
-| **Breakfast burrito** | Absorbs one crash | The Colorado lift-line meal | Groomer | uncommon | 💡 |
+| **Hot wax** | Speed up for a while | Wax nerds; Open Slop's Purl wax picks | any | uncommon| 🟢 |
+| **Breakfast burrito** | Absorbs one crash | The Colorado lift-line meal | Groomer | uncommon| 🟢 |
 | **Hand warmers** | Removes the "frozen" slowdown in the Bowl | Everyone has a pocket full | Bowl | uncommon | 💡 |
-| **Lost GoPro** | Collectible; shows at the end screen | You always find one in spring | any | rare | 💡 |
-| **Epik Pass / Ikahn Pass** | Cools patrol heat; skips lift lines. Pick a side on the title screen | The Epic vs Ikon tribal war, and record pass prices | any | uncommon | 💡 |
-| **Waffle** | Small speed boost and a heart animation | Mountain waffles are a love language | Groomer | uncommon | 💡 |
-| **Coors-ish banquet can** | "Liquid courage": bigger jumps, wobblier landings | Après culture | Park | rare | 💡 |
+| **Lost GoPro** | Collectible; shows at the end screen | You always find one in spring | any | rare| 🟢 |
+| **Epik Pass / Ikahn Pass** | Cools patrol heat; skips lift lines. Pick a side on the title screen | The Epic vs Ikon tribal war, and record pass prices | any | uncommon| 🟢 |
+| **Waffle** | Small speed boost and a heart animation | Mountain waffles are a love language | Groomer | uncommon| 🟢 |
+| **Coors-ish banquet can** | "Liquid courage": bigger jumps, wobblier landings | Après culture | Park | rare| 🟢 |
 
 ## Weather and events (added Nov 19)
 
@@ -93,19 +93,19 @@ Jordan asked for references to *Johnny Tsunami*, *Out Cold*, the Beyond Medals c
 
 | Item | Nod to | What it is / does | Why it's funny | Zone | Rarity | Status |
 |---|---|---|---|---|---|---|
-| **Academy kids** | *Johnny Tsunami* (1999): private-school skiers vs. public-school snowboarders | A pack of prep-school skiers in matching team jackets riding in tight formation. They yell "URCHIN!" when you pass. Spray or plow them: clout + heat | The original skiers-vs-snowboarders movie feud | Groomer | uncommon | 💡 |
+| **Academy kids** | *Johnny Tsunami* (1999): private-school skiers vs. public-school snowboarders | A pack of prep-school skiers in matching team jackets riding in tight formation. They yell "URCHIN!" when you pass. Spray or plow them: clout + heat | The original skiers-vs-snowboarders movie feud | Groomer | uncommon| 🟢 |
 | **Skiers-only clubhouse** | *Johnny Tsunami* | A roped-off "MEMBERS ONLY" lane with a velvet rope. Ride through it anyway: clout + heat | Keeping the mountain from the urchins | Groomer | rare | 💡 |
 | **Race to the bottom** | *Johnny Tsunami*'s final race | The Academy captain pulls up beside you: "Race you to the flags." Beat him to a finish banner ~300 m down for big clout; lose and he gloats | Winner shares the mountain | any | rare | 💡 |
 | **Surfer kid** | *Johnny Tsunami* | A kid in board shorts and a Hawaiian shirt surfing the snow, carving huge slow turns | "It's just frozen waves, brah" | Groomer | uncommon | 💡 |
-| **Big Wave medal** | *Johnny Tsunami*'s medal | Collectible pickup shown on the end screen | The prize the whole race is about | any | rare | 💡 |
-| **The Colorado tycoon** | *Out Cold* (2001): the resort mogul from Colorado buying the party mountain | A suit in a fur coat riding a snowcat with a "LUXURY CONDOS COMING SOON" sign. Spray or plow him: huge clout and **no** heat (patrol hates him too) | Mega-resort buyouts, and a dig at the Epik-style conglomerates | Bowl | rare | 💡 |
-| **Hot tub party** | *Out Cold* | A steaming hot tub beside a lodge, full of partiers. Crash in: splash and a long caption. Ollie over it: bonus | The movie's hot tub chaos | Groomer | rare | 💡 |
+| **Big Wave medal** | *Johnny Tsunami*'s medal | Collectible pickup shown on the end screen | The prize the whole race is about | any | rare| 🟢 |
+| **The Colorado tycoon** | *Out Cold* (2001): the resort mogul from Colorado buying the party mountain | A suit in a fur coat riding a snowcat with a "LUXURY CONDOS COMING SOON" sign. Spray or plow him: huge clout and **no** heat (patrol hates him too) | Mega-resort buyouts, and a dig at the Epik-style conglomerates | Bowl | rare| 🟢 |
+| **Hot tub party** | *Out Cold* | A steaming hot tub beside a lodge, full of partiers. Crash in: splash and a long caption. Ollie over it: bonus | The movie's hot tub chaos | Groomer | rare| 🟢 |
 | **Dive-bar mountain sign** | *Out Cold*'s down-market Alaska hill | A hand-painted sign at a zone start: "THE LAST REAL MOUNTAIN · NO CONDOS" | Every crew has a favorite cheap local hill | any | uncommon | 💡 |
-| **The Euro RV** | Beyond Medals (the crew's RV tour films) | A beat-up RV parked on the slope with a crew in matching outfits hucking off the roof. Ollie off the roof for the biggest air in the game | Their RV trips are legend | Park | rare | 💡 |
-| **Bronze medal** | Beyond Medals (named for missing the Olympics) | Pickup: "Who needs the Olympics?" Bronze, never gold | The crew's name is the joke | any | rare | 💡 |
-| **Palm tree** | Beyond Medals' *Bahamas* film | A single palm tree in the glades | Snowboarding in the Bahamas | Glades | legendary | 💡 |
+| **The Euro RV** | Beyond Medals (the crew's RV tour films) | A beat-up RV parked on the slope with a crew in matching outfits hucking off the roof. Ollie off the roof for the biggest air in the game | Their RV trips are legend | Park | rare| 🟢 |
+| **Bronze medal** | Beyond Medals (named for missing the Olympics) | Pickup: "Who needs the Olympics?" Bronze, never gold | The crew's name is the joke | any | rare| 🟢 |
+| **Palm tree** | Beyond Medals' *Bahamas* film | A single palm tree in the glades | Snowboarding in the Bahamas | Glades | legendary| 🟢 |
 | **Bomb hole** | The Bomb Hole podcast (and the snowboard term for a deep landing crater) | A cliff drop with a crater landing in deep snow. Land in the crater: huge bonus | Named for the feature the show is named for | Pow | uncommon | 💡 |
-| **Lift-line podcast** | The Bomb Hole | Two riders in camp chairs with mics recording on the slope. Pass close: "You're on the pod!" + clout. Crash into them: heat | Everyone has a snowboard podcast now | Groomer | uncommon | 💡 |
+| **Lift-line podcast** | The Bomb Hole | Two riders in camp chairs with mics recording on the slope. Pass close: "You're on the pod!" + clout. Crash into them: heat | Everyone has a snowboard podcast now | Groomer | uncommon| 🟢 |
 | **Group chat end card** | The Bomb Hole's group-chat episodes | End screen: "Sent to the group chat" with fake replies | How every crash gets shared | End screen | every run | 🟢 |
 
 ## Heat sources (added Nov 19)

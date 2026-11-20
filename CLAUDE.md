@@ -9,14 +9,15 @@ Read this first in every Full Send session. Keep it short: rules and the current
 - **Jordan's M1 playtest (Nov 20):** patrol too fast → slowed (190 start, +3/s, max 320); run length → 2,000 m; Slow Zones and ropes are good.
 - **M2 built Nov 20:** rails and boxes (ollie on to grind, crash if you ride into them), lean back (Shift / right mouse / pull thumb down) for tail presses, butter 180s (lean + left/right or sideways flick) and floating in powder, a Powder zone (bogs you down unless leaning; sharks; tree wells you mash to dig out), flat catwalks where you unstrap and skate while skiers laugh, ice patches (no turning, no stopping). **Jordan hasn't played M2 yet.**
 - **Jordan's M2 playtest (Nov 20):** lean back feels great. Patrol still too fast → slowed again (165 start, +2/s, max 295). Hadn't seen rails or catwalks → rails/boxes added to groomers, more in the park, park more common, catwalk odds up (now ~4–10 per 2,000 m). Trees and rocks cut 15%. Not re-tested yet.
+- **M3 built Nov 20 (content pass 1):** 8 pickups (hot wax, burrito, Epik/Ikahn pass, waffle, liquid courage, GoPro, bronze medal, Big Wave medal), 13 more people (drone guy + drone, speaker guy, tele, Euro, Gaper Day costumes, shotski line, lost kid, unstrapped hopper, sideslipper, splitboarder, Academy kids, lift-line podcast, snowcat with the tycoon), chairlifts (double trick points, heckles), snowguns, hot tub, $28 burger stand, palm tree, RV roof gap. About 55 catalog items in the game. **Jordan hasn't played M3 yet.**
 - Decided (PRD §12): Ski Patrol chaser; modern-retro palette; one rider with outfit unlocks (not built); skier jokes friendly; real crews and podcasts only as nods.
 - Testing tip: the preview pane is often hidden, which stops the animation. `FS.game.step(n)` advances the game by hand; use a separate tab if Jordan is playing in the pane. Chunks far from the camera get pruned, so step a few frames after teleporting the rider before placing test objects.
 
 ## Exactly where to pick up
 
-1. Ask Jordan: is patrol right now, are rails easy to land on, do catwalks feel right after easing them twice Nov 20 (now 185 px long, `FLAT_FRICTION` 32, `SKATE_PUSH` 32, `SKATE_MAX` 110; full speed coasts across) and making them 25% rarer (~5 per 2,000 m)? Patrol knobs: `PATROL_*` in `src/core.js`.
-2. Ask Jordan what's next: M3 (content pass 1: 30+ catalog items with real behaviors), M4 (Open Slop link + embed), or real pixel art.
-3. Not built yet: outfit unlocks, the I-70 intro, weather events, most of CONTENT.md.
+1. Ask Jordan how M3 plays: which new people and set pieces are funny, which nobody noticed, and is the hill too busy now? Write the answers in CONTENT.md's Playtest notes (that's the M3 crew playtest the PRD asks for).
+2. Still open from M2: is patrol right now (`PATROL_*` in `core.js`), are rails easy to land on, do catwalks feel right?
+3. Then ask what's next: M4 (Open Slop link + embed), real pixel art, or content pass 2 (the 💡 items left in CONTENT.md: gear snob, moguls, lift line, weather, I-70 intro, bomb hole, Johnny Tsunami race, etc.).
 
 ## Project rules
 
