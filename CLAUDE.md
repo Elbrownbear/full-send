@@ -4,20 +4,18 @@ Read this first in every Full Send session. Keep it short: rules and the current
 
 ## Where we left off (updated 2026-11-19)
 
-- Project created Nov 19, 2026 as a **public** repo (Jordan asked for public), MIT licensed. Only docs exist: [PRD.md](PRD.md), [CONTENT.md](CONTENT.md) (51 items, all still 💡 ideas), SYSTEMS.md, README. No game code yet.
-- Decided: name **Full Send**; plain HTML + JS + canvas, no build step; GitHub Pages hosting; Open Slop gets a link, then an `/arcade` embed, then a crew leaderboard (PRD §11).
-- Decided Nov 19 (PRD §12): Ski Patrol snowmobile chaser (pass clipped); modern-retro palette; one rider with cosmetic outfit unlocks; skier jokes plenty but friendly; **rough playable prototype first, no art mock**.
-- New mechanic: **spray** (hard stop next to someone). Skiers: + clout, + heat. Snowboarders: − clout. Each person in CONTENT.md has a Rides column for this.
-- New content Nov 19: the Moto Gunslinger (six-shooter, motocross armor, shoots and briefly chases you), unstrapped hopper, sideslipper, gear snob, whiteout, wind hold, pow-morning rush, I-70 intro. Cut: uphill skinner, energy drink pickup.
-- Content gets its own milestones (M3, M7) and real design time. PRD §6 is the rule.
-- Not built: everything else. GitHub Pages isn't switched on yet (nothing to serve).
+- **Live:** the M0 feel prototype at https://elbrownbear.github.io/full-send/ (GitHub Pages, deploys on every push to `main`). Public repo, MIT. Placeholder art drawn in code; everything is in `src/game.js` (tunables in `C` at the top, zone mixes in `ZONES`).
+- **In the prototype:** steering (keys, drag, mouse), ollie, kickers with spins and grabs, switch, hard stop + spray (skiers + clout/heat, snowboarders − clout), plow at 50+ mph (same rule), carve lock at speed, crashes, zones (Groomers / Terrain park / Glades), heat bar (no chaser yet), best distance saved.
+- **Jordan's first playtest (Nov 19):** too crowded and hard to get going. Done: ~25% fewer people (80% skiers), half the trees, open park sections with jump lines, tree-heavy glades, a start boost, more momentum, less twitchy steering at speed, plow-through. Not yet re-tested by Jordan.
+- Decided Nov 19 (PRD §12): Ski Patrol snowmobile chaser (pass clipped); modern-retro palette; one rider with cosmetic outfit unlocks; skier jokes plenty but friendly; MIT.
+- Content: CONTENT.md has ~65 items incl. nods to Johnny Tsunami, Out Cold, Beyond Medals and The Bomb Hole (written without real names, PRD §9) and a Heat sources table.
+- Testing tip: the preview pane is often hidden, which stops the animation. `window.FullSend.step(n)` advances the game by hand; use a separate tab if Jordan is playing in the pane.
 
 ## Exactly where to pick up
 
-1. Open [PRD.md](PRD.md) §5 (mechanics) and §10 (M0).
-2. Build the **M0 feel prototype**: `index.html` + `src/` with the fixed-timestep loop, placeholder shapes, steering (keys, touch, mouse), ollie, hard stop + spray on a test skier and a test snowboarder, trees/rocks, crashing, distance counter.
-3. Switch on GitHub Pages (Settings → Pages → deploy from `main`, root) so Jordan can play it on the phone, and ask how steering, ollie and spray feel.
-4. Then M1 (PRD §10): people, Ski Patrol chaser with heat, end screen.
+1. Ask Jordan how the retuned prototype feels on the phone (crowding, getting going, momentum, carve lock, plow).
+2. Ask Jordan: "Use real names (Beyond Medals, The Bomb Hole) or keep them as nods?" and "Which heat sources from CONTENT.md go into M1?" (PRD §12b).
+3. Then M1 (PRD §10): split `src/game.js` into modules, move content to a data file, Ski Patrol chaser driven by heat, end screen + Again, the first real people from CONTENT.md.
 
 ## Project rules
 

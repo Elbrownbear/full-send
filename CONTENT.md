@@ -87,6 +87,46 @@ Things that happen to the whole mountain for a stretch, not single objects.
 | **Pow-morning rush** | A wave of riders and skiers floods in from the top of the screen, all racing to the same stash | Powder panic: nobody went to work today | Pow | rare | 💡 |
 | **I-70 intro** | Before the run starts, a short gag of your car stuck in Floyd Hill traffic ("2 hr 15 min to go"), skippable with a tap | The Front Range drive, and an Open Slop crossover | before the run | every run (skippable) | 💡 |
 
+## Movie, crew and podcast nods (added Nov 19)
+
+Jordan asked for references to *Johnny Tsunami*, *Out Cold*, the Beyond Medals crew and The Bomb Hole podcast. Per PRD §9 these are **nods fans will catch**: no character names, real riders' or hosts' names, logos or likenesses. (Open question: does Jordan want real names used? See PRD §12.)
+
+| Item | Nod to | What it is / does | Why it's funny | Zone | Rarity | Status |
+|---|---|---|---|---|---|---|
+| **Academy kids** | *Johnny Tsunami* (1999): private-school skiers vs. public-school snowboarders | A pack of prep-school skiers in matching team jackets riding in tight formation. They yell "URCHIN!" when you pass. Spray or plow them: clout + heat | The original skiers-vs-snowboarders movie feud | Groomer | uncommon | 💡 |
+| **Skiers-only clubhouse** | *Johnny Tsunami* | A roped-off "MEMBERS ONLY" lane with a velvet rope. Ride through it anyway: clout + heat | Keeping the mountain from the urchins | Groomer | rare | 💡 |
+| **Race to the bottom** | *Johnny Tsunami*'s final race | The Academy captain pulls up beside you: "Race you to the flags." Beat him to a finish banner ~300 m down for big clout; lose and he gloats | Winner shares the mountain | any | rare | 💡 |
+| **Surfer kid** | *Johnny Tsunami* | A kid in board shorts and a Hawaiian shirt surfing the snow, carving huge slow turns | "It's just frozen waves, brah" | Groomer | uncommon | 💡 |
+| **Big Wave medal** | *Johnny Tsunami*'s medal | Collectible pickup shown on the end screen | The prize the whole race is about | any | rare | 💡 |
+| **The Colorado tycoon** | *Out Cold* (2001): the resort mogul from Colorado buying the party mountain | A suit in a fur coat riding a snowcat with a "LUXURY CONDOS COMING SOON" sign. Spray or plow him: huge clout and **no** heat (patrol hates him too) | Mega-resort buyouts, and a dig at the Epik-style conglomerates | Bowl | rare | 💡 |
+| **Hot tub party** | *Out Cold* | A steaming hot tub beside a lodge, full of partiers. Crash in: splash and a long caption. Ollie over it: bonus | The movie's hot tub chaos | Groomer | rare | 💡 |
+| **Dive-bar mountain sign** | *Out Cold*'s down-market Alaska hill | A hand-painted sign at a zone start: "THE LAST REAL MOUNTAIN · NO CONDOS" | Every crew has a favorite cheap local hill | any | uncommon | 💡 |
+| **The Euro RV** | Beyond Medals (the crew's RV tour films) | A beat-up RV parked on the slope with a crew in matching outfits hucking off the roof. Ollie off the roof for the biggest air in the game | Their RV trips are legend | Park | rare | 💡 |
+| **Bronze medal** | Beyond Medals (named for missing the Olympics) | Pickup: "Who needs the Olympics?" Bronze, never gold | The crew's name is the joke | any | rare | 💡 |
+| **Palm tree** | Beyond Medals' *Bahamas* film | A single palm tree in the glades | Snowboarding in the Bahamas | Glades | legendary | 💡 |
+| **Bomb hole** | The Bomb Hole podcast (and the snowboard term for a deep landing crater) | A cliff drop with a crater landing in deep snow. Land in the crater: huge bonus | Named for the feature the show is named for | Pow | uncommon | 💡 |
+| **Lift-line podcast** | The Bomb Hole | Two riders in camp chairs with mics recording on the slope. Pass close: "You're on the pod!" + clout. Crash into them: heat | Everyone has a snowboard podcast now | Groomer | uncommon | 💡 |
+| **Group chat end card** | The Bomb Hole's group-chat episodes | End screen: "Sent to the group chat" with fake replies | How every crash gets shared | End screen | every run | 💡 |
+
+## Heat sources (added Nov 19)
+
+Heat is what brings Ski Patrol (PRD §4). Built ones are in the prototype; the rest are ideas to talk through.
+
+| Source | Heat | Clout | Status |
+|---|---|---|---|
+| Crash into a person (below plow speed) | +20 | 0 (you crash) | 🟢 |
+| Spray a skier (hard stop) | +15 | + (speed, closeness) | 🟢 |
+| **Plow through a skier** at 50+ mph (no crash) | +25 | +100 and up | 🟢 |
+| Plow through a snowboarder | +10 | −150 | 🟢 |
+| Blast a Slow Zone over its speed limit (radar sign shows your mph) | + | small | 💡 |
+| Duck a rope line into closed terrain | big | stash access | 💡 |
+| Cut the lift line | + | + | 💡 |
+| Jump over people (ski school, patrol on foot) | + | big | 💡 |
+| Buzz patrol on foot (pass within a few px) | + | + | 💡 |
+| Ride through the skiers-only clubhouse | + | + | 💡 |
+| Ollie off the snowcat / hit the drone | + | + | 💡 |
+| Crash into the hot tub | + | caption | 💡 |
+
 ## Chasers
 
 The thing that ends every run (PRD §4). **Ski Patrol is the v1 chaser** (decided Nov 19); the others can be modes or easter eggs.

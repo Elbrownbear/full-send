@@ -52,6 +52,8 @@ One rider with the same stats for everyone, so leaderboards are fair. Outfits ar
 | **Stance + switch** | Regular or goofy. Landing backwards means riding switch until you turn around; switch tricks score more | Real snowboard culture; a small skill ceiling |
 | **Stop / scrub** | Hold back (or both thumbs) to sideslip and dump speed | Lets you survive a tight tree section |
 | **Spray (hard stop)** | Slam a hard stop at speed right next to someone and you spray them with a wall of snow. **Skiers:** + clout (more for more speed and a closer stop) and + patrol heat. **Snowboarders:** − clout (you don't spray the homies). Each person in CONTENT.md says whether they ride skis or a board | The most snowboard-culture move there is, and a risk-reward choice: points now, patrol sooner |
+| **Plow** | At 50+ mph you go straight through people instead of crashing (losing a fifth of your speed). **Skiers:** + clout, + heat. **Snowboarders:** − clout. Below that speed, hitting someone is a crash | Rewards keeping your speed, and gives heat a second big source (Jordan, Nov 19) |
+| **Carve lock** | Above a set speed you can't swing fully sideways, and keyboard and drag steering get less twitchy the faster you go. To slow down at speed you have to hard stop | Keeps momentum and makes the hard stop matter (Jordan, Nov 19) |
 | **Ollie** | Jump button pops you off the ground anywhere: small hop, clears small things | Snowboards ollie; skis in the classic needed a ramp |
 | **Jumps (kickers)** | Ramps launch you high. While in the air: spin (left/right) and grab (a button or swipe) | The freestyle score engine |
 | **Spins and grabs** | 180s up to 1080+, plus grabs (indy, melon, method, stalefish, nose, tail). Land facing a clean direction or crash | Trick names are part of the joke ("Send it! 1080 Mute") |
@@ -93,7 +95,9 @@ Trees (pine, aspen), tree wells, rocks and hidden "sharks" under thin cover, stu
 Hot wax (speed), breakfast burrito (shrug off one crash), energy drink (short speed boost), hand warmers, a lost GoPro (collectible), a powder stash entrance, a season pass (cools patrol heat).
 
 ### 7.4 Zones and set pieces (variety by distance)
-The run moves through zones so it doesn't look the same at 3,000 ft as at 300: **Groomer** (start, beginners and ski school) → **Terrain park** (kickers, rails, park rats) → **Glades** (trees and tree wells) → **Pow stash** (deep snow, hidden rocks) → **Catwalk of doom** (flats, skate out) → **Bowl** (open, fast, patrol arrives). Rare set pieces: a Gaper Day parade, a "shotski" line across the run, an avalanche-control boom, the lift line spilling onto the slope.
+**Built in the prototype (Nov 19):** the mountain comes in 64 m bands of **Groomers** (the default mix), **Terrain park** (wide-open snow with lines of kickers, a short reprieve) and **Glades** (heavy trees), with a banner as you enter each. After the first playtest Jordan asked for about 25% fewer people (more of them skiers), half the trees, open jump sections and some really tree-heavy sections.
+
+The fuller plan, so it doesn't look the same at 3,000 ft as at 300: **Groomer** (start, beginners and ski school) → **Terrain park** (kickers, rails, park rats) → **Glades** (trees and tree wells) → **Pow stash** (deep snow, hidden rocks) → **Catwalk of doom** (flats, skate out) → **Bowl** (open, fast, patrol arrives). Rare set pieces: a Gaper Day parade, a "shotski" line across the run, an avalanche-control boom, the lift line spilling onto the slope.
 
 ### 7.5 UI and meta jokes
 Score is **clout**. Crash captions ("Yard sale!", "Jerry of the Day nominee", "Sent it. Did not land it."). The end screen is a fake social post of your worst crash. "Days this season" counter. Pass-price gags on the title screen. Open Slop crossovers (I-70 / Floyd Hill traffic, the Chiller Score, Purl wax picks) once it's linked.
@@ -128,7 +132,7 @@ Full Send is an original game **in the genre** SkiFree defined (endless downhill
 
 | # | Milestone | Done when |
 |---|---|---|
-| M0 | **Feel prototype** | A rough playable build with placeholder shapes, tested on Jordan's phone: steering, ollie, spray and crashing feel right (decided Nov 19: prototype before any mock) |
+| M0 | **Feel prototype** 🟢 built Nov 19, being tuned | A rough playable build with placeholder shapes, tested on Jordan's phone: steering, ollie, spray and crashing feel right (decided Nov 19: prototype before any mock) |
 | M1 | **Core loop** | A rider steers down an endless slope on phone and desktop, trees/rocks/people cause crashes, distance counts, the chaser ends the run, end screen + Again. Live on GitHub Pages |
 | M2 | **Snowboarding** | Edges, stance and switch, ollie, kickers with spins and grabs, rails, flats and skating, powder, tree wells, ice |
 | M3 | **Content pass 1** | 30+ items from CONTENT.md with sprites, behaviors and captions; zones by distance; crew playtest notes recorded |
@@ -157,7 +161,10 @@ Optional crossover: Open Slop passes today's conditions (did it snow?) so the ga
 6. **Skier jokes:** plenty, but friendly. Skiers are the main target, snowboarders get roasted too, and every joke should still land with the skiers in the crew.
 7. **New content:** the Moto Gunslinger, the spray mechanic, the unstrapped hopper, the sideslipper, the gear snob, weather events and an I-70 intro (CONTENT.md).
 
-No open questions right now. New ones go here.
+## 12b. Open questions
+
+1. **Real names in nods:** the Beyond Medals and Bomb Hole references are written as nods with no real names (§9). Use their actual names instead, maybe with a heads-up to them?
+2. **Heat sources:** which of the ideas in CONTENT.md's Heat sources table go into M1?
 
 ## 13. Success
 
