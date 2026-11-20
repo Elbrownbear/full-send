@@ -18,47 +18,47 @@ The living list of everything that can show up on the mountain. **Content is the
 
 | Item | Rides | Behavior | Collision | Spray | Why it's funny | Zone | Rarity | Status |
 |---|---|---|---|---|---|---|---|---|
-| **The Jerry** | skier | Zigzags fast, arms windmilling, ignores you | Both crash; +heat | + clout, + heat | Jerry of the Day is the most-shared ski content on the internet | Groomer | common | 💡 |
-| **Gaper** | skier | Slow, straight, wearing jeans, visible forehead gap between helmet and goggles | Crash, he doesn't notice | + clout, + heat | The gaper gap is the oldest joke on the hill | Groomer | common | 💡 |
-| **The Crew Sitting Mid-Run** | snowboarder | 3–4 snowboarders sitting in a row right below a roller, invisible until you crest it | Crash; caption "WHY ARE YOU SITTING THERE" | − clout ("not the homies") | The number-one skier complaint about snowboarders. We own it | Groomer | common | 💡 |
-| **Ski school snake** | skier | A line of tiny kids in pizza wedge following an instructor, swaying side to side | Crash; big heat | + clout, big heat (it's kids) | "Pizza! French fries!" Everyone has nearly taken one out | Groomer | common | 💡 |
-| **Park rat** | snowboarder | Hangs near kickers in an oversized hoodie, energy drink in hand, occasionally hucks a jump in front of you | Crash; he says "my bad, bro" | − clout | Every park has them | Park | common | 💡 |
-| **The influencer** | either | Stopped, filming herself on a selfie stick or 360 cam | Crash; caption "you're in my shot" / "+10k views" | Skier: + clout and "you're famous now". Snowboarder: − clout | Lift-line TikTok is a whole genre now | Groomer | uncommon | 💡 |
+| **The Jerry** | skier | Zigzags fast, arms windmilling, ignores you | Both crash; +heat | + clout, + heat | Jerry of the Day is the most-shared ski content on the internet | Groomer | common | 🟢 |
+| **Gaper** | skier | Slow, straight, wearing jeans, visible forehead gap between helmet and goggles | Crash, he doesn't notice | + clout, + heat | The gaper gap is the oldest joke on the hill | Groomer | common | 🟢 |
+| **The Crew Sitting Mid-Run** | snowboarder | 3–4 snowboarders sitting in a row right below a roller, invisible until you crest it | Crash; caption "WHY ARE YOU SITTING THERE" | − clout ("not the homies") | The number-one skier complaint about snowboarders. We own it | Groomer | common | 🟢 |
+| **Ski school snake** | skier | A line of tiny kids in pizza wedge following an instructor, swaying side to side | Crash; big heat | + clout, big heat (it's kids) | "Pizza! French fries!" Everyone has nearly taken one out | Groomer | common | 🟢 |
+| **Park rat** | snowboarder | Hangs near kickers in an oversized hoodie, energy drink in hand, occasionally hucks a jump in front of you | Crash; he says "my bad, bro" | − clout | Every park has them | Park | common | 🟢 |
+| **The influencer** | either | Stopped, filming herself on a selfie stick or 360 cam | Crash; caption "you're in my shot" / "+10k views" | Skier: + clout and "you're famous now". Snowboarder: − clout | Lift-line TikTok is a whole genre now | Groomer | uncommon | 🟢 |
 | **Drone guy** | none | A drone hovers over you for a while, then crashes into a tree | Pass under it for bonus clout | n/a | Every resort has a "no drones" sign for a reason | Bowl | uncommon | 💡 |
 | **Bluetooth speaker guy** | either | Rides slow with music notes floating behind him | Crash | By who's riding | You hear him before you see him | Groomer | uncommon | 💡 |
-| **Dad yelling "SKI PATROL!"** | skier | Stands still, yells at you as you pass | No crash; +heat if you pass close | + clout, + heat (and he yells louder) | He is not ski patrol | Groomer | common | 💡 |
+| **Dad yelling "SKI PATROL!"** | skier | Stands still, yells at you as you pass | No crash; +heat if you pass close | + clout, + heat (and he yells louder) | He is not ski patrol | Groomer | common | 🟢 |
 | **Splitboarder** | snowboarder | Skinning up with a board split in half | Crash; he gives a lecture about avalanche gear | − clout | The backcountry snowboarder stereotype | Pow | rare | 💡 |
 | **Tele skier** | skier | Drops a knee every turn; "free the heel" caption | Crash | + clout, + heat | Telemark is a beloved cult | Glades | uncommon | 💡 |
 | **Euro in a one-piece** | skier | Fast, perfect carves, neon one-piece suit | Crash; he's unbothered | + clout, + heat | Retro one-pieces are back | Bowl | uncommon | 💡 |
 | **Gaper Day costume crew** | either | Group in onesies, tutus, a banana suit, a Speedo | Crash; confetti | Per person in the group | April 1 tradition at mountain towns | any | rare | 💡 |
 | **Shotski line** | skier | Six people across the run sharing one ski of shots | Ollie it for huge bonus, or crash | Spray the whole line: big clout, big heat | A classic après set piece | Groomer | rare | 💡 |
 | **Lost kid with one pole** | skier | Wanders | Crash; big heat | Small clout, big heat | Everyone has seen this kid | Groomer | uncommon | 💡 |
-| **Ski patrol** (on foot) | skier | Stands by Slow Zone signs, waves arms | Crash = instant max heat | Huge clout, instant max heat | Foreshadows the chaser | any | common | 💡 |
+| **Ski patrol** (on foot) | skier | Stands by Slow Zone signs, waves arms | Crash = instant max heat | Huge clout, instant max heat | Foreshadows the chaser | any | common | 🟢 |
 | **Unstrapped hopper** (added Nov 19) | snowboarder | One foot out of the binding, hopping and skating across the run, sometimes falling over | Crash; caption "just strap in, man" | − clout | Everyone has been this guy getting off the lift | Groomer | common | 💡 |
 | **Sideslipper** (added Nov 19) | snowboarder | Scraping down the steep pitch on their heel edge, side to side, blocking most of the run and scraping it to ice behind them | Crash; leaves an ice strip | − clout | The beginner snowboarder on every steep pitch | Bowl | common | 💡 |
 | **Gear snob** (added Nov 19) | snowboarder | Waves you down to talk about his board's camber profile (a parody brand). Get close and a speech bubble slows you | Crash; caption "it's a directional twin, bro" | − clout | The lift-line gear lecture | Park | uncommon | 💡 |
-| **The Moto Gunslinger** (added Nov 19) | none (on foot) | A cowboy with a six-shooter, dressed head to toe in motocross armor (roost guard, MX helmet and goggles, knee braces) for no reason anyone knows. Pass too close and he draws, fires a few slow, dodgeable shots, and chases you on foot for a few seconds before giving up | Hit by a shot or by him: crash | Spraying him sets him off, even from farther away | Pure absurdity; the armor makes him readable at a glance | Glades | rare | 💡 |
+| **The Moto Gunslinger** (added Nov 19) | none (on foot) | A cowboy with a six-shooter, dressed head to toe in motocross armor (roost guard, MX helmet and goggles, knee braces) for no reason anyone knows. Pass too close and he draws, fires a few slow, dodgeable shots, and chases you on foot for a few seconds before giving up | Hit by a shot or by him: crash | Spraying him sets him off, even from farther away | Pure absurdity; the armor makes him readable at a glance | Glades | rare | 🟢 |
 
 ## Terrain and objects
 
 | Item | Behavior | Collision | Why it's funny | Zone | Rarity | Status |
 |---|---|---|---|---|---|---|
-| **Pine tree** | Still | Crash | The genre staple | all | common | 💡 |
+| **Pine tree** | Still | Crash | The genre staple | all | common | 🟢 |
 | **Aspen grove** | Still, thin trunks in tight clusters | Crash | Very Colorado | Glades | common | 💡 |
 | **Tree well** | Hidden ring at the base of a pine in deep snow | Stuck for ~3 s, mash to dig out; caption "never ride trees alone" | Real hazard, safety wink | Glades/Pow | common | 💡 |
-| **Rock** | Still | Crash | Staple | all | common | 💡 |
+| **Rock** | Still | Crash | Staple | all | common | 🟢 |
 | **Shark** | A rock barely hidden under fresh snow, only a shimmer shows | Crash; caption "core shot" | Every early-season rider knows this pain | Pow | common | 💡 |
-| **Stump** | Still, low | Ollie over it for bonus | Staple, but ollie-able | Glades | common | 💡 |
+| **Stump** | Still, low | Ollie over it for bonus | Staple, but ollie-able | Glades | common | 🟢 |
 | **Moguls** | A field of bumps | Rider bounces, can't turn well | Snowboarders hate moguls | Bowl | uncommon | 💡 |
 | **Ice patch** | Blue sheen | Can't turn or stop briefly; caption "East Coast powder" | The East Coast "ice coast" joke | any | common | 💡 |
 | **Catwalk / flats** | Near-flat traverse | Speed bleeds; at zero you unstrap and skate while skiers pole past | The universal snowboarder pain | Catwalk | common | 💡 |
-| **Slow Zone sign** | Still; blasting past raises heat | +heat | Resorts are covered in them | Groomer | common | 💡 |
-| **Rope line / closed sign** | Edge of the course | Duck it for a secret stash, +big heat | "Ducking ropes" gets passes pulled | Pow | uncommon | 💡 |
+| **Slow Zone sign** | Still; blasting past raises heat | +heat | Resorts are covered in them | Groomer | common | 🟢 |
+| **Rope line / closed sign** | Edge of the course | Duck it for a secret stash, +big heat | "Ducking ropes" gets passes pulled | Pow | uncommon | 🟢 |
 | **Snowmaking gun** | Blasts a cone of snow sideways | Pushes you; blinds the screen briefly | Early-season resorts are all snow guns | Groomer | uncommon | 💡 |
 | **Snowcat / groomer** | Moves slowly across the run | Crash; leaves corduroy (speed bonus) behind it | First-chair corduroy is sacred | Groomer | uncommon | 💡 |
 | **Lift tower** | Still, in a line | Crash | Staple | all | common | 💡 |
 | **Chairlift overhead** | Chairs pass over; riders heckle ("SEND IT!", "huck it!") | Doing a trick under it earns double clout | The lift-line peanut gallery | any | common | 💡 |
-| **Kicker** | Ramp | Launch; spins/grabs scored | Freestyle core | Park | common | 💡 |
+| **Kicker** | Ramp | Launch; spins/grabs scored | Freestyle core | Park | common | 🟢 |
 | **Rail / box** | Ollie on to slide | Slide points; miss = crash | Park core | Park | common | 💡 |
 | **Jerry gap jump** | A sketchy homemade jump built by kids | Huge air, sketchy landing | Backyard-built booters | Glades | rare | 💡 |
 | **Lodge burger stand** | Still, with a "$28 BURGER" sign | Crash: lose 28 clout | Resort food prices | Groomer | uncommon | 💡 |
@@ -106,7 +106,7 @@ Jordan asked for references to *Johnny Tsunami*, *Out Cold*, the Beyond Medals c
 | **Palm tree** | Beyond Medals' *Bahamas* film | A single palm tree in the glades | Snowboarding in the Bahamas | Glades | legendary | 💡 |
 | **Bomb hole** | The Bomb Hole podcast (and the snowboard term for a deep landing crater) | A cliff drop with a crater landing in deep snow. Land in the crater: huge bonus | Named for the feature the show is named for | Pow | uncommon | 💡 |
 | **Lift-line podcast** | The Bomb Hole | Two riders in camp chairs with mics recording on the slope. Pass close: "You're on the pod!" + clout. Crash into them: heat | Everyone has a snowboard podcast now | Groomer | uncommon | 💡 |
-| **Group chat end card** | The Bomb Hole's group-chat episodes | End screen: "Sent to the group chat" with fake replies | How every crash gets shared | End screen | every run | 💡 |
+| **Group chat end card** | The Bomb Hole's group-chat episodes | End screen: "Sent to the group chat" with fake replies | How every crash gets shared | End screen | every run | 🟢 |
 
 ## Heat sources (added Nov 19)
 
@@ -118,8 +118,8 @@ Heat is what brings Ski Patrol (PRD §4). Built ones are in the prototype; the r
 | Spray a skier (hard stop) | +15 | + (speed, closeness) | 🟢 |
 | **Plow through a skier** at 50+ mph (no crash) | +25 | +100 and up | 🟢 |
 | Plow through a snowboarder | +10 | −150 | 🟢 |
-| **Radar Slow Zone** (M1, picked Nov 19): a pair of orange SLOW ZONE fences with a radar sign that flashes your mph as you approach. Limit 25 mph. Blow through it faster and the sign reads "47 IN A 25": heat +10 plus more for every mph over, and +5 clout per mph over. Ride through under the limit and the sign shows a smiley and cools your heat by 10. Patrol on foot often stands beside it | + (more the faster) | + per mph over | ✏️ |
-| **Rope duck** (M1, picked Nov 19): rope lines with CLOSED signs run along the edge of some zones. Ride under the rope (or ollie it) into a closed stash: untouched pow, no people, bonus clout for every meter you ride in there, +30 heat the moment you duck in and more the longer you stay. Ride back out through a gap in the rope | +30, then more over time | stash bonus | ✏️ |
+| **Radar Slow Zone** (built Nov 19): a pair of orange SLOW ZONE fences with a radar sign that flashes your mph as you approach. Limit 25 mph. Blow through it faster and the sign reads "47 IN A 25": heat +10 plus more for every mph over, and +5 clout per mph over. Ride through under the limit and the sign shows a smiley and cools your heat by 10. Patrol on foot often stands beside it | + (more the faster) | + per mph over | 🟢 |
+| **Rope duck** (built Nov 19): rope lines with CLOSED signs run along the edge of some zones. Ride under the rope (or ollie it) into a closed stash: untouched pow, no people, bonus clout for every meter you ride in there, +30 heat the moment you duck in and more the longer you stay. Ride back out through a gap in the rope | +30, then more over time | stash bonus | 🟢 |
 | Cut the lift line | + | + | 💡 |
 | Jump over people (ski school, patrol on foot) | + | big | 💡 |
 | Buzz patrol on foot (pass within a few px) | + | + | 💡 |
@@ -133,7 +133,7 @@ The thing that ends every run (PRD §4). **Ski Patrol is the v1 chaser** (decide
 
 | Chaser | How it works | Game over screen | Why it's funny | Status |
 |---|---|---|---|---|
-| **Ski Patrol on a snowmobile** (chosen for v1) | Heat from Slow Zones, people you hit and ropes you duck brings it sooner; past a distance it always comes | Your pass with a hole punched in it: "PASS CLIPPED" | Getting your pass pulled is every rider's fear | 💡 |
+| **Ski Patrol on a snowmobile** (built Nov 19) | Heat from Slow Zones, people you hit and ropes you duck brings it sooner; past a distance it always comes | Your pass with a hole punched in it: "PASS CLIPPED" | Getting your pass pulled is every rider's fear| 🟢 |
 | **The Liftie** | Runs after you yelling "TICKET CHECK!" | Your ticket gets scanned red | Ticket checks | 💡 |
 | **Avalanche** | A rolling white wall from above you | You're buried; beacon beeps | Pure physics dread | 💡 |
 | **Jerry swarm** | A growing crowd of Jerries closes in | You become a Jerry (sprite swap) | Gaper Day energy | 💡 |

@@ -4,22 +4,21 @@ Read this first in every Full Send session. Keep it short: rules and the current
 
 ## Where we left off (updated 2026-11-19)
 
-- **Live:** the M0 feel prototype at https://elbrownbear.github.io/full-send/ (GitHub Pages, deploys on every push to `main`). Public repo, MIT. Placeholder art drawn in code; everything is in `src/game.js` (tunables in `C` at the top, zone mixes in `ZONES`).
-- **In the prototype:** steering (keys, drag, mouse), ollie, kickers with spins and grabs, switch, hard stop + spray (skiers + clout/heat, snowboarders − clout), plow at 50+ mph (same rule), carve lock at speed, crashes, zones (Groomers / Terrain park / Glades), heat bar (no chaser yet), best distance saved.
-- **Jordan's first playtest (Nov 19):** too crowded and hard to get going. Done: ~25% fewer people (80% skiers), half the trees, open park sections with jump lines, tree-heavy glades, a start boost, more momentum, less twitchy steering at speed, plow-through. Not yet re-tested by Jordan.
-- Decided Nov 19 (PRD §12): Ski Patrol snowmobile chaser (pass clipped); modern-retro palette; one rider with cosmetic outfit unlocks; skier jokes plenty but friendly; MIT.
-- Content: CONTENT.md has ~65 items incl. nods to Johnny Tsunami, Out Cold, Beyond Medals and The Bomb Hole (written without real names, PRD §9) and a Heat sources table.
-- Testing tip: the preview pane is often hidden, which stops the animation. `window.FullSend.step(n)` advances the game by hand; use a separate tab if Jordan is playing in the pane.
+- **Live:** https://elbrownbear.github.io/full-send/ (GitHub Pages, deploys on every push to `main`). Public repo, MIT. Placeholder art drawn in code.
+- **M1 built Nov 19:** code split into `src/core.js` (tunables `FS.C`), `content.js` (people, zones, lines), `rules.js` (scoring, unit tested), `world.js`, `sprites.js`, `game.js`. Ski Patrol snowmobile: max heat calls it (outrun it by 650 px to shake it, +250 clout), past 1,200 m it always comes and can't be shaken; caught = "Pass clipped" end screen with stats and a group chat. Heat sources: spray, plow, hits, radar Slow Zones (25 mph limit, slowing cools heat), rope-duck stashes, the dad yelling. People: Jerry, gaper, crew sitting, ski school snake, park rat, dad, patrol on foot, influencer, Moto Gunslinger (shoots), plus generic skiers and boarders.
+- Jordan's first playtest notes (crowding, getting going, momentum) were applied before M1; **M1 itself hasn't been played by Jordan yet.**
+- Decided (PRD §12): Ski Patrol chaser; modern-retro palette; one rider with outfit unlocks (not built); skier jokes friendly; real crews and podcasts only as nods.
+- Testing tip: the preview pane is often hidden, which stops the animation. `FS.game.step(n)` advances the game by hand; use a separate tab if Jordan is playing in the pane.
 
 ## Exactly where to pick up
 
-1. Ask Jordan how the retuned prototype feels on the phone (crowding, getting going, momentum, carve lock, plow).
-2. Then M1 (PRD §10): split `src/game.js` into modules, move content to a data file, Ski Patrol chaser driven by heat, end screen + Again, the first real people from CONTENT.md, and the two new heat sources Jordan picked Nov 19: the **radar Slow Zone** and the **rope duck** (designs in CONTENT.md's Heat sources table).
-3. Decided Nov 19: real crews and podcasts stay as nods, no names.
+1. Ask Jordan how M1 plays on the phone: is patrol too fast or too slow (`PATROL_*` in `src/core.js`), is 1,200 m the right length, do the heat sources feel worth the risk?
+2. Ask Jordan: "Next, M2 (snowboard feel: rails, butters, flats and skating, powder, tree wells, ice) or M4 (link the game from Open Slop)?"
+3. Not built yet from earlier plans: outfit unlocks, the I-70 intro, weather events, most of CONTENT.md (M3 content pass).
 
 ## Project rules
 
-**Commands:** no build. Open `index.html`, or `npx --yes serve .` for a local server. Tests (when added) run with `node --test`.
+**Commands:** no build. Open `index.html`, or `npx --yes serve .` for a local server. Tests: `node --test`. New scripts go in `index.html` in load order (core, content, rules, world, sprites, game).
 
 **Originality:** an original game in the SkiFree *genre*. Never use SkiFree's name, sprites, sounds or yeti. Brands only as parody names; no real people (PRD §9).
 
