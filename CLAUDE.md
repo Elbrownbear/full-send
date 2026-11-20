@@ -2,19 +2,20 @@
 
 Read this first in every Full Send session. Keep it short: rules and the current handoff only.
 
-## Where we left off (updated 2026-11-19)
+## Where we left off (updated 2026-11-20)
 
 - **Live:** https://elbrownbear.github.io/full-send/ (GitHub Pages, deploys on every push to `main`). Public repo, MIT. Placeholder art drawn in code.
-- **M1 built Nov 19:** code split into `src/core.js` (tunables `FS.C`), `content.js` (people, zones, lines), `rules.js` (scoring, unit tested), `world.js`, `sprites.js`, `game.js`. Ski Patrol snowmobile: max heat calls it (outrun it by 650 px to shake it, +250 clout), past 1,200 m it always comes and can't be shaken; caught = "Pass clipped" end screen with stats and a group chat. Heat sources: spray, plow, hits, radar Slow Zones (25 mph limit, slowing cools heat), rope-duck stashes, the dad yelling. People: Jerry, gaper, crew sitting, ski school snake, park rat, dad, patrol on foot, influencer, Moto Gunslinger (shoots), plus generic skiers and boarders.
-- Jordan's first playtest notes (crowding, getting going, momentum) were applied before M1; **M1 itself hasn't been played by Jordan yet.**
+- **M1 (Nov 19):** code split into `src/core.js` (tunables `FS.C`), `content.js` (people, zones, lines), `rules.js` (scoring, unit tested), `world.js`, `sprites.js`, `game.js`. Ski Patrol snowmobile (max heat calls it, outrun it to shake it; past `PATROL_BASE_M` it always comes), pass-clipped end screen, radar Slow Zones, rope ducks, Jerry/gaper/crew/ski school/park rat/dad/patrol/influencer/Moto Gunslinger.
+- **Jordan's M1 playtest (Nov 20):** patrol too fast → slowed (190 start, +3/s, max 320); run length → 2,000 m; Slow Zones and ropes are good.
+- **M2 built Nov 20:** rails and boxes (ollie on to grind, crash if you ride into them), lean back (Shift / right mouse / pull thumb down) for tail presses, butter 180s (lean + left/right or sideways flick) and floating in powder, a Powder zone (bogs you down unless leaning; sharks; tree wells you mash to dig out), flat catwalks where you unstrap and skate while skiers laugh, ice patches (no turning, no stopping). **Jordan hasn't played M2 yet.**
 - Decided (PRD §12): Ski Patrol chaser; modern-retro palette; one rider with outfit unlocks (not built); skier jokes friendly; real crews and podcasts only as nods.
-- Testing tip: the preview pane is often hidden, which stops the animation. `FS.game.step(n)` advances the game by hand; use a separate tab if Jordan is playing in the pane.
+- Testing tip: the preview pane is often hidden, which stops the animation. `FS.game.step(n)` advances the game by hand; use a separate tab if Jordan is playing in the pane. Chunks far from the camera get pruned, so step a few frames after teleporting the rider before placing test objects.
 
 ## Exactly where to pick up
 
-1. Ask Jordan how M1 plays on the phone: is patrol too fast or too slow (`PATROL_*` in `src/core.js`), is 1,200 m the right length, do the heat sources feel worth the risk?
-2. Ask Jordan: "Next, M2 (snowboard feel: rails, butters, flats and skating, powder, tree wells, ice) or M4 (link the game from Open Slop)?"
-3. Not built yet from earlier plans: outfit unlocks, the I-70 intro, weather events, most of CONTENT.md (M3 content pass).
+1. Ask Jordan how M2 plays on the phone: is leaning back (pull thumb down) easy to do, are catwalks too long (`catwalkFor` in `world.js`, 300 px), are rails easy enough to land on?
+2. Ask Jordan what's next: M3 (content pass 1: 30+ catalog items with real behaviors), M4 (Open Slop link + embed), or real pixel art.
+3. Not built yet: outfit unlocks, the I-70 intro, weather events, most of CONTENT.md.
 
 ## Project rules
 

@@ -45,13 +45,13 @@ The living list of everything that can show up on the mountain. **Content is the
 |---|---|---|---|---|---|---|
 | **Pine tree** | Still | Crash | The genre staple | all | common | 🟢 |
 | **Aspen grove** | Still, thin trunks in tight clusters | Crash | Very Colorado | Glades | common | 💡 |
-| **Tree well** | Hidden ring at the base of a pine in deep snow | Stuck for ~3 s, mash to dig out; caption "never ride trees alone" | Real hazard, safety wink | Glades/Pow | common | 💡 |
+| **Tree well** | Hidden ring at the base of a pine in deep snow | Stuck for ~3 s, mash to dig out; caption "never ride trees alone" | Real hazard, safety wink | Glades/Pow | common| 🟢 |
 | **Rock** | Still | Crash | Staple | all | common | 🟢 |
-| **Shark** | A rock barely hidden under fresh snow, only a shimmer shows | Crash; caption "core shot" | Every early-season rider knows this pain | Pow | common | 💡 |
+| **Shark** | A rock barely hidden under fresh snow, only a shimmer shows | Crash; caption "core shot" | Every early-season rider knows this pain | Pow | common| 🟢 |
 | **Stump** | Still, low | Ollie over it for bonus | Staple, but ollie-able | Glades | common | 🟢 |
 | **Moguls** | A field of bumps | Rider bounces, can't turn well | Snowboarders hate moguls | Bowl | uncommon | 💡 |
-| **Ice patch** | Blue sheen | Can't turn or stop briefly; caption "East Coast powder" | The East Coast "ice coast" joke | any | common | 💡 |
-| **Catwalk / flats** | Near-flat traverse | Speed bleeds; at zero you unstrap and skate while skiers pole past | The universal snowboarder pain | Catwalk | common | 💡 |
+| **Ice patch** | Blue sheen | Can't turn or stop briefly; caption "East Coast powder" | The East Coast "ice coast" joke | any | common| 🟢 |
+| **Catwalk / flats** | Near-flat traverse | Speed bleeds; at zero you unstrap and skate while skiers pole past | The universal snowboarder pain | Catwalk | common| 🟢 |
 | **Slow Zone sign** | Still; blasting past raises heat | +heat | Resorts are covered in them | Groomer | common | 🟢 |
 | **Rope line / closed sign** | Edge of the course | Duck it for a secret stash, +big heat | "Ducking ropes" gets passes pulled | Pow | uncommon | 🟢 |
 | **Snowmaking gun** | Blasts a cone of snow sideways | Pushes you; blinds the screen briefly | Early-season resorts are all snow guns | Groomer | uncommon | 💡 |
@@ -59,7 +59,7 @@ The living list of everything that can show up on the mountain. **Content is the
 | **Lift tower** | Still, in a line | Crash | Staple | all | common | 💡 |
 | **Chairlift overhead** | Chairs pass over; riders heckle ("SEND IT!", "huck it!") | Doing a trick under it earns double clout | The lift-line peanut gallery | any | common | 💡 |
 | **Kicker** | Ramp | Launch; spins/grabs scored | Freestyle core | Park | common | 🟢 |
-| **Rail / box** | Ollie on to slide | Slide points; miss = crash | Park core | Park | common | 💡 |
+| **Rail / box** | Ollie on to slide | Slide points; miss = crash | Park core | Park | common| 🟢 |
 | **Jerry gap jump** | A sketchy homemade jump built by kids | Huge air, sketchy landing | Backyard-built booters | Glades | rare | 💡 |
 | **Lodge burger stand** | Still, with a "$28 BURGER" sign | Crash: lose 28 clout | Resort food prices | Groomer | uncommon | 💡 |
 | **Lift line** | A wall of people across the run with a "WAIT 45 MIN" sign | Slows you to a crawl; Epik/Ikahn pass item skips it | Lift lines are the #1 complaint | Bowl | rare | 💡 |
