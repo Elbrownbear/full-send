@@ -14,7 +14,7 @@ Read this first in every Full Send session. Keep it short: rules and the current
 
 ## Exactly where to pick up
 
-1. Ask Jordan: is patrol right now, are rails easy to land on, are catwalks too long (`catwalkFor` in `world.js`, 300 px)? Patrol knobs: `PATROL_*` in `src/core.js`.
+1. Ask Jordan: is patrol right now, are rails easy to land on, do catwalks feel right after easing them Nov 20 (35% less punishing: 220 px long, `FLAT_FRICTION` 40, `SKATE_PUSH` 28, `SKATE_MAX` 95)? Patrol knobs: `PATROL_*` in `src/core.js`.
 2. Ask Jordan what's next: M3 (content pass 1: 30+ catalog items with real behaviors), M4 (Open Slop link + embed), or real pixel art.
 3. Not built yet: outfit unlocks, the I-70 intro, weather events, most of CONTENT.md.
 

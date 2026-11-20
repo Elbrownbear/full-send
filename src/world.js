@@ -13,14 +13,14 @@
   }
   const bandOf = (y) => Math.floor(Math.floor(y / C.CHUNK) / C.ZONE_ROWS);
 
-  // Some bands have a flat catwalk across the whole run (about 38 m), where snowboarders end up skating.
+  // Some bands have a flat catwalk across the whole run (about 28 m), where snowboarders end up skating.
   function catwalkFor(band) {
     let cw = S.catwalks.get(band);
     if (!cw) {
       const rnd = FS.mulberry32(FS.hash3(S.seed, 5151, band));
       const zone = FS.ZONES[zoneAt(band * C.ZONE_ROWS)];
       const y0 = band * C.ZONE_ROWS * C.CHUNK + 96;
-      cw = { has: band >= 2 && rnd() < zone.catwalk, y0, y1: y0 + 300 };
+      cw = { has: band >= 2 && rnd() < zone.catwalk, y0, y1: y0 + 220 };
       S.catwalks.set(band, cw);
     }
     return cw;
