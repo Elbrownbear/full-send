@@ -9,6 +9,9 @@ The living list of everything that can show up on the mountain. **Content is the
 - **Rarity:** common / uncommon / rare / legendary.
 - Parody names only for brands. No real people.
 
+**Review log**
+- **Nov 19, 2026:** Jordan reviewed the first 45. **43 kept** (all of People, Terrain and Pickups below), none to tweak, **2 cut** (see [Cut](#cut)).
+
 ## People
 
 | Item | Behavior | Collision | Why it's funny | Zone | Rarity | Status |
@@ -22,7 +25,6 @@ The living list of everything that can show up on the mountain. **Content is the
 | **Drone guy** | A drone hovers over you for a while, then crashes into a tree | Pass under it for bonus clout | Every resort has a "no drones" sign for a reason | Bowl | uncommon | 💡 |
 | **Bluetooth speaker guy** | Rides slow with music notes floating behind him | Crash | You hear him before you see him | Groomer | uncommon | 💡 |
 | **Dad yelling "SKI PATROL!"** | Stands still, yells at you as you pass | No crash; +heat if you pass close | He is not ski patrol | Groomer | common | 💡 |
-| **Uphill skinner** | Walking *up* the hill in skins, headlamp on | Crash; caption "uphill traffic has the right of… no wait" | Uphill access is a hot topic at every resort | Glades | uncommon | 💡 |
 | **Splitboarder** | Skinning up with a board split in half | Crash; he gives a lecture about avalanche gear | The backcountry snowboarder stereotype | Pow | rare | 💡 |
 | **Tele skier** | Drops a knee every turn; "free the heel" caption | Crash | Telemark is a beloved cult | Glades | uncommon | 💡 |
 | **Euro in a one-piece** | Fast, perfect carves, neon one-piece suit | Crash; he's unbothered | Retro one-pieces are back | Bowl | uncommon | 💡 |
@@ -62,7 +64,6 @@ The living list of everything that can show up on the mountain. **Content is the
 |---|---|---|---|---|---|
 | **Hot wax** | Speed up for a while | Wax nerds; Open Slop's Purl wax picks | any | uncommon | 💡 |
 | **Breakfast burrito** | Absorbs one crash | The Colorado lift-line meal | Groomer | uncommon | 💡 |
-| **Energy drink ("Celcius")** | Short speed burst, jittery steering | Park rat fuel | Park | common | 💡 |
 | **Hand warmers** | Removes the "frozen" slowdown in the Bowl | Everyone has a pocket full | Bowl | uncommon | 💡 |
 | **Lost GoPro** | Collectible; shows at the end screen | You always find one in spring | any | rare | 💡 |
 | **Epik Pass / Ikahn Pass** | Cools patrol heat; skips lift lines. Pick a side on the title screen | The Epic vs Ikon tribal war, and record pass prices | any | uncommon | 💡 |
@@ -92,6 +93,15 @@ The thing that ends every run (PRD §4). Pick one for v1; the others can be mode
 | "Floyd Hill: 2 hr 15 min" sign at the start | Start | Open Slop crossover: the I-70 drive | 💡 |
 | "Chiller Score" of the run on the end screen | End screen | Open Slop crossover | 💡 |
 | Unstrap/skate prompt: "skiers are laughing at you" | Catwalk | Snowboarder truth | 💡 |
+
+## Cut
+
+Kept here so they don't get re-pitched.
+
+| Item | Cut | Notes |
+|---|---|---|
+| Uphill skinner | Nov 19, 2026 | Overlaps the splitboarder, who also skins uphill |
+| Energy drink pickup | Nov 19, 2026 | The park rat still holds one as a prop (no pickup) |
 
 ## Playtest notes
 
