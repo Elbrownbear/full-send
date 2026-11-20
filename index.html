@@ -32,6 +32,22 @@
     summary { cursor: pointer; text-align: center; color: var(--muted); }
     details h3 { font-size: 8px; margin: 10px 0 2px; color: var(--pink); }
     details p { margin: 0; }
+    .panel { max-height: calc(100% - 8px); overflow-y: auto; }
+    .pass { position: relative; margin: 0 auto 14px; width: 230px; height: 124px; background: #fff; border: 3px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); text-align: left; overflow: hidden; }
+    .pass .stripe { height: 24px; background: var(--pink); color: #fff; font-size: 9px; line-height: 24px; padding: 0 10px; }
+    .pass .pname { margin: 12px 10px 0; font-size: 9px; }
+    .pass .pinfo { margin: 8px 10px 0; font-size: 7px; line-height: 1.8; color: var(--muted); }
+    .pass .hole { position: absolute; right: 22px; top: 40px; width: 24px; height: 24px; border-radius: 50%; background: var(--ink); }
+    .pass .stamp { position: absolute; right: 8px; bottom: 10px; transform: rotate(-12deg); color: #d32f2f; border: 3px solid #d32f2f; padding: 4px 6px; font-size: 11px; background: rgba(255,255,255,0.85); }
+    .over-line { font-size: 8px; line-height: 1.8; color: var(--muted); margin: 0 0 6px; }
+    #overBest { font-size: 9px; color: var(--pink); margin: 0 0 10px; min-height: 0; }
+    .stats { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; margin: 0; text-align: left; font-size: 8px; line-height: 1.4; }
+    .stats dt { color: var(--muted); }
+    .stats dd { margin: 0; text-align: right; }
+    .chat { margin: 14px 0 0; padding: 10px; border: 3px solid var(--ink); background: #eef3fa; text-align: left; font-size: 7px; line-height: 1.9; }
+    .chat h3 { margin: 0 0 6px; font-size: 8px; color: var(--muted); }
+    .chat p { margin: 0 0 4px; }
+    .chat b { color: var(--pink); font-weight: normal; }
     #pauseBtn { position: fixed; top: calc(10px + env(safe-area-inset-top)); right: 10px; width: 40px; height: 40px; padding: 0; font-size: 12px; }
   </style>
 </head>
@@ -42,7 +58,7 @@
   <div id="title" class="overlay">
     <div class="panel">
       <h1>FULL SEND</h1>
-      <p class="tag">A snowboard game<br>Feel prototype</p>
+      <p class="tag">A snowboard game<br>Don't get your pass clipped</p>
       <div class="stance">
         <span>Stance</span>
         <button type="button" data-stance="regular">Regular</button>
@@ -58,8 +74,8 @@
         <p>Left/Right or A/D: steer<br>Down/S: point downhill<br>Up/W: hard stop + spray<br>Space: ollie (hold in air to grab)<br>Left/Right in air: spin<br>P: pause · R: restart</p>
         <h3>Mouse</h3>
         <p>Point where to go<br>Above the rider: hard stop<br>Click: ollie</p>
-        <h3>Spray</h3>
-        <p>Spray skiers: clout + patrol heat<br>Spray snowboarders: lose clout</p>
+        <h3>Heat and Ski Patrol</h3>
+        <p>Spray or plow skiers (50+ mph): clout + heat<br>Do it to snowboarders: lose clout<br>Slow Zones: over 25 mph = clout + heat, under = cool off<br>Duck a rope: fresh pow, clout, lots of heat<br>Max heat calls patrol. Outrun them to shake them<br>Past 1,200 m they come anyway. Caught = pass clipped</p>
       </details>
     </div>
   </div>
@@ -75,7 +91,36 @@
     </div>
   </div>
 
+  <div id="over" class="overlay" hidden>
+    <div class="panel">
+      <div class="pass" aria-hidden="true">
+        <div class="stripe">SEASON PASS</div>
+        <div class="pname">FULL SEND RIDER</div>
+        <div class="pinfo" id="passInfo"></div>
+        <div class="hole"></div>
+        <div class="stamp">CLIPPED</div>
+      </div>
+      <h2>Pass clipped</h2>
+      <p class="over-line" id="overLine"></p>
+      <p id="overBest"></p>
+      <dl class="stats" id="overStats"></dl>
+      <div class="chat">
+        <h3>Sent to the group chat</h3>
+        <div id="overChat"></div>
+      </div>
+      <div class="stack">
+        <button type="button" id="againBtn" class="big">Again</button>
+        <button type="button" id="overMenuBtn">Title screen</button>
+      </div>
+    </div>
+  </div>
+
   <div id="sat" style="position:fixed;top:0;left:0;width:0;height:env(safe-area-inset-top);pointer-events:none"></div>
+  <script src="src/core.js"></script>
+  <script src="src/content.js"></script>
+  <script src="src/rules.js"></script>
+  <script src="src/world.js"></script>
+  <script src="src/sprites.js"></script>
   <script src="src/game.js"></script>
 </body>
 </html>
