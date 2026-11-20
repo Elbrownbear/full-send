@@ -42,7 +42,8 @@
   function newRun() {
     Object.assign(S, {
       seed: URL_SEED ?? ((Math.random() * 2 ** 31) | 0),
-      chunks: new Map(), spawned: new Set(), ropes: new Map(), catwalks: new Map(),
+      chunks: new Map(), spawned: new Set(), ropes: new Map(), catwalks: new Map(), lifts: new Map(),
+      buffs: { wax: 0, can: 0, burrito: false }, cloutBank: 0, heckleT: 0, whiteT: 0, cordWarned: false, palmSeen: false,
       npcs: [], particles: [], popups: [], trail: [], bullets: [],
       rider: {
         x: 0, y: 0, z: 0, vz: 0, h: MID, speed: 0, mode: 'ride',
@@ -56,16 +57,22 @@
       clout: 0, heat: 0, dist: 0, caption: null, zoneToast: null, lastZone: null,
       hintT: 0, simT: 0, camX: 0, camY: 0, pruneT: 0, caughtT: 0,
       stash: { in: false, lastY: 0, bank: 0, earned: 0 },
-      stats: { sprayed: 0, homies: 0, plowed: 0, crashes: 0, speedTraps: 0, worstMph: 0, stashM: 0, bestTrick: null, topMph: 0, shaken: 0, shot: false, wells: 0, skated: 0, grinds: 0 },
+      stats: { sprayed: 0, homies: 0, plowed: 0, crashes: 0, speedTraps: 0, worstMph: 0, stashM: 0, bestTrick: null, topMph: 0, shaken: 0, shot: false, wells: 0, skated: 0, grinds: 0, found: [], tycoon: false, pickups: 0, liftTricks: 0 },
     });
   }
 
   const addHeat = (n) => { S.heat = clamp(S.heat + n, 0, 100); };
-  const addClout = (n) => { S.clout += n; };
+  // frac = a trickle (like the drone filming you): bank fractions and pay out in fives.
+  function addClout(n, frac) {
+    if (!frac) { S.clout += n; return; }
+    S.cloutBank += n;
+    if (S.cloutBank >= 5) { const k = Math.floor(S.cloutBank / 5) * 5; S.cloutBank -= k; S.clout += k; }
+  }
   function popup(x, y, text, kind) { S.popups.push({ x, y, text, kind, t: 1.3, life: 1.3 }); }
   function say(text, t = 1.6) { S.caption = { text, t, life: t }; }
   FS.popup = popup;
   FS.addHeat = addHeat;
+  FS.addClout = addClout;
 
   // ---------- Input ----------
   const input = { left: false, right: false, stopHeld: false, jumpHeld: false, jumpQueued: false, turnPulse: 0, downPulse: false, spinDir: 0, leanKey: false, mouseLean: false, butterFlick: 0 };
@@ -266,6 +273,11 @@
     if (r.mode !== 'crash' && r.mode !== 'stuck') collide();
     if (r.butterSpin > 0) r.butterSpin = Math.max(0, r.butterSpin - C.BUTTER_SPIN * dt);
     terrainToasts();
+    if (r.mode !== 'crash' && r.mode !== 'stuck') { checkPickups(); setPieces(dt); }
+    if (S.buffs.wax > 0) S.buffs.wax -= dt;
+    if (S.buffs.can > 0) S.buffs.can -= dt;
+    if (S.whiteT > 0) S.whiteT -= dt;
+    if (S.heckleT > 0) S.heckleT -= dt;
     updateStash(dt);
     WORLD.updatePeople(dt);
     updateBullets(dt);
@@ -306,7 +318,9 @@
       if (Math.abs(deg) === 90) acc -= C.SIDE_BRAKE;
       if (pow) acc -= (leanHeld() ? C.POW_DRAG_LEAN : C.POW_DRAG) * r.speed; // sink unless you lean back
       if (S.onIce) acc += C.ICE_GRIP * C.DRAG * r.speed; // ice is fast
-      r.speed = clamp(r.speed + acc * dt, 0, C.MAX);
+      if (S.onCord) acc += 0.4 * C.DRAG * r.speed;       // so is fresh corduroy
+      if (S.buffs.wax > 0) acc += 0.25 * C.DRAG * r.speed; // hot wax
+      r.speed = clamp(r.speed + acc * dt, 0, C.MAX + (S.buffs.wax > 0 ? 30 : 0));
       // Out of speed on a catwalk: unstrap and skate.
       if (flat && r.speed < C.SKATE_AT) { startSkate(); return; }
       updateButter(dt, flat || pow);
@@ -316,24 +330,84 @@
     r.y += Math.cos(a) * r.speed * dt;
     S.onIce = onIce();
     addTrail(r.stopping ? 4 : WORLD.inPow(r.x, r.y) && !leanHeld() ? 4 : S.stash.in ? 3 : 2);
-    let launched = false;
+    let launched = false, roof = null;
     WORLD.forNearbyStatics(r.x, r.y, (o) => {
       if (o.type === 'kicker' && !r.stopping && !launched && r.speed > 40 && Math.abs(r.x - o.x) < 11 && prevY < o.y - 1 && r.y >= o.y - 1) {
         launched = true;
       }
+      // The RV has a snow ramp up its back: ride up it and launch off the roof.
+      if (o.type === 'rv' && !r.stopping && !roof && r.speed > 60 && Math.abs(r.x - o.x) < 14 && prevY < o.y - 16 && r.y >= o.y - 16) roof = o;
       if (o.type === 'slowzone') checkRadar(o, prevY);
     });
-    if (launched) takeoff(C.KICK_V + r.speed * C.KICK_GAIN);
+    if (roof) {
+      takeoff((C.KICK_V + r.speed * C.KICK_GAIN) * 1.35);
+      r.z = roof.ht + 1; // you're on the roof
+      popup(r.x, r.y - 40, 'ROOF GAP!', 'trick');
+    } else if (launched) takeoff(C.KICK_V + r.speed * C.KICK_GAIN);
   }
 
+  // What's under the board: ice (returned) and fresh corduroy (S.onCord).
   function onIce() {
     const r = S.rider;
-    let hit = false;
+    let hit = false, cord = false;
     WORLD.forNearbyStatics(r.x, r.y, (o) => {
-      if (o.type === 'ice' && Math.abs(r.x - o.x) < 14 && Math.abs(r.y - (o.y - 7)) < 7) { hit = true; return false; }
+      if (o.type === 'ice' && Math.abs(r.x - o.x) < 14 && Math.abs(r.y - (o.y - 7)) < 7) hit = true;
+      if (o.type === 'cord' && Math.abs(r.x - o.x) < 15 && Math.abs(r.y - (o.y - 5)) < 6) cord = true;
     });
     if (hit && !S.iceWarned) { S.iceWarned = true; popup(r.x, r.y - 26, 'EAST COAST POWDER', 'say'); }
+    if (cord && !S.cordWarned) { S.cordWarned = true; popup(r.x, r.y - 26, 'FRESH CORDUROY', 'good'); }
+    S.onCord = cord;
     return hit;
+  }
+
+  // ---------- Pickups ----------
+  function checkPickups() {
+    const r = S.rider;
+    if (r.z > 20) return;
+    WORLD.forNearbyStatics(r.x, r.y, (o) => {
+      if (o.type !== 'pickup' || o.taken || Math.abs(r.x - o.x) > 9 || Math.abs(r.y - (o.y - 4)) > 8) return;
+      o.taken = true;
+      pickUp(o.kind);
+    });
+  }
+  function pickUp(kind) {
+    const r = S.rider, p = FS.PICKUPS[kind], b = S.buffs;
+    S.stats.pickups++;
+    let name = p.name;
+    if (kind === 'wax') b.wax = 8;
+    else if (kind === 'burrito') b.burrito = true;
+    else if (kind === 'can') b.can = 10;
+    else if (kind === 'waffle') { addClout(50); r.speed = Math.min(C.MAX, r.speed + 40); for (let i = 0; i < 6; i++) S.particles.push({ x: r.x, y: r.y, z: 10, vx: (Math.random() - 0.5) * 60, vy: -30, vz: 60, life: 0.7, c: '#ff3d7f' }); }
+    else if (kind === 'pass') {
+      if (Math.random() < 0.5) name = p.alt;
+      addHeat(-40);
+      if (S.patrol && S.patrol.mode === 'heat') { S.patrol = null; S.warned = false; say('PASS CHECKS OUT', 1.6); } // waves you through
+    } else if (p.collect) { addClout(p.collect); S.stats.found.push(p.name); }
+    popup(r.x, r.y - 34, name, 'trick');
+    popup(r.x, r.y - 22, p.say, 'good');
+  }
+
+  // ---------- Set pieces ----------
+  function setPieces(dt) {
+    const r = S.rider;
+    WORLD.forNearbyStatics(r.x, r.y, (o) => {
+      // Snowmaking gun: blasts you sideways and whites out the screen.
+      if (o.type === 'snowgun') {
+        const along = (r.x - o.x) * o.dir;
+        if (along > 4 && along < 80 && Math.abs(r.y - (o.y - 6)) < 10 + along * 0.3 && r.z < 20) {
+          r.x += o.dir * 70 * dt; S.whiteT = Math.max(S.whiteT, 0.35);
+          if (!o.hit) { o.hit = true; popup(r.x, r.y - 26, "CAN'T SEE!", 'say'); }
+        }
+      }
+      if (o.type === 'snowgun' && Math.random() < 0.7) {
+        const ang = (o.dir > 0 ? 90 : -90) + (Math.random() - 0.5) * 50;
+        S.particles.push({ x: o.x + o.dir * 6, y: o.y - 2, z: 10, vx: Math.sin(ang * DEG) * 120, vy: Math.cos(ang * DEG) * 40, vz: 10, life: 0.6, c: '#ffffff' });
+      }
+      // The palm tree in the glades: once per run.
+      if (o.type === 'palm' && !S.palmSeen && Math.hypot(r.x - o.x, r.y - o.y) < 40) { S.palmSeen = true; addClout(100); popup(o.x, o.y - 40, 'BAHAMAS?! +100', 'good'); }
+    });
+    // Riding under the chairlift: the chairs heckle you when you're in the air.
+    if (r.mode === 'air' && S.heckleT <= 0 && WORLD.underLift(r.x, r.y)) { S.heckleT = 1.4; popup(r.x + 10, r.y - 46, pick(FS.HECKLES), 'say'); }
   }
 
   // ---------- Butters: lean back on the snow ----------
@@ -410,7 +484,7 @@
   }
   function startGrind(o) {
     const r = S.rider;
-    const res = RULES.trick(r);
+    const res = RULES.trick(r, S.buffs.can > 0 ? 35 : 55);
     if (!res.ok) { r.spin = 0; crash(pick(FS.CRASH_LINES.spin), o); return; }
     if (res.half % 2 === 1) r.sw = !r.sw;
     if (res.pts > 0) { addClout(res.pts); popup(r.x, r.y - 30, `${res.name} +${res.pts}`, 'trick'); }
@@ -445,6 +519,8 @@
 
   function takeoff(vz) {
     const r = S.rider, a = HEADINGS[r.h] * DEG;
+    if (S.buffs.can > 0) vz *= 1.3; // liquid courage: bigger airs
+    r.liftAir = WORLD.underLift(r.x, r.y);
     r.mode = 'air'; r.vz = vz; r.z = 0.01;
     r.airVX = Math.sin(a) * r.speed; r.airVY = Math.cos(a) * r.speed;
     r.spin = 0; r.grabT = 0; r.airT = 0; r.wasSwitch = r.sw; r.grabName = pick(FS.GRABS);
@@ -458,7 +534,19 @@
     r.vz -= C.GZ * dt; r.z += r.vz * dt;
     if (input.spinDir) r.spin += input.spinDir * C.SPIN_RATE * dt;
     if (grabHeld()) r.grabT += dt;
-    WORLD.forNearbyStatics(r.x, r.y, (o) => { if (o.type === 'slowzone') checkRadar(o, prevY); }); // radar still clocks you in the air
+    WORLD.forNearbyStatics(r.x, r.y, (o) => {
+      if (o.type === 'slowzone') checkRadar(o, prevY); // radar still clocks you in the air
+      // Out Cold nod: clear the hot tub.
+      if (o.type === 'hottub' && !o.cleared && r.z > o.ht && Math.abs(r.x - o.x) < 14 && prevY < o.y - 6 && r.y >= o.y - 6) {
+        o.cleared = true; addClout(150); popup(o.x, o.y - 30, 'HOT TUB HOP +150', 'trick');
+      }
+    });
+    // Ollie the whole shotski line.
+    for (const n of S.npcs) {
+      if (n.kind === 'shotski' && !n.done && n.fallenT <= 0 && r.z > 8 && Math.abs(r.x - n.x) < 36 && prevY < n.y && r.y >= n.y) {
+        n.done = true; addClout(300); popup(n.x, n.y - 32, 'SHOTSKI CLEARED +300', 'trick'); popup(n.x, n.y - 20, 'CHEERS!', 'say');
+      }
+    }
     if (r.vz < 0) { const o = railUnder(); if (o) { startGrind(o); return; } } // coming down onto a rail or box
     if (r.z <= 0) land();
   }
@@ -466,10 +554,13 @@
   function land() {
     const r = S.rider;
     r.z = 0; r.vz = 0;
-    const res = RULES.trick(r);
+    const res = RULES.trick(r, S.buffs.can > 0 ? 35 : 55); // liquid courage: wobblier landings
     if (!res.ok) { r.spin = 0; crash(pick(FS.CRASH_LINES.spin), null); return; }
     r.mode = 'ride';
     if (res.half % 2 === 1) r.sw = !r.sw;
+    if (res.pts > 0 && (r.liftAir || WORLD.underLift(r.x, r.y))) { // the chairlift saw it: double points
+      res.pts *= 2; res.name = 'UNDER THE LIFT: ' + res.name; S.stats.liftTricks++;
+    }
     if (res.pts > 0) {
       addClout(res.pts);
       popup(r.x, r.y - 26, `${res.name} +${res.pts}`, 'trick');
@@ -500,6 +591,18 @@
   function crash(text, obj) {
     const r = S.rider;
     if (r.mode === 'crash') return;
+    // A breakfast burrito in your pocket absorbs one crash.
+    if (S.buffs.burrito && state === 'play') {
+      S.buffs.burrito = false;
+      r.invuln = 1; r.spin = 0; r.z = 0; r.vz = 0; r.rail = null;
+      if (r.mode === 'air' || r.mode === 'grind') r.mode = 'ride';
+      if (obj && obj.ht !== undefined) r.y = Math.max(r.y, obj.y + 6);
+      r.speed *= 0.5;
+      popup(r.x, r.y - 30, 'BURRITO SAVED YOU', 'good');
+      return;
+    }
+    if (obj && obj.type === 'burger') { addClout(-28); popup(obj.x, obj.y - 30, '-28', 'bad'); }
+    if (obj && obj.type === 'hottub') { addHeat(10); popup(obj.x, obj.y - 30, 'SPLASH', 'say'); }
     r.mode = 'crash'; r.crashT = C.CRASH_T; r.speed = 0; r.z = 0; r.vz = 0;
     r.stopping = false; r.spin = 0; r.crashObj = obj; r.rail = null; r.butterT = 0;
     S.stats.crashes++;
@@ -544,9 +647,11 @@
     if (r.z >= 16 || r.stopping) return; // sliding to a stop sprays people instead of hitting them
     for (const n of S.npcs) {
       if (n.fallenT > 0 || !overlap(rb, n)) continue;
+      const def = FS.PEOPLE[n.kind];
+      if (def.flying) continue; // the drone is up in the air
+      if (def.solid) { crash(pick(FS.CRASH_LINES[n.kind] || FS.CRASH_LINES.person), n); return; } // you can't plow a snowcat
       if (r.speed >= C.PLOW_SPEED) { plow(n); continue; }
       n.fallenT = 2.5;
-      const def = FS.PEOPLE[n.kind];
       addHeat(def.patrol ? 100 : 20 * (def.heatMult || 1));
       popup(n.x, n.y - 22, FS.SAYS.hit[n.rides], 'say');
       crash(pick(FS.CRASH_LINES.person), n);
@@ -570,6 +675,7 @@
     r.speed *= 0.8;
     if (n.rides === 'ski') S.stats.plowed++;
     burst(n.x, n.y, 14);
+    if (FS.PEOPLE[n.kind].confetti) confetti(n.x, n.y);
     scorePerson(n, res);
   }
 
@@ -579,13 +685,15 @@
     const a = r.stopDir * DEG, ux = Math.sin(a), uy = Math.cos(a);
     const reach = 18 + r.stopSpeed * 0.14;
     for (const n of S.npcs) {
-      if (n.sprayed || n.fallenT > 0) continue;
+      if (n.sprayed || n.fallenT > 0 || FS.PEOPLE[n.kind].flying) continue;
       const dx = n.x - r.x, dy = (n.y - 3) - r.y, d = Math.hypot(dx, dy);
       if (d > reach) continue;
       if (d > 10 && (dx * ux + dy * uy) / d < 0.45) continue; // must be in front of the spray
       n.sprayed = true; n.flashT = 0.6;
       const res = RULES.spray(n, r.stopSpeed, d, reach);
       if (res.aggro) WORLD.aggro(n);
+      if (n.tycoon) S.stats.tycoon = true;
+      if (FS.PEOPLE[n.kind].confetti) confetti(n.x, n.y);
       if (n.rides === 'ski') S.stats.sprayed++;
       scorePerson(n, res);
     }
@@ -705,6 +813,14 @@
       S.particles.push({ x, y, z: 4, vx: Math.cos(ang) * v, vy: Math.sin(ang) * v, vz: 40 + Math.random() * 90, life: 0.5 + Math.random() * 0.5, c: pick(SNOW) });
     }
   }
+  // Gaper Day: costumes come with confetti.
+  function confetti(x, y) {
+    const cs = ['#ff3d7f', '#ffd400', '#00c2a8', '#6c8cff', '#ff7a1a'];
+    for (let i = 0; i < 16; i++) {
+      const ang = Math.random() * Math.PI * 2, v = 30 + Math.random() * 70;
+      S.particles.push({ x, y, z: 12, vx: Math.cos(ang) * v, vy: Math.sin(ang) * v, vz: 60 + Math.random() * 60, life: 0.9, c: pick(cs) });
+    }
+  }
   function updateParticles(dt) {
     for (let i = S.particles.length - 1; i >= 0; i--) {
       const p = S.particles[i];
@@ -783,6 +899,32 @@
     if (r.mode === 'grind') { px(sx - 7, by - 11, 3, 1, jacket); px(sx + 4, by - 11, 3, 1, jacket); } // arms out for balance
     px(sx - 2 + lean, by - 16 + crouch, 4, 4, helmet);
     if (heel) px(sx - 2 + lean, by - 14 + crouch, 4, 1, '#3ce0ff');
+  }
+
+  // Chairlifts: two cables down the band, chairs going up one side and down the other, with a shadow on the snow.
+  function drawLifts() {
+    const camX = S.camX, camY = S.camY;
+    const b0 = WORLD.bandOf(Math.max(0, camY)), b1 = WORLD.bandOf(Math.max(0, camY + H));
+    for (let b = b0; b <= b1; b++) {
+      const lf = WORLD.liftFor(b);
+      if (!lf.has) continue;
+      const top = Math.max(lf.y0, camY - 10), bot = Math.min(lf.y1, camY + H + 10);
+      if (bot <= top) continue;
+      const sx = lf.x - camX;
+      g.fillStyle = 'rgba(80,100,130,0.18)'; g.fillRect(sx + 10, top - camY, 1, bot - top); g.fillRect(sx + 22, top - camY, 1, bot - top);
+      g.fillStyle = '#2b2f3a'; g.fillRect(sx - 6, top - camY - 40, 1, bot - top); g.fillRect(sx + 6, top - camY - 40, 1, bot - top);
+      const len = lf.y1 - lf.y0;
+      for (const [side, dir] of [[-6, -1], [6, 1]]) {
+        for (let k = 0; k < len; k += 56) {
+          const wy = lf.y0 + ((k + dir * S.simT * 40) % len + len) % len;
+          if (wy < top || wy > bot) continue;
+          const cy = wy - camY - 40;
+          px(sx + side - 1, cy, 1, 5, '#2b2f3a');
+          px(sx + side - 4, cy + 5, 8, 2, '#41557a');
+          if (dir < 0) { px(sx + side - 3, cy + 1, 2, 4, '#ff8a1f'); px(sx + side + 1, cy + 1, 2, 4, '#2f6fe4'); } // riders going up
+        }
+      }
+    }
   }
 
   function render() {
@@ -865,12 +1007,14 @@
       const sx = Math.round(o.x - camX), sy = Math.round(o.y - camY);
       if (o === r) drawRider();
       else if (o === S.patrol) DRAW.snowmobile(sx, sy, S.simT, o.dirX);
-      else if (o.kind) DRAW.person(o, sx, sy, S.simT);
+      else if (!o.type) DRAW.person(o, sx, sy, S.simT); // people have no type (pickups have a kind too)
       else if (o.type === 'slowzone') DRAW.slowzone(sx, sy, o.done);
-      else DRAW[o.type](sx, sy);
+      else DRAW[o.type](sx, sy, o, S.simT);
     }
+    drawLifts();
     for (const b of S.bullets) { px(b.x - camX - 1, b.y - camY - 6, 3, 2, '#ffb300'); px(b.x - camX - 1 - b.vx * 0.02, b.y - camY - 6 - b.vy * 0.02, 2, 1, '#ffe082'); }
     for (const p of S.particles) px(p.x - camX, p.y - camY - p.z, 2, 2, p.c);
+    if (S.whiteT > 0) { g.fillStyle = `rgba(255,255,255,${Math.min(0.85, S.whiteT * 2.5)})`; g.fillRect(0, 0, W, H); } // snowgun whiteout
 
     if (DEBUG) {
       g.strokeStyle = 'rgba(255,0,0,0.8)'; g.lineWidth = 1;
@@ -922,6 +1066,11 @@
     text(`${Math.floor(S.dist).toLocaleString()} m`, L, T, 16, '#0f1a2e');
     text(`CLOUT ${S.clout.toLocaleString()}`, L, T + 24, 10, S.clout < 0 ? '#c62828' : '#0f1a2e');
     text(`${Math.round(r.speed * C.MPH)} MPH${r.sw ? '  SWITCH' : ''}`, L, T + 40, 8, '#41557a');
+    const b = S.buffs, buffs = [];
+    if (b.wax > 0) buffs.push(`WAX ${Math.ceil(b.wax)}`);
+    if (b.can > 0) buffs.push(`COURAGE ${Math.ceil(b.can)}`);
+    if (b.burrito) buffs.push('BURRITO');
+    if (buffs.length) text(buffs.join(' · '), L, T + 54, 7, '#6a1b9a');
 
     const bw = 84, bx = offX + gw - 12 - 50 - bw;
     const hot = S.patrol && Math.floor(S.simT * 6) % 2 === 0;
@@ -1023,6 +1172,9 @@
       ['Speed traps', st.speedTraps],
       ['Stash meters', Math.round(st.stashM)],
       ['Rails and boxes', st.grinds],
+      ['Under-the-lift tricks', st.liftTricks],
+      ['Pickups', st.pickups],
+      ['Found', st.found.length ? st.found.join(', ') : 'nothing'],
       ['Patrol shaken', st.shaken],
       ['Tree wells', st.wells],
       ['Unstrapped', st.skated],

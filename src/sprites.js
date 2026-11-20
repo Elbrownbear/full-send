@@ -68,6 +68,72 @@
     px(sx - 3, sy - 1, 6, 1, '#e3ebf4');
   }
 
+  // ---------- M3 set pieces ----------
+  function tower(sx, sy) {
+    px(sx + 3, sy - 3, 14, 3, 'rgba(80,100,130,0.18)'); // shadow
+    px(sx - 2, sy - 40, 4, 40, '#7d8590'); px(sx - 2, sy - 40, 1, 40, '#aeb4bc');
+    px(sx - 8, sy - 42, 16, 3, '#5a6270');
+    px(sx - 3, sy - 2, 6, 2, '#5a6270');
+  }
+  function snowgun(sx, sy, o) {
+    const d = o ? o.dir : 1;
+    px(sx - 4, sy - 2, 1, 2, '#444'); px(sx + 3, sy - 2, 1, 2, '#444'); px(sx, sy - 6, 1, 6, '#444'); // tripod
+    px(sx - 4, sy - 11, 8, 6, '#e8eaed'); px(sx - 3, sy - 10, 6, 4, '#9aa0a8'); // fan housing
+    px(sx + (d > 0 ? 4 : -7), sy - 9, 3, 2, '#5a6270'); // nozzle
+  }
+  function burger(sx, sy) {
+    px(sx - 11, sy - 10, 22, 10, '#8a5a2b'); px(sx - 11, sy - 10, 22, 1, '#a8743f');
+    px(sx - 13, sy - 14, 26, 4, '#c62828'); px(sx - 13, sy - 15, 26, 1, '#ffffff'); // red roof with snow
+    px(sx - 9, sy - 8, 18, 4, '#3a2a1a'); // serving window
+    // Sign: a burger icon (bun, patty, lettuce, bun) on a post.
+    px(sx + 12, sy - 22, 1, 12, '#5a3a1a');
+    px(sx + 8, sy - 26, 10, 2, '#e0a050'); px(sx + 8, sy - 24, 10, 1, '#3aa655'); px(sx + 8, sy - 23, 10, 2, '#5a3a1a'); px(sx + 8, sy - 21, 10, 1, '#e0a050');
+  }
+  function hottub(sx, sy, o, t) {
+    px(sx - 13, sy - 12, 26, 12, '#8a5a2b'); px(sx - 11, sy - 11, 22, 8, '#5ad1ff'); px(sx - 11, sy - 11, 22, 1, '#b5ecff');
+    const heads = ['#f0c6a0', '#c68b59', '#f0c6a0'];
+    for (let i = 0; i < 3; i++) { px(sx - 8 + i * 7, sy - 13, 4, 4, heads[i]); px(sx - 8 + i * 7, sy - 14, 4, 1, ['#222', '#ffd400', '#ff3d7f'][i]); }
+    const f = Math.floor((t || 0) * 3) % 3; // steam
+    px(sx - 6 + f * 3, sy - 18 - f, 2, 2, 'rgba(255,255,255,0.8)'); px(sx + 4 - f * 2, sy - 20 + f, 2, 2, 'rgba(255,255,255,0.7)');
+  }
+  function palm(sx, sy) {
+    for (let i = 0; i < 26; i++) px(sx - 1 + Math.round(Math.sin(i / 9) * 3), sy - i, 3, 1, i % 4 ? '#8a6a3a' : '#6b4a2b');
+    const tx = sx + 2, ty = sy - 27;
+    for (let i = 0; i < 10; i++) { px(tx - i, ty + Math.round(i * i / 14), 2, 2, '#2e9e4f'); px(tx + i, ty + Math.round(i * i / 14), 2, 2, '#2e9e4f'); px(tx - i / 2, ty - i / 2, 2, 2, '#3fbf62'); px(tx + i / 2, ty - i / 2, 2, 2, '#3fbf62'); }
+    px(tx - 1, ty + 1, 3, 3, '#6b4a2b'); // coconuts
+  }
+  // Beyond Medals nod: a beat-up RV with a snow ramp up its back and a crew on the roof.
+  function rv(sx, sy, o, t) {
+    for (let i = 0; i < 16; i++) px(sx - 13 + i / 4, sy - 32 + i, 26 - i / 2, 1, '#f4f8fc'); // snow ramp (uphill side)
+    px(sx - 17, sy - 16, 34, 13, '#efe6d2'); px(sx - 17, sy - 10, 34, 2, '#c0392b'); px(sx - 17, sy - 8, 34, 1, '#ff8a1f');
+    for (let i = 0; i < 4; i++) px(sx - 14 + i * 8, sy - 14, 5, 3, '#6fa8d6');
+    px(sx - 12, sy - 3, 5, 3, '#222'); px(sx + 7, sy - 3, 5, 3, '#222');
+    px(sx - 17, sy - 17, 34, 1, '#ffffff');
+    const f = Math.floor((t || 0) * 4) % 2; // the crew, cheering
+    for (let i = 0; i < 3; i++) { const cx = sx - 9 + i * 8; px(cx, sy - 22, 3, 5, ['#ff3d7f', '#00c2a8', '#ffd400'][i]); px(cx, sy - 25, 3, 3, '#f0c6a0'); if ((i + f) % 2) px(cx - 1, sy - 27, 1, 3, '#f0c6a0'); }
+  }
+  function cord(sx, sy) {
+    for (let i = 0; i < 10; i += 2) px(sx - 15, sy - 10 + i, 30, 1, '#d2deeb');
+  }
+  // Pickups bob and sparkle.
+  const PICKUP_ART = {
+    wax(x, y) { px(x - 4, y - 3, 8, 4, '#ff8a1f'); px(x - 4, y - 3, 8, 1, '#ffb27a'); },
+    burrito(x, y) { px(x - 5, y - 3, 10, 4, '#c0c6cc'); px(x - 5, y - 3, 10, 1, '#eef1f4'); px(x + 3, y - 3, 2, 4, '#f2c230'); },
+    pass(x, y) { px(x - 1, y - 9, 1, 5, '#2f6fe4'); px(x - 4, y - 5, 8, 6, '#ffffff'); px(x - 4, y - 5, 8, 2, '#ff3d7f'); px(x - 4, y - 5, 8, 6, 'rgba(0,0,0,0)'); },
+    waffle(x, y) { px(x - 4, y - 4, 8, 6, '#e0a050'); px(x - 2, y - 4, 1, 6, '#b8782a'); px(x + 1, y - 4, 1, 6, '#b8782a'); px(x - 4, y - 2, 8, 1, '#b8782a'); },
+    can(x, y) { px(x - 2, y - 6, 5, 7, '#c0c6cc'); px(x - 2, y - 4, 5, 2, '#2f6fe4'); px(x - 2, y - 6, 5, 1, '#eef1f4'); },
+    gopro(x, y) { px(x - 3, y - 4, 6, 5, '#1d1d1f'); px(x - 1, y - 3, 3, 3, '#5ad1ff'); },
+    bronze(x, y) { px(x - 2, y - 9, 1, 4, '#c62828'); px(x + 1, y - 9, 1, 4, '#2f6fe4'); px(x - 3, y - 5, 6, 6, '#b8732f'); px(x - 2, y - 4, 4, 4, '#d9944d'); },
+    wavemedal(x, y) { px(x - 2, y - 9, 4, 4, '#00c2a8'); px(x - 3, y - 5, 6, 6, '#e0b84a'); px(x - 2, y - 3, 4, 1, '#2f6fe4'); },
+  };
+  function pickup(sx, sy, o, t) {
+    if (!o || o.taken) return;
+    const bob = Math.round(Math.sin((t || 0) * 4 + o.x) * 1.5);
+    px(sx - 4, sy - 1, 8, 2, 'rgba(60,80,110,0.2)');
+    (PICKUP_ART[o.kind] || PICKUP_ART.wax)(sx, sy - 4 + bob);
+    if (Math.floor((t || 0) * 5 + o.y) % 4 === 0) px(sx + 4, sy - 12 + bob, 1, 1, '#ffffff');
+  }
+
   // Radar Slow Zone: two orange posts and a banner over the run, radar sign on the right.
   function slowzone(sx, sy, done) {
     px(sx - 33, sy - 16, 2, 16, '#ff7a1a'); px(sx + 31, sy - 16, 2, 16, '#ff7a1a');
@@ -192,6 +258,123 @@
     },
   };
 
+  // ---------- M3 people ----------
+  Object.assign(LOOKS, {
+    droneguy(n, sx, sy) {
+      skierBody(sx, sy, '#3a3f4b', '#2b2f3a');
+      px(sx - 3, sy - 12, 6, 2, '#111'); px(sx + 2, sy - 16, 1, 4, '#9aa0a8'); // controller and antenna
+    },
+    // The drone flies at n.alt pixels up, with a shadow on the snow.
+    drone(n, sx, sy, t) {
+      if (n.state === 'down') { px(sx - 3, sy - 2, 6, 2, '#5a6270'); px(sx - 5, sy - 1, 2, 1, '#111'); px(sx + 4, sy - 3, 2, 1, '#111'); return; }
+      const ay = sy - Math.round(n.alt) - 4;
+      if (n.alt > 1) px(sx - 3, sy - 1, 6, 1, 'rgba(60,80,110,0.25)');
+      const f = Math.floor(t * 20) % 2;
+      px(sx - 2, ay, 4, 3, '#5a6270');
+      px(sx - 5, ay - 1, 3, 1, f ? '#111' : '#777'); px(sx + 3, ay - 1, 3, 1, f ? '#777' : '#111');
+      px(sx - 5, ay + 3, 3, 1, f ? '#777' : '#111'); px(sx + 3, ay + 3, 3, 1, f ? '#111' : '#777');
+      px(sx, ay + 1, 1, 1, f ? '#ff1744' : '#5a6270');
+    },
+    speaker(n, sx, sy, t) {
+      if (n.rides === 'ski') { skierBody(sx, sy, n.color, '#2b2f3a'); poles(sx, sy); } else boarderBody(sx, sy, n);
+      px(sx + 3, sy - 15, 4, 5, '#111'); px(sx + 4, sy - 13, 2, 2, '#777'); // speaker on the backpack
+      const k = (t * 14 + n.phase * 10) % 12; // a music note floating up
+      px(sx + 7, sy - 22 - k, 2, 2, '#6a1b9a'); px(sx + 8, sy - 26 - k, 1, 4, '#6a1b9a');
+    },
+    // Telemark: one knee dropped, alternating every turn; wool hat with a pom.
+    tele(n, sx, sy, t) {
+      const f = Math.floor(t * 2 + n.phase) % 2;
+      px(sx - 2 - f, sy - 6 + (f ? 3 : 0), 1, 10, '#6b4a2b'); px(sx + 1 + (1 - f), sy - 6 + (f ? 0 : 3), 1, 10, '#6b4a2b'); // wood skis, staggered
+      px(sx - 2, sy - 9 + (f ? 1 : 0), 2, 4, '#5a4a3a'); px(sx + 1, sy - 8 - (f ? 1 : 0), 2, 3, '#5a4a3a');
+      px(sx - 3, sy - 15, 6, 6, '#7a4fe0'); px(sx - 3, sy - 13, 6, 1, '#1fa3a3');
+      px(sx - 2, sy - 19, 4, 4, SKIN); px(sx - 2, sy - 20, 4, 2, '#c62828'); px(sx - 1, sy - 22, 2, 2, '#ffffff');
+      poles(sx, sy);
+    },
+    // The Euro: neon one-piece, perfect carves.
+    euro(n, sx, sy) {
+      skis(sx, sy, 11, '#ff3d7f');
+      px(sx - 2, sy - 15, 5, 10, '#ff3d7f'); px(sx - 2, sy - 13, 5, 2, '#00e5ff'); px(sx - 2, sy - 9, 5, 1, '#ffd400');
+      px(sx - 2, sy - 19, 4, 4, SKIN); px(sx - 2, sy - 19, 4, 2, '#ffffff'); px(sx - 2, sy - 17, 4, 1, '#111');
+      poles(sx, sy);
+    },
+    // Gaper Day costumes: banana, tutu, dino onesie, speedo.
+    costume(n, sx, sy) {
+      const c = (n.idx || 0) % 4;
+      if (n.rides === 'ski') skis(sx, sy); else px(sx - 6, sy - 2, 12, 3, n.board);
+      if (c === 0) { px(sx - 3, sy - 20, 6, 15, '#ffe14d'); px(sx - 1, sy - 22, 2, 2, '#6b4a2b'); px(sx - 1, sy - 16, 2, 1, '#111'); }
+      else if (c === 1) { px(sx - 2, sy - 9, 4, 4, '#2b2f3a'); px(sx - 5, sy - 10, 10, 2, '#ff6fb5'); px(sx - 3, sy - 16, 6, 6, '#ff6fb5'); px(sx - 2, sy - 20, 4, 4, SKIN); }
+      else if (c === 2) { px(sx - 3, sy - 16, 6, 11, '#3aa655'); px(sx - 2, sy - 20, 4, 4, '#3aa655'); px(sx + 3, sy - 18, 1, 1, '#ffd400'); px(sx + 3, sy - 14, 1, 1, '#ffd400'); px(sx - 1, sy - 18, 1, 1, '#111'); }
+      else { px(sx - 3, sy - 15, 6, 10, SKIN); px(sx - 3, sy - 9, 6, 2, '#2f6fe4'); px(sx - 2, sy - 19, 4, 4, SKIN); px(sx - 2, sy - 20, 4, 1, '#ffd400'); }
+    },
+    // The shotski: six people in a row sharing one ski with shots on it.
+    shotski(n, sx, sy) {
+      for (let i = 0; i < 6; i++) { const x = sx - 30 + i * 12; skierBody(x, sy, FS.COLORS.ski[i % 5], '#2b2f3a'); }
+      px(sx - 34, sy - 12, 68, 2, '#8a5a2b');
+      for (let i = 0; i < 6; i++) px(sx - 31 + i * 12, sy - 14, 2, 2, '#ffffff');
+    },
+    lostkid(n, sx, sy) {
+      skis(sx, sy + 2, 6);
+      px(sx - 2, sy - 6, 4, 4, n.color);
+      px(sx - 1, sy - 9, 3, 3, SKIN); px(sx - 1, sy - 10, 3, 2, n.color);
+      px(sx + 3, sy - 7, 1, 8, '#9aa0a8'); // just the one pole
+    },
+    // One foot out of the binding, hopping across the run.
+    hopper(n, sx, sy) {
+      const up = Math.round(n.alt || 0);
+      px(sx - 6, sy - 2 - up, 12, 3, n.board);
+      px(sx - 3, sy - 8 - up, 2, 6, '#3a3f4b'); px(sx + 2, sy - 7, 2, 5, '#3a3f4b'); // one leg on the board, one on the snow
+      px(sx - 4, sy - 15 - up, 8, 7, n.color);
+      px(sx - 2, sy - 19 - up, 4, 4, SKIN); px(sx - 2, sy - 20 - up, 4, 2, '#222');
+    },
+    // Heelside sideslip down the pitch, arms out, scraping.
+    sideslipper(n, sx, sy, t) {
+      px(sx - 7, sy - 2, 14, 3, n.board);
+      px(sx - 3, sy - 8, 6, 6, '#3a3f4b');
+      px(sx - 3, sy - 14, 6, 6, n.color); px(sx - 7, sy - 13, 4, 1, n.color); px(sx + 3, sy - 13, 4, 1, n.color);
+      px(sx - 2, sy - 18, 4, 4, SKIN); px(sx - 2, sy - 19, 4, 2, '#eeeeee');
+      if (Math.floor(t * 8) % 2) px(sx - 6 + Math.floor(t * 30) % 12, sy + 1, 2, 1, '#cfe2f7');
+    },
+    // Splitboarder: the board split into two skis with red skins, big pack with a shovel handle.
+    splitboarder(n, sx, sy) {
+      px(sx - 3, sy - 6, 2, 10, n.board); px(sx + 1, sy - 6, 2, 10, n.board); px(sx - 3, sy - 4, 2, 6, '#c62828'); px(sx + 1, sy - 4, 2, 6, '#c62828');
+      px(sx - 2, sy - 9, 4, 4, '#3a3f4b');
+      px(sx - 3, sy - 15, 6, 6, n.color);
+      px(sx - 5, sy - 17, 4, 8, '#ff7a1a'); px(sx - 4, sy - 20, 1, 3, '#9aa0a8'); // pack and shovel handle
+      px(sx - 2, sy - 19, 4, 4, SKIN); px(sx - 2, sy - 19, 4, 2, '#ffd400');
+      poles(sx, sy);
+    },
+    // Johnny Tsunami nod: prep-school ski team, navy jackets with a gold crest.
+    academy(n, sx, sy) {
+      skierBody(sx, sy, '#1b2a4a', '#1b2a4a', '#1b2a4a', '#e0b84a');
+      px(sx - 1, sy - 13, 2, 2, '#e0b84a'); px(sx - 2, sy - 15, 4, 1, '#ffffff');
+      poles(sx, sy);
+    },
+    // The Bomb Hole nod: camp chair, mic, headphones.
+    podcast(n, sx, sy) {
+      px(sx - 5, sy - 2, 1, 3, '#2f6fe4'); px(sx + 4, sy - 2, 1, 3, '#2f6fe4'); px(sx - 5, sy - 6, 10, 4, '#2f6fe4');
+      px(sx - 3, sy - 11, 6, 6, n.color);
+      px(sx - 2, sy - 15, 4, 4, SKIN); px(sx - 3, sy - 15, 1, 3, '#111'); px(sx + 2, sy - 15, 1, 3, '#111'); px(sx - 2, sy - 16, 4, 1, '#111');
+      const m = n.idx ? -1 : 1; // mics face each other
+      px(sx + m * 6, sy - 12, 1, 12, '#555'); px(sx + m * 6 - 1, sy - 14, 3, 3, '#111');
+    },
+    // A groomer: big orange snowcat with a blade; sometimes the tycoon rides the back with his condo sign.
+    snowcat(n, sx, sy, t) {
+      const d = n.dir || 1;
+      px(sx - 15, sy - 4, 30, 4, '#2a2a2a'); for (let i = 0; i < 6; i++) px(sx - 14 + i * 5 + (Math.floor(t * 10) % 2), sy - 4, 2, 4, '#555');
+      px(sx - 13, sy - 12, 26, 8, '#ff7a1a'); px(sx - 13, sy - 12, 26, 1, '#ffb27a');
+      px(sx + (d > 0 ? 0 : -10), sy - 19, 10, 7, '#ff7a1a'); px(sx + (d > 0 ? 2 : -8), sy - 18, 6, 4, '#9fd8ff'); // cab
+      px(sx + d * 15 - (d > 0 ? 0 : 3), sy - 10, 3, 9, '#c0c6cc'); // blade
+      px(sx + (d > 0 ? 1 : -5), sy - 23, 4, 2, Math.floor(t * 3) % 2 ? '#ffd400' : '#ff7a1a'); // beacon
+      if (n.tycoon) {
+        const bx = sx - d * 9;
+        px(bx - 2, sy - 22, 5, 9, '#d9c7a8'); px(bx - 3, sy - 20, 7, 2, '#ffffff'); // fur coat
+        px(bx - 1, sy - 25, 3, 3, SKIN); px(bx - 1, sy - 26, 3, 1, '#ffffff');
+        px(bx - d * 6, sy - 32, 1, 14, '#5a3a1a'); px(bx - d * 6 - 6, sy - 36, 13, 6, '#ffd400'); // CONDOS COMING SOON sign
+        for (let i = 0; i < 3; i++) px(bx - d * 6 - 5, sy - 35 + i * 2, 11 - i * 3, 1, '#111');
+      }
+    },
+  });
+
   function person(n, sx, sy, t) {
     if (n.fallenT > 0) { fallen(n, sx, sy); return; }
     (LOOKS[n.look] || LOOKS.skier)(n, sx, sy, t);
@@ -219,5 +402,5 @@
     px(sx - 4 + lean, sy - 21, 4, 2, f ? '#ff1744' : '#2979ff'); px(sx + lean, sy - 21, 4, 2, f ? '#2979ff' : '#ff1744');
   }
 
-  FS.draw = { px, tree, rock, stump, kicker, rail, box, ice, shark, slowzone, rope, person, board, snowmobile };
+  FS.draw = { px, tree, rock, stump, kicker, rail, box, ice, shark, tower, snowgun, burger, hottub, palm, rv, cord, pickup, slowzone, rope, person, board, snowmobile };
 })();

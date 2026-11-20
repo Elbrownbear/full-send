@@ -30,6 +30,27 @@
     const cw = catwalkFor(bandOf(y));
     return cw.has && y >= cw.y0 && y < cw.y1;
   }
+  // Some bands have a chairlift running straight down them, beside wherever the rider was when it was built.
+  // Riding under it doubles your trick points, and the chairs heckle you.
+  function liftFor(band) {
+    let lf = S.lifts.get(band);
+    if (!lf) {
+      const rnd = FS.mulberry32(FS.hash3(S.seed, 3131, band));
+      const zone = FS.ZONES[zoneAt(band * C.ZONE_ROWS)];
+      const has = band >= 2 && rnd() < (zone.lift || 0);
+      const side = rnd() < 0.5 ? -1 : 1;
+      const y0 = band * C.ZONE_ROWS * C.CHUNK;
+      lf = { has, x: Math.round(S.rider.x + side * (30 + rnd() * 90)), y0, y1: y0 + C.ZONE_ROWS * C.CHUNK };
+      S.lifts.set(band, lf);
+    }
+    return lf;
+  }
+  function underLift(x, y) {
+    if (y < 0) return false;
+    const lf = liftFor(bandOf(y));
+    return lf.has && Math.abs(x - lf.x) < 16;
+  }
+
   // Deep snow: the whole powder zone, and any roped-off stash.
   function inPow(x, y) {
     if (y < 0) return false;
@@ -61,7 +82,14 @@
   // ---------- Chunks ----------
   function makeStatic(type, x, y) {
     const d = FS.STATICS[type];
-    return { type, x: Math.round(x), y: Math.round(y), w: d.w, h: d.h, ht: d.ht };
+    const o = { type, x: Math.round(x), y: Math.round(y), w: d.w, h: d.h, ht: d.ht };
+    if (type === 'snowgun') o.dir = (o.x + o.y) & 1 ? 1 : -1; // which way it blasts
+    return o;
+  }
+  // Statics added while playing (ice behind a sideslipper, corduroy behind a snowcat).
+  function addStatic(type, x, y) {
+    const ch = getChunk(Math.floor(x / C.CHUNK), Math.floor(y / C.CHUNK));
+    if (ch.statics.length < 80) ch.statics.push(makeStatic(type, x, y));
   }
 
   function getChunk(cx, cy) {
@@ -107,6 +135,12 @@
       spawnPerson(kind, x, y, prnd);
     };
 
+    // Chairlift towers every 140 px down the lift line.
+    const lf = liftFor(Math.floor(cy / C.ZONE_ROWS));
+    if (lf.has && lf.x >= x0 && lf.x < x0 + SZ) {
+      for (let ty = Math.ceil(y0 / 140) * 140; ty < y0 + SZ; ty += 140) if (ty >= lf.y0 + 40 && ty < lf.y1 - 20) place('tower', lf.x, ty);
+    }
+
     // A radar Slow Zone, often with patrol standing beside it.
     const sz = rnd(), szx = x0 + 50 + rnd() * (SZ - 100), szy = y0 + 40 + rnd() * (SZ - 80), szPatrol = rnd();
     if (sz < zone.slowZone && place('slowzone', szx, szy) && szPatrol < 0.5) spawn('patrol', szx + 44, szy + 6);
@@ -121,6 +155,9 @@
         if (rnd() < zone.jumpLine) { place('kicker', x, y + 70); place('kicker', x, y + 140); } // a jump line
       } else if (type === 'person') {
         spawn(FS.roll(zone.people, prnd()), x, y);
+      } else if (type === 'pickup') {
+        const kind = FS.roll(zone.pickups, rnd());
+        if (place('pickup', x, y)) statics[statics.length - 1].kind = kind;
       } else if (type !== 'empty') place(type, x, y);
     }
     return { statics, speckles };
@@ -142,6 +179,7 @@
     const bMin = bandOf(S.camY) - 2;
     for (const b of S.ropes.keys()) if (b < bMin) S.ropes.delete(b);
     for (const b of S.catwalks.keys()) if (b < bMin) S.catwalks.delete(b);
+    for (const b of S.lifts.keys()) if (b < bMin) S.lifts.delete(b);
   }
 
   // ---------- People ----------
@@ -151,9 +189,10 @@
     if (rides === 'either') rides = rnd() < 0.5 ? 'ski' : 'board';
     let beh = def.beh;
     if (beh === 'cruise' && def.standChance && rnd() < def.standChance) beh = 'stand';
-    const moving = beh === 'cruise' || beh === 'zigzag' || beh === 'snake';
+    const moving = beh === 'cruise' || beh === 'zigzag' || beh === 'snake' || beh === 'carve' || beh === 'sideslip' || beh === 'uphill';
     return Object.assign({
-      kind, rides, beh, look: def.look, x, y, w: 8, h: 6,
+      kind, rides, beh, look: def.look, x, y, w: def.wide || 8, h: 6,
+      dir: rnd() < 0.5 ? -1 : 1, tmr: 0, done: false, alt: 0, state: 'idle',
       vy: moving && def.speed ? FS.range(rnd, def.speed) : 0,
       phase: rnd() * 6.28, wob: 10 + rnd() * 20,
       color: FS.pick(kind === 'school' ? FS.COLORS.kids : rides === 'board' ? FS.COLORS.board : FS.COLORS.ski, rnd),
@@ -174,10 +213,15 @@
     }
     if (def.group) {
       const n = FS.rint(rnd, def.group[0], def.group[1]);
-      for (let k = 0; k < n; k++) S.npcs.push(makePerson(kind, x + k * def.spacing, y, rnd));
+      for (let k = 0; k < n; k++) S.npcs.push(makePerson(kind, x + k * def.spacing, y, rnd, { idx: k, lead: k === 0 }));
       return;
     }
-    S.npcs.push(makePerson(kind, x, y, rnd));
+    const p = makePerson(kind, x, y, rnd);
+    S.npcs.push(p);
+    // The drone guy's drone, parked beside him until you come past.
+    if (def.withDrone) S.npcs.push(makePerson('drone', x + 8, y - 2, rnd, { owner: p, alt: 0 }));
+    // Snowcats drive across the run; a third of them carry the tycoon and his condo sign.
+    if (kind === 'snowcat') { p.vx = p.dir * 35; p.tycoon = rnd() < 0.35; }
   }
 
   function aggro(n) {
@@ -203,6 +247,33 @@
     if (n.aggroT <= 0) n.coolT = C.GUN_COOLDOWN;
   }
 
+  // The drone: parked until you come past, then it films you (clout while it's on you), then flies into a tree.
+  function updateDrone(n, dt) {
+    const r = S.rider;
+    if (n.state === 'idle') {
+      if (Math.hypot(r.x - n.x, r.y - n.y) < 120) { n.state = 'follow'; n.tmr = 6; FS.popup(n.x, n.y - 30, 'GETTING THE SHOT', 'say'); }
+      return;
+    }
+    if (n.state === 'follow') {
+      n.alt = Math.min(30, n.alt + 40 * dt);
+      const tx = r.x + 18, ty = r.y - 6;
+      n.x += (tx - n.x) * Math.min(1, dt * 3); n.y += (ty - n.y) * Math.min(1, dt * 3);
+      if (Math.hypot(r.x - n.x, r.y - n.y) < 60) FS.addClout(10 * dt, true);
+      if ((n.tmr -= dt) <= 0) {
+        n.state = 'crashing';
+        let best = null, bd = 260; // find a tree to fly into
+        forNearbyStatics(n.x, n.y, (o) => { if (o.type === 'tree') { const d = Math.hypot(o.x - n.x, o.y - n.y); if (d < bd) { bd = d; best = o; } } });
+        n.target = best ? { x: best.x, y: best.y - 2 } : { x: n.x + 80 * n.dir, y: n.y + 40 };
+      }
+      return;
+    }
+    if (n.state === 'crashing') {
+      const dx = n.target.x - n.x, dy = n.target.y - n.y, d = Math.hypot(dx, dy);
+      if (d < 4) { n.state = 'down'; n.alt = 0; FS.popup(n.x, n.y - 24, 'DRONE DOWN', 'bad'); return; }
+      n.x += (dx / d) * 150 * dt; n.y += (dy / d) * 150 * dt; n.alt = Math.max(2, n.alt - 10 * dt);
+    }
+  }
+
   function updatePeople(dt) {
     const r = S.rider, t = S.simT;
     for (let i = S.npcs.length - 1; i >= 0; i--) {
@@ -220,6 +291,28 @@
           n.x = L.x + Math.sin(t * 1.2 + L.phase - n.idx * 0.8) * 12 - Math.sin(t * 1.2 + L.phase) * 12;
         }
       } else if (n.beh === 'gunslinger') updateGunslinger(n, dt);
+      else if (n.beh === 'carve') { n.y += n.vy * dt; n.x += Math.sin(t * 2.2 + n.phase) * 80 * dt; } // the Euro: fast, perfect S-turns
+      else if (n.beh === 'wander') { // the lost kid: drifts wherever
+        if ((n.tmr -= dt) <= 0) { n.tmr = 0.8 + Math.random() * 1.2; n.ang = Math.random() * Math.PI * 2; }
+        n.x += Math.cos(n.ang || 0) * 18 * dt; n.y += (Math.sin(n.ang || 0) * 18 + 8) * dt;
+      } else if (n.beh === 'hop') { n.x += n.dir * 42 * dt; n.alt = Math.abs(Math.sin(t * 9 + n.phase)) * 3; } // one foot out, hopping across the run
+      else if (n.beh === 'sideslip') {
+        n.y += n.vy * dt; n.x += Math.sin(t * 1.3 + n.phase) * 28 * dt;
+        // Scrapes the pitch to ice behind them.
+        if ((n.tmr -= dt) <= 0) { n.tmr = 2.2; addStatic('ice', n.x, n.y + 2); }
+      } else if (n.beh === 'uphill') n.y -= n.vy * dt; // splitboarder skinning up
+      else if (n.beh === 'snowcat') {
+        n.x += n.vx * dt;
+        if ((n.tmr -= dt) <= 0) { n.tmr = 0.75; addStatic('cord', n.x - n.dir * 18, n.y + 4); } // fresh corduroy behind it
+      } else if (n.beh === 'drone') updateDrone(n, dt);
+
+      const near = Math.hypot(r.x - n.x, r.y - n.y);
+      // Prep-school skiers yell at you (the first of each group). No heat: they're not patrol.
+      if (n.kind === 'academy' && n.lead && !n.yelled && near < 40) { n.yelled = true; FS.popup(n.x, n.y - 28, 'URCHIN!', 'bad'); }
+      // Ride past the podcast and you're on the pod.
+      if (n.kind === 'podcast' && n.lead && !n.done && near < 36) { n.done = true; FS.addClout(100); FS.popup(n.x + 8, n.y - 28, "YOU'RE ON THE POD +100", 'good'); }
+      // The speaker guy: good vibes, once.
+      if (n.kind === 'speaker' && !n.done && near < 50) { n.done = true; FS.addClout(20); FS.popup(n.x, n.y - 28, 'VIBES +20', 'good'); }
 
       // The dad who yells "SKI PATROL!" (he is not ski patrol).
       if (n.kind === 'dad' && !n.yelled && n.fallenT <= 0 && Math.hypot(r.x - n.x, r.y - n.y) < C.DAD_YELL_PX) {
@@ -231,5 +324,5 @@
     }
   }
 
-  FS.world = { zoneAt, bandOf, ropeFor, inStash, catwalkFor, inFlat, inPow, getChunk, forNearbyStatics, prune, updatePeople, aggro, makePerson };
+  FS.world = { zoneAt, bandOf, ropeFor, inStash, catwalkFor, inFlat, inPow, liftFor, underLift, getChunk, forNearbyStatics, prune, updatePeople, aggro, makePerson };
 })();

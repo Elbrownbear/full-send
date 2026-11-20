@@ -8,10 +8,13 @@
     // Hard stop next to someone (PRD §5). person = { kind, rides }.
     spray(person, speed, d, reach, rnd = Math.random) {
       const def = FS.PEOPLE[person.kind] || {};
+      // Out Cold nod: the Colorado tycoon. Everyone hates him, patrol included.
+      if (person.tycoon) return { clout: 500, heat: 0, text: '+500 NO CONDOS!', say: 'MY FUR COAT!' };
+      if (person.kind === 'snowcat') return { clout: 25, heat: 5, text: '+25 SPRAYED THE CAT', say: 'HEY!' };
       if (person.rides === 'none') return { clout: 0, heat: 0, text: 'UH OH', say: FS.pick(def.says || ['HEY!'], rnd), aggro: true };
       if (person.rides === 'board') return { clout: -75, heat: 0, text: '-75 SPRAYED A HOMIE', say: FS.pick(FS.SAYS.boardSprayed, rnd), homie: true };
       const close = 1 + Math.max(0, 1 - d / reach); // closer stop = up to double
-      let pts = r5((30 + speed * 0.6) * close);
+      let pts = r5((30 + speed * 0.6) * close * (def.mult || 1));
       let heat = 15 * (def.heatMult || 1);
       if (def.patrol) { pts = r5(pts * 2); heat = 100; }
       return { clout: pts, heat, text: `+${pts} SPRAYED`, say: FS.pick(def.says || FS.SAYS.skiSprayed, rnd) };
@@ -22,8 +25,8 @@
       const def = FS.PEOPLE[person.kind] || {};
       if (person.rides === 'none') return { clout: 50, heat: 0, text: '+50 DISARMED', say: 'MY HAT!' };
       if (person.rides === 'board') return { clout: -150, heat: 10, text: '-150 FRIENDLY FIRE', say: FS.pick(FS.SAYS.boardSprayed, rnd), homie: true };
-      let pts = r5(100 + Math.max(0, speed - FS.C.PLOW_SPEED) * 1.5);
-      let heat = 25 * (def.heatMult || 1);
+      let pts = r5((100 + Math.max(0, speed - FS.C.PLOW_SPEED) * 1.5) * (def.mult || 1)); // mult: a whole shotski line
+      let heat = 25 * (def.heatMult || 1) * (def.mult ? 1.5 : 1);
       if (def.patrol) { pts *= 2; heat = 100; }
       return { clout: pts, heat, text: `+${pts} BOWLED OVER`, say: FS.pick(def.says || FS.SAYS.plowed, rnd) };
     },
@@ -36,10 +39,10 @@
       return { heat: Math.round(10 + over * 0.5), clout: over * 5, text: `${mph} IN A ${lim}! +${over * 5}`, over };
     },
 
-    // Landing: spins must finish within 55° of a clean 180, or it's a crash.
-    trick({ spin, grabT, grabName, airT, wasSwitch }) {
+    // Landing: spins must finish within `tolerance` degrees (55, or 35 on liquid courage) of a clean 180, or it's a crash.
+    trick({ spin, grabT, grabName, airT, wasSwitch }, tolerance = 55) {
       const n = Math.round(spin / 180);
-      if (Math.abs(spin - n * 180) > 55) return { ok: false };
+      if (Math.abs(spin - n * 180) > tolerance) return { ok: false };
       const half = Math.abs(n);
       let pts = 0;
       const names = [];
@@ -73,6 +76,8 @@
       if (stats.shot) lines.push('wait who had a GUN');
       if (stats.wells > 0) lines.push('tree well?? never ride trees alone');
       if (stats.skated >= 2) lines.push(`unstrapped ${stats.skated} times lmao`);
+      if (stats.tycoon) lines.push('YOU SPRAYED THE CONDO GUY');
+      if (stats.found && stats.found.length) lines.push(`found a ${stats.found[0].toLowerCase()}??`);
       if (dist < 300) lines.push('short day huh');
       const pool = FS.CHAT_GENERIC.slice();
       while (lines.length < 3 && pool.length) lines.push(pool.splice(Math.floor(rnd() * pool.length), 1)[0]);

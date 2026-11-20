@@ -83,6 +83,29 @@ test('every zone and person used in content has the data it needs', () => {
   for (const z of Object.values(ZONES)) for (const t of Object.keys(z.weights)) if (t !== 'person' && t !== 'empty') assert.ok(STATICS[t], t);
 });
 
+test('spraying the Colorado tycoon pays big with no heat', () => {
+  const r = rules.spray({ kind: 'snowcat', rides: 'none', tycoon: true }, 200, 10, 46, fixed);
+  assert.strictEqual(r.clout, 500);
+  assert.strictEqual(r.heat, 0);
+});
+
+test('plowing the whole shotski line pays triple', () => {
+  const one = rules.plow({ kind: 'skier', rides: 'ski' }, 230, fixed);
+  const line = rules.plow({ kind: 'shotski', rides: 'ski' }, 230, fixed);
+  assert.strictEqual(line.clout, one.clout * 3);
+});
+
+test('liquid courage tightens the landing window', () => {
+  const t = { spin: 225, grabT: 0, grabName: '', airT: 1, wasSwitch: false };
+  assert.strictEqual(rules.trick(t, 55).ok, true);
+  assert.strictEqual(rules.trick(t, 35).ok, false);
+});
+
+test('every pickup in a zone exists in PICKUPS', () => {
+  const { PICKUPS } = window.FS;
+  for (const z of Object.values(ZONES)) for (const k of Object.keys(z.pickups || {})) assert.ok(PICKUPS[k], k);
+});
+
 test('group chat roasts what you actually did first', () => {
   const lines = rules.chat({ homies: 2, plowed: 4, worstMph: 52, stashM: 0, shot: false }, 900, fixed);
   assert.strictEqual(lines.length, 3);
