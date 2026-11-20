@@ -64,6 +64,25 @@ test('tricks: a clean switch 360 with a grab scores; over-rotation crashes', () 
   assert.strictEqual(rules.trick({ spin: 270, grabT: 0, grabName: '', airT: 1, wasSwitch: false }).ok, false);
 });
 
+test('grinds pay more the longer you slide, and switch pays more', () => {
+  const short = rules.grind(0.2, 'Boardslide', false);
+  const long = rules.grind(1, 'Boardslide', false);
+  const sw = rules.grind(1, 'Boardslide', true);
+  assert.ok(long.pts > short.pts && sw.pts > long.pts);
+  assert.strictEqual(sw.name, 'Switch Boardslide');
+});
+
+test('butters: a quick lean scores nothing, a held tail press scores', () => {
+  assert.strictEqual(rules.butter(0.2).pts, 0);
+  assert.ok(rules.butter(1).pts > 0);
+});
+
+test('every zone and person used in content has the data it needs', () => {
+  const { STATICS, ZONE_ODDS } = window.FS;
+  for (const z of Object.keys(ZONE_ODDS)) assert.ok(ZONES[z], z);
+  for (const z of Object.values(ZONES)) for (const t of Object.keys(z.weights)) if (t !== 'person' && t !== 'empty') assert.ok(STATICS[t], t);
+});
+
 test('group chat roasts what you actually did first', () => {
   const lines = rules.chat({ homies: 2, plowed: 4, worstMph: 52, stashM: 0, shot: false }, 900, fixed);
   assert.strictEqual(lines.length, 3);

@@ -42,19 +42,21 @@
   function newRun() {
     Object.assign(S, {
       seed: URL_SEED ?? ((Math.random() * 2 ** 31) | 0),
-      chunks: new Map(), spawned: new Set(), ropes: new Map(),
+      chunks: new Map(), spawned: new Set(), ropes: new Map(), catwalks: new Map(),
       npcs: [], particles: [], popups: [], trail: [], bullets: [],
       rider: {
         x: 0, y: 0, z: 0, vz: 0, h: MID, speed: 0, mode: 'ride',
         stopping: false, stopDir: 0, stopSide: 1, stopSpeed: 0, sprayT: 0,
         airVX: 0, airVY: 0, spin: 0, grabT: 0, grabName: '', airT: 0, wasSwitch: false,
         sw: false, invuln: 0, crashT: 0, crashObj: null, turnT: 0,
+        rail: null, grindT: 0, grindStyle: '', butterT: 0, butterSpin: 0, stuckT: 0, skateAnim: 0, pushT: 0,
       },
+      onIce: false, iceWarned: false, flatIn: false, powIn: false, powTipped: false,
       patrol: null, patrolLevel: 0, warned: false,
       clout: 0, heat: 0, dist: 0, caption: null, zoneToast: null, lastZone: null,
       hintT: 0, simT: 0, camX: 0, camY: 0, pruneT: 0, caughtT: 0,
       stash: { in: false, lastY: 0, bank: 0, earned: 0 },
-      stats: { sprayed: 0, homies: 0, plowed: 0, crashes: 0, speedTraps: 0, worstMph: 0, stashM: 0, bestTrick: null, topMph: 0, shaken: 0, shot: false },
+      stats: { sprayed: 0, homies: 0, plowed: 0, crashes: 0, speedTraps: 0, worstMph: 0, stashM: 0, bestTrick: null, topMph: 0, shaken: 0, shot: false, wells: 0, skated: 0, grinds: 0 },
     });
   }
 
@@ -66,15 +68,17 @@
   FS.addHeat = addHeat;
 
   // ---------- Input ----------
-  const input = { left: false, right: false, stopHeld: false, jumpHeld: false, jumpQueued: false, turnPulse: 0, downPulse: false, spinDir: 0 };
+  const input = { left: false, right: false, stopHeld: false, jumpHeld: false, jumpQueued: false, turnPulse: 0, downPulse: false, spinDir: 0, leanKey: false, mouseLean: false, butterFlick: 0 };
   const pointer = { mode: 'keys', mouse: null, touch: null };
   const isTouch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
 
   function resetInput() {
-    Object.assign(input, { left: false, right: false, stopHeld: false, jumpHeld: false, jumpQueued: false, turnPulse: 0, downPulse: false, spinDir: 0 });
+    Object.assign(input, { left: false, right: false, stopHeld: false, jumpHeld: false, jumpQueued: false, turnPulse: 0, downPulse: false, spinDir: 0, leanKey: false, mouseLean: false, butterFlick: 0 });
     pointer.touch = null;
   }
-  const grabHeld = () => input.jumpHeld || (pointer.mode === 'touch' && pointer.touch !== null);
+  const grabHeld = () => input.jumpHeld || (pointer.mode === 'touch' && pointer.touch !== null && !pointer.touch.lean);
+  // Lean back: Shift, right mouse button, or pull your thumb down.
+  const leanHeld = () => input.leanKey || input.mouseLean || !!(pointer.touch && pointer.touch.lean);
   // After a landing, stop or crash, steering by drag starts fresh from where the thumb is now.
   function rebaseTouch() {
     const tp = pointer.touch;
@@ -84,12 +88,27 @@
   function handleInput(dt) {
     const r = S.rider;
     input.spinDir = 0;
-    if (input.jumpQueued) { input.jumpQueued = false; if (r.mode === 'ride' && !r.stopping) takeoff(C.OLLIE_V); }
     const dir = (input.right ? 1 : 0) - (input.left ? 1 : 0);
+    // Skating a catwalk or digging out of a tree well: every press is a push or a dig.
+    if (r.mode === 'skate' || r.mode === 'stuck') {
+      if (input.jumpQueued || input.downPulse || input.turnPulse) mash();
+      input.jumpQueued = false; input.downPulse = false; input.turnPulse = 0; input.butterFlick = 0;
+      return;
+    }
+    if (input.jumpQueued) {
+      input.jumpQueued = false;
+      if (r.mode === 'ride' && !r.stopping) takeoff(C.OLLIE_V);
+      else if (r.mode === 'grind') leaveRail(0, C.OLLIE_V);
+    }
     if (r.mode === 'crash') { input.turnPulse = 0; input.downPulse = false; return; }
+    if (r.mode === 'grind') { if (input.turnPulse) leaveRail(input.turnPulse, 50); input.turnPulse = 0; return; }
     if (r.mode === 'air') { input.spinDir = dir; input.turnPulse = 0; return; }
     if (input.stopHeld) requestStop();
     if (input.downPulse) { input.downPulse = false; if (!r.stopping) r.h = MID; }
+    // Leaning back + a tap left or right = butter 180 on the snow.
+    const flick = input.turnPulse || input.butterFlick;
+    input.butterFlick = 0;
+    if (flick && leanHeld() && canButter()) { butter180(); input.turnPulse = 0; return; }
     if (dir !== 0 && !r.stopping && !input.turnPulse) {
       r.turnT -= dt;
       if (r.turnT <= 0) { steer(dir); r.turnT = C.TURN_REPEAT * (1 + r.speed / 250); }
@@ -102,6 +121,7 @@
 
   function steer(dir) {
     const r = S.rider;
+    if (S.onIce) return; // no edge on ice
     // Stopped and already pointing sideways: take a little skating step instead.
     if (r.speed < 15 && ((dir < 0 && r.h === 0) || (dir > 0 && r.h === 6))) { r.x += dir * 6; return; }
     r.h = limitHeading(r.h + dir);
@@ -143,7 +163,9 @@
     else if (k === 'down') input.downPulse = true;
     else if (k === 'jump') { input.jumpHeld = true; input.jumpQueued = true; }
   });
+  addEventListener('keydown', (e) => { if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') input.leanKey = true; });
   addEventListener('keyup', (e) => {
+    if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') input.leanKey = false;
     const k = KEYMAP[e.code];
     if (k === 'left') input.left = false;
     else if (k === 'right') input.right = false;
@@ -159,11 +181,17 @@
     if (S.rider.mode === 'air') S.rider.spin += e.movementX * 1.5;
   });
   canvas.addEventListener('mousedown', (e) => {
-    if (e.button !== 0 || state !== 'play') return;
+    if (state !== 'play') return;
     pointer.mode = 'mouse';
+    if (e.button === 2) { input.mouseLean = true; return; }
+    if (e.button !== 0) return;
     input.jumpHeld = true; input.jumpQueued = true;
   });
-  addEventListener('mouseup', () => { if (pointer.mode === 'mouse') input.jumpHeld = false; });
+  addEventListener('mouseup', (e) => {
+    if (e.button === 2) input.mouseLean = false;
+    else if (pointer.mode === 'mouse') input.jumpHeld = false;
+  });
+  canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 
   canvas.addEventListener('touchstart', (e) => {
     e.preventDefault();
@@ -172,7 +200,8 @@
     for (const t of e.changedTouches) {
       if (!pointer.touch) {
         const now = performance.now();
-        pointer.touch = { id: t.identifier, sx: t.clientX, sy: t.clientY, lx: t.clientX, t0: now, baseH: S.rider.h, moved: false, flicked: false, hist: [{ y: t.clientY, t: now }] };
+        pointer.touch = { id: t.identifier, sx: t.clientX, sy: t.clientY, lx: t.clientX, t0: now, baseH: S.rider.h, moved: false, flicked: false, lean: false, buttered: false, hist: [{ x: t.clientX, y: t.clientY, t: now }] };
+        if (S.rider.mode === 'skate' || S.rider.mode === 'stuck') input.jumpQueued = true; // every tap is a push or a dig
       } else {
         input.jumpQueued = true; // a second finger is an instant ollie
       }
@@ -188,12 +217,16 @@
       const now = performance.now();
       const dx = t.clientX - tp.sx, dy = t.clientY - tp.sy;
       if (Math.abs(dx) > 10 || Math.abs(dy) > 10) tp.moved = true;
-      tp.hist.push({ y: t.clientY, t: now });
+      tp.hist.push({ x: t.clientX, y: t.clientY, t: now });
       while (tp.hist.length > 1 && now - tp.hist[0].t > 150) tp.hist.shift();
-      const flickDy = t.clientY - tp.hist[0].y;
+      const flickDy = t.clientY - tp.hist[0].y, flickDx = t.clientX - tp.hist[0].x;
       const r = S.rider;
+      // Thumb pulled down past LEAN_PX = leaning back. A quick sideways flick while leaning = butter 180.
+      tp.lean = !tp.flicked && dy > C.LEAN_PX;
+      if (!tp.lean) tp.buttered = false;
+      else if (!tp.buttered && Math.abs(flickDx) > 40) { tp.buttered = true; input.butterFlick = Math.sign(flickDx); }
       if (r.mode === 'air') r.spin += (t.clientX - tp.lx) * C.TOUCH_SPIN;
-      else if (!tp.flicked && flickDy < -C.FLICK_PX && Math.abs(t.clientX - tp.lx) < 20) { tp.flicked = true; requestStop(); }
+      else if (!tp.flicked && flickDy < -C.FLICK_PX && dy < 0 && Math.abs(t.clientX - tp.lx) < 20) { tp.flicked = true; requestStop(); }
       else if (!tp.flicked && r.mode === 'ride' && !r.stopping) r.h = limitHeading(tp.baseH + Math.round(dx / (C.TOUCH_STEP_PX * (1 + r.speed / 300))));
       tp.lx = t.clientX;
     }
@@ -205,7 +238,8 @@
     if (!tp) return;
     for (const t of e.changedTouches) {
       if (t.identifier !== tp.id) continue;
-      if (!tp.moved && performance.now() - tp.t0 < 250 && state === 'play') input.jumpQueued = true; // tap = ollie
+      const r = S.rider;
+      if (!tp.moved && performance.now() - tp.t0 < 250 && state === 'play' && r.mode !== 'skate' && r.mode !== 'stuck') input.jumpQueued = true; // tap = ollie
       pointer.touch = null;
     }
   };
@@ -224,9 +258,14 @@
     handleInput(dt);
     if (r.invuln > 0) r.invuln -= dt;
     if (r.mode === 'crash') { r.crashT -= dt; if (r.crashT <= 0) getUp(); }
+    else if (r.mode === 'stuck') { r.stuckT -= dt; if (r.stuckT <= 0) { popup(r.x, r.y - 26, 'DUG OUT', 'good'); getUp(); } }
     else if (r.mode === 'air') updateAir(dt);
+    else if (r.mode === 'grind') updateGrind(dt);
+    else if (r.mode === 'skate') updateSkate(dt);
     else updateGround(dt);
-    if (r.mode !== 'crash') collide();
+    if (r.mode !== 'crash' && r.mode !== 'stuck') collide();
+    if (r.butterSpin > 0) r.butterSpin = Math.max(0, r.butterSpin - C.BUTTER_SPIN * dt);
+    terrainToasts();
     updateStash(dt);
     WORLD.updatePeople(dt);
     updateBullets(dt);
@@ -257,15 +296,26 @@
     } else {
       deg = HEADINGS[r.h];
       const pull = Math.cos(deg * DEG);
-      let acc = C.G * pull - C.DRAG * r.speed;
-      if (r.speed < C.START_SPEED && pull > 0.3) acc += C.START_BOOST * pull;
+      const flat = WORLD.inFlat(r.y), pow = WORLD.inPow(r.x, r.y);
+      let acc;
+      if (flat) acc = -C.DRAG * r.speed - C.FLAT_FRICTION; // catwalk: no pull at all
+      else {
+        acc = C.G * pull - C.DRAG * r.speed;
+        if (r.speed < C.START_SPEED && pull > 0.3) acc += C.START_BOOST * pull;
+      }
       if (Math.abs(deg) === 90) acc -= C.SIDE_BRAKE;
+      if (pow) acc -= (leanHeld() ? C.POW_DRAG_LEAN : C.POW_DRAG) * r.speed; // sink unless you lean back
+      if (S.onIce) acc += C.ICE_GRIP * C.DRAG * r.speed; // ice is fast
       r.speed = clamp(r.speed + acc * dt, 0, C.MAX);
+      // Out of speed on a catwalk: unstrap and skate.
+      if (flat && r.speed < C.SKATE_AT) { startSkate(); return; }
+      updateButter(dt, flat || pow);
     }
     const a = deg * DEG, prevY = r.y;
     r.x += Math.sin(a) * r.speed * dt;
     r.y += Math.cos(a) * r.speed * dt;
-    addTrail(r.stopping ? 4 : S.stash.in ? 3 : 2);
+    S.onIce = onIce();
+    addTrail(r.stopping ? 4 : WORLD.inPow(r.x, r.y) && !leanHeld() ? 4 : S.stash.in ? 3 : 2);
     let launched = false;
     WORLD.forNearbyStatics(r.x, r.y, (o) => {
       if (o.type === 'kicker' && !r.stopping && !launched && r.speed > 40 && Math.abs(r.x - o.x) < 11 && prevY < o.y - 1 && r.y >= o.y - 1) {
@@ -274,6 +324,123 @@
       if (o.type === 'slowzone') checkRadar(o, prevY);
     });
     if (launched) takeoff(C.KICK_V + r.speed * C.KICK_GAIN);
+  }
+
+  function onIce() {
+    const r = S.rider;
+    let hit = false;
+    WORLD.forNearbyStatics(r.x, r.y, (o) => {
+      if (o.type === 'ice' && Math.abs(r.x - o.x) < 14 && Math.abs(r.y - (o.y - 7)) < 7) { hit = true; return false; }
+    });
+    if (hit && !S.iceWarned) { S.iceWarned = true; popup(r.x, r.y - 26, 'EAST COAST POWDER', 'say'); }
+    return hit;
+  }
+
+  // ---------- Butters: lean back on the snow ----------
+  function canButter() {
+    const r = S.rider;
+    return r.mode === 'ride' && !r.stopping && r.speed >= 30 && r.speed <= 240 && !WORLD.inFlat(r.y) && !WORLD.inPow(r.x, r.y);
+  }
+  function updateButter(dt, noButter) {
+    const r = S.rider;
+    if (!noButter && leanHeld() && canButter()) { r.butterT += dt; return; }
+    if (r.butterT > 0) {
+      const res = RULES.butter(r.butterT);
+      if (res.pts > 0) { addClout(res.pts); popup(r.x, r.y - 26, `${res.name} +${res.pts}`, 'trick'); }
+      r.butterT = 0;
+    }
+  }
+  function butter180() {
+    const r = S.rider;
+    r.sw = !r.sw;
+    r.butterSpin = 180;
+    addClout(RULES.BUTTER_180);
+    popup(r.x, r.y - 26, `${r.sw ? 'Butter 180 to switch' : 'Butter 180'} +${RULES.BUTTER_180}`, 'trick');
+  }
+
+  // ---------- Catwalks: unstrap and skate ----------
+  function startSkate() {
+    const r = S.rider;
+    r.mode = 'skate'; r.speed = Math.max(r.speed, 8); r.h = MID; r.butterT = 0;
+    S.stats.skated++;
+    say('UNSTRAP AND SKATE', 1.4);
+    // A couple of skiers pole past, laughing.
+    for (let k = 0; k < 2; k++) {
+      const n = WORLD.makePerson('skier', r.x + (k ? 26 : -24), r.y - 50 - k * 30, Math.random, { beh: 'cruise', vy: 95 + k * 15, wob: 4 });
+      S.npcs.push(n);
+    }
+    popup(r.x, r.y - 40, pick(FS.LAUGHS), 'say');
+  }
+  function updateSkate(dt) {
+    const r = S.rider;
+    r.speed = Math.max(0, r.speed - (C.DRAG * r.speed + C.FLAT_FRICTION * 0.5) * dt);
+    r.y += r.speed * dt;
+    r.skateAnim += dt;
+    if (r.pushT > 0) r.pushT -= dt;
+    if (!WORLD.inFlat(r.y)) { r.mode = 'ride'; popup(r.x, r.y - 26, 'STRAPPED BACK IN', 'good'); rebaseTouch(); }
+  }
+  function mash() {
+    const r = S.rider;
+    if (r.mode === 'skate') { r.speed = Math.min(C.SKATE_MAX, r.speed + C.SKATE_PUSH); r.pushT = 0.2; }
+    else if (r.mode === 'stuck') { r.stuckT -= C.WELL_DIG; burst(r.x, r.y - 4, 4); }
+  }
+
+  // Zone-style banners for catwalks and the first powder.
+  function terrainToasts() {
+    const r = S.rider;
+    const flat = WORLD.inFlat(r.y);
+    if (flat && !S.flatIn) S.zoneToast = { text: 'CATWALK · KEEP YOUR SPEED', t: 2 };
+    S.flatIn = flat;
+    const pow = WORLD.inPow(r.x, r.y);
+    if (pow && !S.powIn && !S.powTipped) {
+      S.powTipped = true;
+      S.zoneToast = { text: isTouch ? 'POW · PULL THUMB DOWN TO LEAN BACK' : 'POW · HOLD SHIFT TO LEAN BACK', t: 2.6 };
+    }
+    S.powIn = pow;
+  }
+
+  // ---------- Rails and boxes ----------
+  function railUnder() {
+    const r = S.rider;
+    let found = null;
+    WORLD.forNearbyStatics(r.x, r.y, (o) => {
+      if (FS.GRINDABLE[o.type] && Math.abs(r.x - o.x) <= o.w / 2 + 5 && r.y >= o.y - o.h && r.y <= o.y - 6 && r.z <= o.ht + 2) { found = o; return false; }
+    });
+    return found;
+  }
+  function startGrind(o) {
+    const r = S.rider;
+    const res = RULES.trick(r);
+    if (!res.ok) { r.spin = 0; crash(pick(FS.CRASH_LINES.spin), o); return; }
+    if (res.half % 2 === 1) r.sw = !r.sw;
+    if (res.pts > 0) { addClout(res.pts); popup(r.x, r.y - 30, `${res.name} +${res.pts}`, 'trick'); }
+    r.speed = Math.max(90, Math.hypot(r.airVX, r.airVY));
+    r.mode = 'grind'; r.rail = o; r.z = o.ht; r.vz = 0; r.x = o.x; r.grindT = 0; r.spin = 0;
+    const straight = r.h === MID;
+    r.grindStyle = o.type === 'box' ? (straight ? 'Box 50-50' : 'Box slide') : (straight ? '50-50' : 'Boardslide');
+    r.wasSwitch = r.sw;
+  }
+  function updateGrind(dt) {
+    const r = S.rider;
+    r.grindT += dt;
+    r.speed = Math.max(80, r.speed - 20 * dt);
+    r.y += r.speed * dt;
+    if (Math.random() < 0.5) S.particles.push({ x: r.x, y: r.y, z: r.z, vx: (Math.random() - 0.5) * 40, vy: -10, vz: 30, life: 0.25, c: '#ffe082' });
+    if (r.y >= r.rail.y) leaveRail(0, 50);
+  }
+  // Off the end, off the side (dir ±1) or ollie off (vz).
+  function leaveRail(dir, vz) {
+    const r = S.rider;
+    const res = RULES.grind(r.grindT, r.grindStyle, r.wasSwitch);
+    addClout(res.pts);
+    S.stats.grinds++;
+    popup(r.x, r.y - 30, `${res.name} +${res.pts}`, 'trick');
+    if (!S.stats.bestTrick || res.pts > S.stats.bestTrick.pts) S.stats.bestTrick = { name: res.name, pts: res.pts };
+    r.mode = 'air'; r.vz = vz; r.z = r.rail.ht + 0.5; r.h = MID;
+    r.airVX = dir * 70; r.airVY = r.speed;
+    r.spin = 0; r.grabT = 0; r.airT = 0; r.wasSwitch = r.sw;
+    r.invuln = Math.max(r.invuln, 0.15); // don't instantly re-hit the rail you just left
+    r.rail = null;
   }
 
   function takeoff(vz) {
@@ -292,6 +459,7 @@
     if (input.spinDir) r.spin += input.spinDir * C.SPIN_RATE * dt;
     if (grabHeld()) r.grabT += dt;
     WORLD.forNearbyStatics(r.x, r.y, (o) => { if (o.type === 'slowzone') checkRadar(o, prevY); }); // radar still clocks you in the air
+    if (r.vz < 0) { const o = railUnder(); if (o) { startGrind(o); return; } } // coming down onto a rail or box
     if (r.z <= 0) land();
   }
 
@@ -315,6 +483,10 @@
   function requestStop() {
     const r = S.rider;
     if (r.mode !== 'ride' || r.stopping || r.speed < C.STOP_MIN) return;
+    if (S.onIce) { // no edge to dig in
+      if (S.simT - (S.noEdgeAt || -9) > 1) { S.noEdgeAt = S.simT; popup(r.x, r.y - 26, 'NO EDGE!', 'bad'); }
+      return;
+    }
     r.stopping = true;
     r.stopDir = HEADINGS[r.h];
     r.stopSpeed = r.speed;
@@ -329,10 +501,21 @@
     const r = S.rider;
     if (r.mode === 'crash') return;
     r.mode = 'crash'; r.crashT = C.CRASH_T; r.speed = 0; r.z = 0; r.vz = 0;
-    r.stopping = false; r.spin = 0; r.crashObj = obj;
+    r.stopping = false; r.spin = 0; r.crashObj = obj; r.rail = null; r.butterT = 0;
     S.stats.crashes++;
     say(text);
     burst(r.x, r.y, 18);
+    S.trail.push(null);
+  }
+
+  // Deep snow at the base of a tree: stuck until you dig out (or patrol finds you).
+  function treeWell(o) {
+    const r = S.rider;
+    r.mode = 'stuck'; r.stuckT = C.WELL_T; r.speed = 0; r.z = 0; r.vz = 0; r.stopping = false; r.spin = 0; r.crashObj = o;
+    S.stats.wells++;
+    say('TREE WELL!', 1.6);
+    popup(r.x, r.y - 30, isTouch ? 'TAP TO DIG OUT' : 'MASH TO DIG OUT', 'bad');
+    burst(r.x, r.y, 12);
     S.trail.push(null);
   }
 
@@ -353,9 +536,10 @@
     const rb = { x: r.x, y: r.y, w: 6, h: 4 };
     let hit = null;
     WORLD.forNearbyStatics(r.x, r.y, (o) => {
-      if (o.ht === 0 || r.z >= o.ht) return; // kickers and Slow Zones aren't obstacles
+      if (o.ht === 0 || r.z >= o.ht || o === r.rail) return; // kickers, ice and Slow Zones aren't obstacles
       if (overlap(rb, o)) { hit = o; return false; }
     });
+    if (hit && hit.type === 'tree' && WORLD.inPow(hit.x, hit.y)) { treeWell(hit); return; }
     if (hit) { crash(pick(FS.CRASH_LINES[hit.type]), hit); return; }
     if (r.z >= 16 || r.stopping) return; // sliding to a stop sprays people instead of hitting them
     for (const n of S.npcs) {
@@ -489,7 +673,7 @@
     const r = S.rider;
     S.patrol = {
       mode, x: r.x + (Math.random() - 0.5) * 120, y: S.camY - 30, dirX: 0,
-      speed: C.PATROL_SPEED + S.patrolLevel * C.PATROL_LEVEL_UP + (mode === 'dist' ? 20 : 0),
+      speed: C.PATROL_SPEED + S.patrolLevel * C.PATROL_LEVEL_UP + (mode === 'dist' ? 10 : 0),
     };
     say(mode === 'heat' ? 'SKI PATROL! SHAKE THEM!' : 'SKI PATROL!', 2);
   }
@@ -498,7 +682,8 @@
     const r = S.rider;
     state = 'caught';
     S.caughtT = 1.4;
-    r.speed = 0; r.stopping = false; r.mode = r.mode === 'air' ? 'ride' : r.mode;
+    r.speed = 0; r.stopping = false; r.z = 0; r.rail = null;
+    if (r.mode === 'air' || r.mode === 'grind' || r.mode === 'skate') r.mode = 'ride';
     say('PASS CLIPPED', 2);
     burst(r.x, r.y, 20);
     resetInput();
@@ -559,10 +744,31 @@
       px(sx - 6, sy - 5, 11, 4, jacket); px(sx + 5, sy - 6, 4, 4, helmet);
       return;
     }
+    if (r.mode === 'stuck') {
+      // Buried to the chest in a tree well, arms flailing.
+      const f = Math.floor(S.simT * 8) % 2;
+      px(sx - 3, sy - 9, 6, 5, jacket); px(sx - 2, sy - 13, 4, 4, helmet);
+      px(sx - 6, sy - (f ? 14 : 10), 2, 4, jacket); px(sx + 4, sy - (f ? 10 : 14), 2, 4, jacket);
+      px(sx - 7, sy - 5, 14, 5, '#ffffff'); px(sx - 5, sy - 6, 10, 1, '#ffffff');
+      return;
+    }
+    if (r.mode === 'skate') {
+      // One foot out of the binding, pushing.
+      const push = Math.floor(r.skateAnim * 6) % 2;
+      DRAW.board(sx, sy, 0, '#ffd23f');
+      px(sx - 2, sy - 6, 2, 5, '#22314d');
+      px(sx + 1 + (push ? 3 : 1), sy - 6 + (push ? 3 : 0), 2, 5, '#22314d'); // the free leg
+      px(sx - 3, sy - 12, 6, 6, jacket); px(sx - 2, sy - 16, 4, 4, helmet); px(sx - 2, sy - 14, 4, 1, '#3ce0ff');
+      return;
+    }
+    const sunk = r.mode === 'ride' && !leanHeld() && WORLD.inPow(r.x, r.y) && r.speed > 5; // board hidden in deep snow
     let deg = HEADINGS[r.h];
     if (r.stopping) deg = r.stopDir + 90;
     if (r.mode === 'air') deg += r.spin;
-    DRAW.board(sx, by, deg, '#ffd23f');
+    if (r.mode === 'grind') deg = r.grindStyle.includes('50-50') ? 0 : 90;
+    deg += r.butterSpin;
+    if (!sunk) DRAW.board(sx, by, deg, '#ffd23f');
+    else px(sx - 7, sy - 3, 14, 3, '#ffffff');
     // Facing downhill (heelside) shows the goggles; toeside shows the back of the helmet.
     const travel = r.stopping ? r.stopSide : Math.sin(HEADINGS[r.h] * DEG);
     let heel = travel >= 0;
@@ -570,11 +776,13 @@
     if (r.sw) heel = !heel;
     const grabbing = r.mode === 'air' && grabHeld();
     const crouch = grabbing || r.stopping ? 2 : 0;
-    px(sx - 2, by - 6, 4, 5, '#22314d');
-    px(sx - 3, by - 12 + crouch, 6, 6, jacket);
+    const lean = r.mode === 'ride' && leanHeld() ? -1 : 0; // leaning back shifts the body up the board
+    if (!sunk) px(sx - 2, by - 6, 4, 5, '#22314d');
+    px(sx - 3 + lean, by - 12 + crouch, 6, 6, jacket);
     if (grabbing) px(sx + 3, by - 8, 1, 6, jacket);
-    px(sx - 2, by - 16 + crouch, 4, 4, helmet);
-    if (heel) px(sx - 2, by - 14 + crouch, 4, 1, '#3ce0ff');
+    if (r.mode === 'grind') { px(sx - 7, by - 11, 3, 1, jacket); px(sx + 4, by - 11, 3, 1, jacket); } // arms out for balance
+    px(sx - 2 + lean, by - 16 + crouch, 4, 4, helmet);
+    if (heel) px(sx - 2 + lean, by - 14 + crouch, 4, 1, '#3ce0ff');
   }
 
   function render() {
@@ -589,6 +797,22 @@
     const b0 = WORLD.bandOf(Math.max(0, camY)), b1 = WORLD.bandOf(Math.max(0, camY + H));
     const ropes = [];
     for (let b = b0; b <= b1; b++) {
+      const by0 = b * C.ZONE_ROWS * C.CHUNK;
+      // Powder zones: brighter, deeper snow.
+      if (FS.ZONES[WORLD.zoneAt(b * C.ZONE_ROWS)].pow) {
+        const y0 = Math.max(0, by0 - camY), y1 = Math.min(H, by0 + C.ZONE_ROWS * C.CHUNK - camY);
+        if (y1 > y0) { g.fillStyle = '#f7faff'; g.fillRect(0, y0, W, y1 - y0); }
+      }
+      // Catwalks: flat, groomed corduroy across the whole run.
+      const cw = WORLD.catwalkFor(b);
+      if (cw.has) {
+        const y0 = Math.max(0, cw.y0 - camY), y1 = Math.min(H, cw.y1 - camY);
+        if (y1 > y0) {
+          g.fillStyle = '#e1e9f2'; g.fillRect(0, y0, W, y1 - y0);
+          g.fillStyle = '#d6e0ec';
+          for (let y = Math.ceil((camY + y0) / 4) * 4; y < camY + y1; y += 4) g.fillRect(0, y - camY, W, 1);
+        }
+      }
       const rp = WORLD.ropeFor(b);
       if (!rp.has) continue;
       ropes.push(rp);
@@ -609,10 +833,10 @@
       for (const o of ch.statics) {
         const x = o.x - camX, y = o.y - camY;
         if (x < -60 || x > W + 60 || y < -10 || y > H + 40) continue;
-        (o.type === 'kicker' ? ground : ups).push(o);
+        (FS.GROUND[o.type] ? ground : ups).push(o);
       }
     }
-    for (const o of ground) DRAW.kicker(o.x - camX, o.y - camY);
+    for (const o of ground) DRAW[o.type](o.x - camX, o.y - camY);
     drawStartGate();
 
     g.lineCap = 'square';
@@ -634,7 +858,7 @@
     }
     ups.push(r);
     if (S.patrol) ups.push(S.patrol);
-    const key = (o) => (o === r ? r.y + (r.z > 6 ? 60 : 0) : o.y);
+    const key = (o) => (o === r ? (r.rail ? r.rail.y + 1 : r.y + (r.z > 6 ? 60 : 0)) : o.y);
     ups.sort((a, b) => key(a) - key(b));
     if (r.mode === 'air') px(r.x - camX - 6, r.y - camY - 1, 12, 3, 'rgba(60,80,110,0.25)');
     for (const o of ups) {
@@ -798,7 +1022,10 @@
       ['Homies sprayed', st.homies],
       ['Speed traps', st.speedTraps],
       ['Stash meters', Math.round(st.stashM)],
+      ['Rails and boxes', st.grinds],
       ['Patrol shaken', st.shaken],
+      ['Tree wells', st.wells],
+      ['Unstrapped', st.skated],
       ['Crashes', st.crashes],
     ];
     const dl = $('overStats');

@@ -37,11 +37,11 @@
 
     // Heat and Ski Patrol (PRD §4)
     HEAT_DECAY: 1.5,       // heat lost per second
-    PATROL_BASE_M: 1200,   // past this distance patrol comes no matter what, and can't be shaken
-    PATROL_SPEED: 220,     // snowmobile starting speed (px/s); you top out around 280
-    PATROL_ACCEL: 5,       // it keeps getting faster
-    PATROL_MAX: 360,
-    PATROL_LEVEL_UP: 25,   // each time you shake them, the next one starts this much faster
+    PATROL_BASE_M: 2000,   // past this distance patrol comes no matter what, and can't be shaken (Jordan, Nov 19)
+    PATROL_SPEED: 190,     // snowmobile starting speed (px/s); you top out around 280. Slowed Nov 19: "too fast"
+    PATROL_ACCEL: 3,       // it keeps getting faster
+    PATROL_MAX: 320,
+    PATROL_LEVEL_UP: 20,   // each time you shake them, the next one starts this much faster
     PATROL_LOSE_PX: 650,   // gap that shakes a patrol called by heat
     PATROL_CATCH_PX: 10,
 
@@ -52,6 +52,19 @@
     STASH_CLOUT_PER_M: 2,
     DAD_YELL_PX: 40,
     DAD_HEAT: 5,
+
+    // M2: snowboard feel
+    LEAN_PX: 28,           // pull your thumb this far down to lean back
+    FLAT_FRICTION: 60,     // catwalks: no pull, extra drag
+    SKATE_AT: 14,          // below this speed on a catwalk you unstrap and skate
+    SKATE_PUSH: 22,        // each push adds this much speed
+    SKATE_MAX: 75,
+    POW_DRAG: 0.9,         // deep snow bogs you down...
+    POW_DRAG_LEAN: 0.05,   // ...unless you lean back and float
+    WELL_T: 2.4,           // stuck in a tree well this long, minus digging
+    WELL_DIG: 0.3,         // each mash digs you out this much faster
+    ICE_GRIP: 0.5,         // ice: less drag, no turning, no hard stop
+    BUTTER_SPIN: 900,      // how fast a butter 180 animates (deg/s)
 
     // The Moto Gunslinger
     GUN_RANGE: 70,

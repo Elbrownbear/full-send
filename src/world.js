@@ -9,10 +9,32 @@
   function zoneAt(cy) {
     const band = Math.floor(cy / C.ZONE_ROWS);
     if (band <= 0) return 'groomer';
-    const r = FS.mulberry32(FS.hash3(S.seed, 7777, band))();
-    return r < 0.5 ? 'groomer' : r < 0.72 ? 'park' : 'glades';
+    return FS.roll(FS.ZONE_ODDS, FS.mulberry32(FS.hash3(S.seed, 7777, band))());
   }
   const bandOf = (y) => Math.floor(Math.floor(y / C.CHUNK) / C.ZONE_ROWS);
+
+  // Some bands have a flat catwalk across the whole run (about 38 m), where snowboarders end up skating.
+  function catwalkFor(band) {
+    let cw = S.catwalks.get(band);
+    if (!cw) {
+      const rnd = FS.mulberry32(FS.hash3(S.seed, 5151, band));
+      const zone = FS.ZONES[zoneAt(band * C.ZONE_ROWS)];
+      const y0 = band * C.ZONE_ROWS * C.CHUNK + 96;
+      cw = { has: band >= 2 && rnd() < zone.catwalk, y0, y1: y0 + 300 };
+      S.catwalks.set(band, cw);
+    }
+    return cw;
+  }
+  function inFlat(y) {
+    if (y < 0) return false;
+    const cw = catwalkFor(bandOf(y));
+    return cw.has && y >= cw.y0 && y < cw.y1;
+  }
+  // Deep snow: the whole powder zone, and any roped-off stash.
+  function inPow(x, y) {
+    if (y < 0) return false;
+    return !!FS.ZONES[zoneAt(Math.floor(y / C.CHUNK))].pow || inStash(x, y);
+  }
 
   // Some bands have a rope line down one side, with a closed stash of fresh pow beyond it.
   // The rope is placed beside wherever the rider is when the band is first built.
@@ -71,9 +93,11 @@
       if (inStartArea(x, y)) return false;
       // Stashes are open pow: no jumps or rocks, and only every other tree.
       if (inStash(x, y) && (type !== 'tree' || (Math.round(x) * 7 + Math.round(y) * 13) & 1)) return false;
+      const d = FS.STATICS[type];
+      if (inFlat(y) || inFlat(y - d.h)) return false; // catwalks are groomed and clear
+      // Keep things apart by their sizes (boxes centered on each one's footprint).
       for (const s of statics) {
-        const wide = s.type === 'slowzone' || type === 'slowzone';
-        if (Math.abs(s.x - x) < (wide ? 44 : 16) && Math.abs(s.y - y) < (wide ? 24 : 14)) return false;
+        if (Math.abs(s.x - x) < (s.w + d.w) / 2 + 8 && Math.abs((s.y - s.h / 2) - (y - d.h / 2)) < (s.h + d.h) / 2 + 10) return false;
       }
       statics.push(makeStatic(type, x, y));
       return true;
@@ -117,6 +141,7 @@
     }
     const bMin = bandOf(S.camY) - 2;
     for (const b of S.ropes.keys()) if (b < bMin) S.ropes.delete(b);
+    for (const b of S.catwalks.keys()) if (b < bMin) S.catwalks.delete(b);
   }
 
   // ---------- People ----------
@@ -206,5 +231,5 @@
     }
   }
 
-  FS.world = { zoneAt, bandOf, ropeFor, inStash, getChunk, forNearbyStatics, prune, updatePeople, aggro };
+  FS.world = { zoneAt, bandOf, ropeFor, inStash, catwalkFor, inFlat, inPow, getChunk, forNearbyStatics, prune, updatePeople, aggro, makePerson };
 })();

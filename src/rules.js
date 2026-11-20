@@ -50,6 +50,19 @@
       return { ok: true, half, pts: r5(pts), name: names.join(' ') || 'Big air' };
     },
 
+    // Sliding a rail or box for `secs` seconds. style: '50-50', 'Boardslide', 'Box 50-50', 'Box slide'.
+    grind(secs, style, sw) {
+      const pts = r5((60 + secs * 160) * (sw ? 1.25 : 1));
+      return { pts, name: (sw ? 'Switch ' : '') + style };
+    },
+
+    // Leaning back on the snow. Short presses don't count.
+    butter(secs) {
+      if (secs < 0.4) return { pts: 0 };
+      return { pts: r5(20 + secs * 70), name: 'Tail press' };
+    },
+    BUTTER_180: 90,
+
     // End-screen group chat: specific roasts first, then generic ones.
     chat(stats, dist, rnd = Math.random) {
       const lines = [];
@@ -58,6 +71,8 @@
       if (stats.worstMph > 0) lines.push(`${stats.worstMph} in a ${FS.C.RADAR_LIMIT_MPH} is crazy`);
       if (stats.stashM > 0) lines.push('ducking ropes again?');
       if (stats.shot) lines.push('wait who had a GUN');
+      if (stats.wells > 0) lines.push('tree well?? never ride trees alone');
+      if (stats.skated >= 2) lines.push(`unstrapped ${stats.skated} times lmao`);
       if (dist < 300) lines.push('short day huh');
       const pool = FS.CHAT_GENERIC.slice();
       while (lines.length < 3 && pool.length) lines.push(pool.splice(Math.floor(rnd() * pool.length), 1)[0]);

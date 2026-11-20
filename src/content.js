@@ -13,7 +13,11 @@
     person: ['Yard sale!', 'Yard sale!', 'Jerry of the Day nominee'],
     bullet: ['Got smoked by a cowboy', 'Shot by a guy in roost guards'],
     spin: ['Over-rotated!', 'Caught an edge'],
+    shark: ['Core shot!', 'Shark attack', 'There was a rock under there'],
+    rail: ['Racked on the rail', 'Ollie ONTO it', 'Rail: 1, you: 0'],
+    box: ['Ate the box', 'Ollie ONTO it'],
   };
+  FS.LAUGHS = ['LOL SNOWBOARDERS', 'NEED A PUSH?', 'SKIS DON\'T DO THAT', 'SEE YOU AT THE BOTTOM'];
 
   FS.SAYS = {
     skiSprayed: ['HEY!!', 'MY GOGGLES!', 'NOT COOL, BRO', 'I PAID $300 FOR THIS'],
@@ -52,27 +56,43 @@
     stump: { w: 6, h: 4, ht: 6 },
     kicker: { w: 22, h: 12, ht: 0 },
     slowzone: { w: 64, h: 4, ht: 0 },
+    rail: { w: 4, h: 48, ht: 5 },   // ollie on to grind; ride into it on the ground and you crash
+    box: { w: 8, h: 40, ht: 4 },    // a wider, friendlier rail
+    ice: { w: 30, h: 14, ht: 0 },   // no turning, no hard stop
+    shark: { w: 8, h: 4, ht: 6 },   // a rock hiding under fresh snow
   };
+  // Drawn flat on the snow (under people and the rider).
+  FS.GROUND = { kicker: true, ice: true };
+  // You can grind these.
+  FS.GRINDABLE = { rail: true, box: true };
 
   // Zones: 64 m bands of mountain, each with its own mix. Weights are relative chances per roll.
   // slowZone = chance of a radar Slow Zone per chunk; rope = chance a band has a roped-off stash.
+  // catwalk = chance a band has a flat catwalk across it. pow = deep snow everywhere (lean back).
   FS.ZONES = {
     groomer: {
-      name: 'GROOMERS', count: 7, grow: 8, cluster: 0.15, jumpLine: 0.15, slowZone: 0.3, rope: 0.2,
-      weights: { tree: 23, rock: 9, stump: 6, kicker: 7, person: 20, empty: 35 },
+      name: 'GROOMERS', count: 7, grow: 8, cluster: 0.15, jumpLine: 0.15, slowZone: 0.3, rope: 0.2, catwalk: 0.25,
+      weights: { tree: 23, rock: 9, stump: 6, kicker: 7, ice: 4, person: 20, empty: 35 },
       people: { skier: 10, boarder: 2.5, crew: 0.8, jerry: 2, gaper: 2, school: 1, dad: 1, influencer: 1, patrol: 0.4 },
     },
     park: {
-      name: 'TERRAIN PARK', count: 7, grow: 4, cluster: 0, jumpLine: 0.7, slowZone: 0, rope: 0,
-      weights: { tree: 3, rock: 1, kicker: 30, person: 12, empty: 54 },
+      name: 'TERRAIN PARK', count: 8, grow: 4, cluster: 0, jumpLine: 0.7, slowZone: 0, rope: 0, catwalk: 0,
+      weights: { tree: 3, rock: 1, kicker: 26, rail: 9, box: 8, person: 12, empty: 50 },
       people: { parkrat: 4, boarder: 3, skier: 4, crew: 0.8, influencer: 1, jerry: 1 },
     },
     glades: {
-      name: 'GLADES', count: 11, grow: 10, cluster: 0.45, jumpLine: 0, slowZone: 0, rope: 0.5,
+      name: 'GLADES', count: 11, grow: 10, cluster: 0.45, jumpLine: 0, slowZone: 0, rope: 0.5, catwalk: 0.15,
       weights: { tree: 60, rock: 6, stump: 8, kicker: 2, person: 6, empty: 18 },
       people: { skier: 4, boarder: 1, jerry: 1.5, gaper: 0.5, gunslinger: 0.6 },
     },
+    pow: {
+      name: 'POWDER · LEAN BACK', count: 8, grow: 8, cluster: 0.3, jumpLine: 0, slowZone: 0, rope: 0, catwalk: 0, pow: true,
+      weights: { tree: 28, shark: 8, stump: 4, kicker: 3, person: 5, empty: 52 },
+      people: { boarder: 3, skier: 2, jerry: 1 },
+    },
   };
+  // How often each zone comes up (the first band is always groomers).
+  FS.ZONE_ODDS = { groomer: 40, park: 20, glades: 20, pow: 20 };
 
   // The group chat on the end screen (a nod to The Bomb Hole's group-chat episodes).
   FS.CHAT_HANDLES = ['@shredhead', '@parkrat99', '@pow_or_bust', '@i70survivor', '@jerrywatch'];

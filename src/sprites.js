@@ -39,6 +39,35 @@
     px(sx - 11, sy + 1, 22, 3, '#cfdcea');
     px(sx - 12, sy - 3, 2, 3, '#ff7a1a'); px(sx + 10, sy - 3, 2, 3, '#ff7a1a');
   }
+  // A rail runs downhill from (sy - 48) to sy, on little legs; it casts a shadow to its right.
+  function rail(sx, sy) {
+    px(sx + 1, sy - 46, 2, 46, '#c9d6e6');
+    for (const y of [sy - 44, sy - 24, sy - 4]) px(sx - 1, y, 2, 5, '#5a6270');
+    px(sx - 1, sy - 49, 2, 46, '#8a94a3');
+    px(sx - 1, sy - 49, 1, 46, '#d7dde6');
+  }
+  // A box: wider, with a yellow and black side.
+  function box(sx, sy) {
+    px(sx + 4, sy - 38, 2, 38, '#c9d6e6');
+    px(sx - 4, sy - 41, 8, 38, '#2b2f3a');
+    px(sx - 4, sy - 41, 8, 2, '#ffd23f');
+    for (let y = sy - 37; y < sy - 4; y += 8) px(sx - 4, y, 8, 3, '#ffd23f');
+    px(sx - 3, sy - 41, 6, 38, 'rgba(255,255,255,0.12)');
+  }
+  // Ice: a blue sheen with glints.
+  function ice(sx, sy) {
+    for (let i = 0; i < 14; i++) {
+      const w = Math.round(15 * Math.sqrt(1 - ((i - 6.5) / 7) ** 2));
+      px(sx - w, sy - 14 + i, w * 2, 1, i % 3 === 0 ? '#bcd6f2' : '#cfe2f7');
+    }
+    px(sx - 6, sy - 10, 3, 1, '#ffffff'); px(sx + 4, sy - 6, 2, 1, '#ffffff');
+  }
+  // A shark: just the tip of a rock poking out of fresh snow. Hard to see on purpose.
+  function shark(sx, sy) {
+    px(sx - 2, sy - 3, 4, 2, '#8a929c'); px(sx - 1, sy - 4, 2, 1, '#a5adb6');
+    px(sx - 3, sy - 1, 6, 1, '#e3ebf4');
+  }
+
   // Radar Slow Zone: two orange posts and a banner over the run, radar sign on the right.
   function slowzone(sx, sy, done) {
     px(sx - 33, sy - 16, 2, 16, '#ff7a1a'); px(sx + 31, sy - 16, 2, 16, '#ff7a1a');
@@ -190,5 +219,5 @@
     px(sx - 4 + lean, sy - 21, 4, 2, f ? '#ff1744' : '#2979ff'); px(sx + lean, sy - 21, 4, 2, f ? '#2979ff' : '#ff1744');
   }
 
-  FS.draw = { px, tree, rock, stump, kicker, slowzone, rope, person, board, snowmobile };
+  FS.draw = { px, tree, rock, stump, kicker, rail, box, ice, shark, slowzone, rope, person, board, snowmobile };
 })();
