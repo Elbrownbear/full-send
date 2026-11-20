@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0f1a2e">
+  <meta name="description" content="Full Send: a retro top-down snowboarding game packed with modern ski and snowboard culture.">
+  <title>Full Send</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink: #0f1a2e; --snow: #eaf1f8; --pink: #ff3d7f; --muted: #41557a; }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: var(--ink); overscroll-behavior: none; }
+    body { font-family: "Press Start 2P", ui-monospace, monospace; color: var(--ink); -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+    canvas { position: fixed; inset: 0; display: block; touch-action: none; }
+    .overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(15, 26, 46, 0.45); }
+    .panel { width: 100%; max-width: 360px; background: #fff; border: 4px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); padding: 20px 18px; text-align: center; }
+    h1 { margin: 0 0 8px; font-size: 26px; line-height: 1.2; color: var(--pink); text-shadow: 3px 3px 0 var(--ink); letter-spacing: 1px; }
+    h2 { margin: 0 0 16px; font-size: 16px; }
+    .tag { margin: 0 0 18px; font-size: 8px; line-height: 1.8; color: var(--muted); }
+    button { font: inherit; color: var(--ink); background: #fff; border: 3px solid var(--ink); padding: 10px 12px; font-size: 10px; cursor: pointer; box-shadow: 3px 3px 0 var(--ink); }
+    button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+    button.big { display: block; width: 100%; margin: 14px 0 0; padding: 14px; font-size: 14px; background: var(--pink); color: #fff; }
+    .stance { display: flex; gap: 8px; align-items: center; justify-content: center; font-size: 8px; }
+    .stance button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+    .stack button { display: block; width: 100%; margin-top: 10px; }
+    #best { margin: 14px 0 0; font-size: 8px; color: var(--muted); min-height: 8px; }
+    details { margin-top: 14px; text-align: left; font-size: 8px; line-height: 2; }
+    summary { cursor: pointer; text-align: center; color: var(--muted); }
+    details h3 { font-size: 8px; margin: 10px 0 2px; color: var(--pink); }
+    details p { margin: 0; }
+    #pauseBtn { position: fixed; top: calc(10px + env(safe-area-inset-top)); right: 10px; width: 40px; height: 40px; padding: 0; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <canvas id="game" aria-label="Full Send game"></canvas>
+  <button id="pauseBtn" aria-label="Pause" hidden>II</button>
+
+  <div id="title" class="overlay">
+    <div class="panel">
+      <h1>FULL SEND</h1>
+      <p class="tag">A snowboard game<br>Feel prototype</p>
+      <div class="stance">
+        <span>Stance</span>
+        <button type="button" data-stance="regular">Regular</button>
+        <button type="button" data-stance="goofy">Goofy</button>
+      </div>
+      <button type="button" id="startBtn" class="big">Drop in</button>
+      <p id="best"></p>
+      <details>
+        <summary>Controls</summary>
+        <h3>Phone</h3>
+        <p>Drag left/right: steer<br>Tap: ollie<br>Flick up: hard stop + spray<br>In the air: swipe to spin, hold to grab<br>Second finger: instant ollie</p>
+        <h3>Keyboard</h3>
+        <p>Left/Right or A/D: steer<br>Down/S: point downhill<br>Up/W: hard stop + spray<br>Space: ollie (hold in air to grab)<br>Left/Right in air: spin<br>P: pause · R: restart</p>
+        <h3>Mouse</h3>
+        <p>Point where to go<br>Above the rider: hard stop<br>Click: ollie</p>
+        <h3>Spray</h3>
+        <p>Spray skiers: clout + patrol heat<br>Spray snowboarders: lose clout</p>
+      </details>
+    </div>
+  </div>
+
+  <div id="pause" class="overlay" hidden>
+    <div class="panel">
+      <h2>Paused</h2>
+      <div class="stack">
+        <button type="button" id="resumeBtn" class="big">Resume</button>
+        <button type="button" id="restartBtn">Restart</button>
+        <button type="button" id="menuBtn">Title screen</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sat" style="position:fixed;top:0;left:0;width:0;height:env(safe-area-inset-top);pointer-events:none"></div>
+  <script src="src/game.js"></script>
+</body>
+</html>
