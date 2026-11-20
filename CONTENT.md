@@ -118,8 +118,8 @@ Heat is what brings Ski Patrol (PRD §4). Built ones are in the prototype; the r
 | Spray a skier (hard stop) | +15 | + (speed, closeness) | 🟢 |
 | **Plow through a skier** at 50+ mph (no crash) | +25 | +100 and up | 🟢 |
 | Plow through a snowboarder | +10 | −150 | 🟢 |
-| Blast a Slow Zone over its speed limit (radar sign shows your mph) | + | small | 💡 |
-| Duck a rope line into closed terrain | big | stash access | 💡 |
+| **Radar Slow Zone** (M1, picked Nov 19): a pair of orange SLOW ZONE fences with a radar sign that flashes your mph as you approach. Limit 25 mph. Blow through it faster and the sign reads "47 IN A 25": heat +10 plus more for every mph over, and +5 clout per mph over. Ride through under the limit and the sign shows a smiley and cools your heat by 10. Patrol on foot often stands beside it | + (more the faster) | + per mph over | ✏️ |
+| **Rope duck** (M1, picked Nov 19): rope lines with CLOSED signs run along the edge of some zones. Ride under the rope (or ollie it) into a closed stash: untouched pow, no people, bonus clout for every meter you ride in there, +30 heat the moment you duck in and more the longer you stay. Ride back out through a gap in the rope | +30, then more over time | stash bonus | ✏️ |
 | Cut the lift line | + | + | 💡 |
 | Jump over people (ski school, patrol on foot) | + | big | 💡 |
 | Buzz patrol on foot (pass within a few px) | + | + | 💡 |

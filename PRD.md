@@ -163,9 +163,11 @@ Optional crossover: Open Slop passes today's conditions (did it snow?) so the ga
 
 8. **Real crews and podcasts stay as nods** (Nov 19): Beyond Medals and The Bomb Hole are referenced through jokes fans will catch, never by name, logo or likeness (§9).
 
+9. **M1 heat sources** (Nov 19): the **radar Slow Zone** (blow through over 25 mph for clout and heat, or slow down to cool off) and the **rope duck** (closed stash with bonus clout and heavy heat). Designs in CONTENT.md's Heat sources table. They join spraying, plowing and hitting people.
+
 ## 12b. Open questions
 
-1. **Heat sources:** which of the ideas in CONTENT.md's Heat sources table go into M1?
+None right now. New ones go here.
 
 ## 13. Success
 
