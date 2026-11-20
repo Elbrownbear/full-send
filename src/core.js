@@ -38,10 +38,10 @@
     // Heat and Ski Patrol (PRD §4)
     HEAT_DECAY: 1.5,       // heat lost per second
     PATROL_BASE_M: 2000,   // past this distance patrol comes no matter what, and can't be shaken (Jordan, Nov 19)
-    PATROL_SPEED: 190,     // snowmobile starting speed (px/s); you top out around 280. Slowed Nov 19: "too fast"
-    PATROL_ACCEL: 3,       // it keeps getting faster
-    PATROL_MAX: 320,
-    PATROL_LEVEL_UP: 20,   // each time you shake them, the next one starts this much faster
+    PATROL_SPEED: 165,     // snowmobile starting speed (px/s); you top out around 280. Slowed twice (Nov 19, Nov 20): "too fast"
+    PATROL_ACCEL: 2,       // it keeps getting faster
+    PATROL_MAX: 295,       // only just faster than your top speed, so clean riding holds them off a long time
+    PATROL_LEVEL_UP: 15,   // each time you shake them, the next one starts this much faster
     PATROL_LOSE_PX: 650,   // gap that shakes a patrol called by heat
     PATROL_CATCH_PX: 10,
 

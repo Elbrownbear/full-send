@@ -673,7 +673,7 @@
     const r = S.rider;
     S.patrol = {
       mode, x: r.x + (Math.random() - 0.5) * 120, y: S.camY - 30, dirX: 0,
-      speed: C.PATROL_SPEED + S.patrolLevel * C.PATROL_LEVEL_UP + (mode === 'dist' ? 10 : 0),
+      speed: C.PATROL_SPEED + S.patrolLevel * C.PATROL_LEVEL_UP,
     };
     say(mode === 'heat' ? 'SKI PATROL! SHAKE THEM!' : 'SKI PATROL!', 2);
   }

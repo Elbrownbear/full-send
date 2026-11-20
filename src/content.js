@@ -70,29 +70,30 @@
   // slowZone = chance of a radar Slow Zone per chunk; rope = chance a band has a roped-off stash.
   // catwalk = chance a band has a flat catwalk across it. pow = deep snow everywhere (lean back).
   FS.ZONES = {
+    // Nov 20: trees and rocks cut 15% everywhere (the difference went to empty snow), rails added to groomers, more catwalks.
     groomer: {
-      name: 'GROOMERS', count: 7, grow: 8, cluster: 0.15, jumpLine: 0.15, slowZone: 0.3, rope: 0.2, catwalk: 0.25,
-      weights: { tree: 23, rock: 9, stump: 6, kicker: 7, ice: 4, person: 20, empty: 35 },
+      name: 'GROOMERS', count: 7, grow: 8, cluster: 0.15, jumpLine: 0.15, slowZone: 0.3, rope: 0.2, catwalk: 0.45,
+      weights: { tree: 19.5, rock: 7.7, stump: 6, kicker: 7, ice: 4, rail: 2, box: 2, person: 20, empty: 35.8 },
       people: { skier: 10, boarder: 2.5, crew: 0.8, jerry: 2, gaper: 2, school: 1, dad: 1, influencer: 1, patrol: 0.4 },
     },
     park: {
       name: 'TERRAIN PARK', count: 8, grow: 4, cluster: 0, jumpLine: 0.7, slowZone: 0, rope: 0, catwalk: 0,
-      weights: { tree: 3, rock: 1, kicker: 26, rail: 9, box: 8, person: 12, empty: 50 },
+      weights: { tree: 2.6, rock: 0.8, kicker: 26, rail: 14, box: 12, person: 12, empty: 41.6 },
       people: { parkrat: 4, boarder: 3, skier: 4, crew: 0.8, influencer: 1, jerry: 1 },
     },
     glades: {
-      name: 'GLADES', count: 11, grow: 10, cluster: 0.45, jumpLine: 0, slowZone: 0, rope: 0.5, catwalk: 0.15,
-      weights: { tree: 60, rock: 6, stump: 8, kicker: 2, person: 6, empty: 18 },
+      name: 'GLADES', count: 11, grow: 10, cluster: 0.45, jumpLine: 0, slowZone: 0, rope: 0.5, catwalk: 0.3,
+      weights: { tree: 51, rock: 5.1, stump: 8, kicker: 2, person: 6, empty: 27.9 },
       people: { skier: 4, boarder: 1, jerry: 1.5, gaper: 0.5, gunslinger: 0.6 },
     },
     pow: {
       name: 'POWDER · LEAN BACK', count: 8, grow: 8, cluster: 0.3, jumpLine: 0, slowZone: 0, rope: 0, catwalk: 0, pow: true,
-      weights: { tree: 28, shark: 8, stump: 4, kicker: 3, person: 5, empty: 52 },
+      weights: { tree: 23.8, shark: 6.8, stump: 4, kicker: 3, person: 5, empty: 57.4 },
       people: { boarder: 3, skier: 2, jerry: 1 },
     },
   };
   // How often each zone comes up (the first band is always groomers).
-  FS.ZONE_ODDS = { groomer: 40, park: 20, glades: 20, pow: 20 };
+  FS.ZONE_ODDS = { groomer: 38, park: 24, glades: 19, pow: 19 };
 
   // The group chat on the end screen (a nod to The Bomb Hole's group-chat episodes).
   FS.CHAT_HANDLES = ['@shredhead', '@parkrat99', '@pow_or_bust', '@i70survivor', '@jerrywatch'];
