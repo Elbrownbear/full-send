@@ -55,11 +55,12 @@
 
     // M2: snowboard feel
     LEAN_PX: 28,           // pull your thumb this far down to lean back
-    // Catwalks eased Nov 20 ("35% too punishing"): crossing now takes ~65% as long (2.5–3.3 s instead of 3.9–5.1 s).
-    FLAT_FRICTION: 40,     // catwalks: no pull, extra drag
+    // Catwalks eased twice Nov 20: first 35% (3.9–5.1 s → 2.5–3.3 s), then about 25% more (average ~2.9 s → ~2.15 s).
+    // Hit one at full speed and you coast across; come in slow and you still skate.
+    FLAT_FRICTION: 32,     // catwalks: no pull, extra drag
     SKATE_AT: 14,          // below this speed on a catwalk you unstrap and skate
-    SKATE_PUSH: 28,        // each push adds this much speed
-    SKATE_MAX: 95,
+    SKATE_PUSH: 32,        // each push adds this much speed
+    SKATE_MAX: 110,
     POW_DRAG: 0.9,         // deep snow bogs you down...
     POW_DRAG_LEAN: 0.05,   // ...unless you lean back and float
     WELL_T: 2.4,           // stuck in a tree well this long, minus digging

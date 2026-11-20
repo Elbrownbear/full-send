@@ -70,9 +70,10 @@
   // slowZone = chance of a radar Slow Zone per chunk; rope = chance a band has a roped-off stash.
   // catwalk = chance a band has a flat catwalk across it. pow = deep snow everywhere (lean back).
   FS.ZONES = {
-    // Nov 20: trees and rocks cut 15% everywhere (the difference went to empty snow), rails added to groomers, more catwalks.
+    // Nov 20: trees and rocks cut 15% everywhere (the difference went to empty snow), rails added to groomers.
+  // Catwalk odds raised, then cut 25% the same day (groomers 0.45 → 0.34, glades 0.3 → 0.23).
     groomer: {
-      name: 'GROOMERS', count: 7, grow: 8, cluster: 0.15, jumpLine: 0.15, slowZone: 0.3, rope: 0.2, catwalk: 0.45,
+      name: 'GROOMERS', count: 7, grow: 8, cluster: 0.15, jumpLine: 0.15, slowZone: 0.3, rope: 0.2, catwalk: 0.34,
       weights: { tree: 19.5, rock: 7.7, stump: 6, kicker: 7, ice: 4, rail: 2, box: 2, person: 20, empty: 35.8 },
       people: { skier: 10, boarder: 2.5, crew: 0.8, jerry: 2, gaper: 2, school: 1, dad: 1, influencer: 1, patrol: 0.4 },
     },
@@ -82,7 +83,7 @@
       people: { parkrat: 4, boarder: 3, skier: 4, crew: 0.8, influencer: 1, jerry: 1 },
     },
     glades: {
-      name: 'GLADES', count: 11, grow: 10, cluster: 0.45, jumpLine: 0, slowZone: 0, rope: 0.5, catwalk: 0.3,
+      name: 'GLADES', count: 11, grow: 10, cluster: 0.45, jumpLine: 0, slowZone: 0, rope: 0.5, catwalk: 0.23,
       weights: { tree: 51, rock: 5.1, stump: 8, kicker: 2, person: 6, empty: 27.9 },
       people: { skier: 4, boarder: 1, jerry: 1.5, gaper: 0.5, gunslinger: 0.6 },
     },
