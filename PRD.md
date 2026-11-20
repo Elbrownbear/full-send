@@ -161,10 +161,11 @@ Optional crossover: Open Slop passes today's conditions (did it snow?) so the ga
 6. **Skier jokes:** plenty, but friendly. Skiers are the main target, snowboarders get roasted too, and every joke should still land with the skiers in the crew.
 7. **New content:** the Moto Gunslinger, the spray mechanic, the unstrapped hopper, the sideslipper, the gear snob, weather events and an I-70 intro (CONTENT.md).
 
+8. **Real crews and podcasts stay as nods** (Nov 19): Beyond Medals and The Bomb Hole are referenced through jokes fans will catch, never by name, logo or likeness (§9).
+
 ## 12b. Open questions
 
-1. **Real names in nods:** the Beyond Medals and Bomb Hole references are written as nods with no real names (§9). Use their actual names instead, maybe with a heads-up to them?
-2. **Heat sources:** which of the ideas in CONTENT.md's Heat sources table go into M1?
+1. **Heat sources:** which of the ideas in CONTENT.md's Heat sources table go into M1?
 
 ## 13. Success
 

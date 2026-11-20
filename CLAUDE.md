@@ -14,7 +14,7 @@ Read this first in every Full Send session. Keep it short: rules and the current
 ## Exactly where to pick up
 
 1. Ask Jordan how the retuned prototype feels on the phone (crowding, getting going, momentum, carve lock, plow).
-2. Ask Jordan: "Use real names (Beyond Medals, The Bomb Hole) or keep them as nods?" and "Which heat sources from CONTENT.md go into M1?" (PRD §12b).
+2. Ask Jordan: "Which heat sources from CONTENT.md go into M1?" (PRD §12b). (Decided Nov 19: real crews and podcasts stay as nods, no names.)
 3. Then M1 (PRD §10): split `src/game.js` into modules, move content to a data file, Ski Patrol chaser driven by heat, end screen + Again, the first real people from CONTENT.md.
 
 ## Project rules

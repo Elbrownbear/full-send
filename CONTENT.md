@@ -89,7 +89,7 @@ Things that happen to the whole mountain for a stretch, not single objects.
 
 ## Movie, crew and podcast nods (added Nov 19)
 
-Jordan asked for references to *Johnny Tsunami*, *Out Cold*, the Beyond Medals crew and The Bomb Hole podcast. Per PRD §9 these are **nods fans will catch**: no character names, real riders' or hosts' names, logos or likenesses. (Open question: does Jordan want real names used? See PRD §12.)
+Jordan asked for references to *Johnny Tsunami*, *Out Cold*, the Beyond Medals crew and The Bomb Hole podcast. Per PRD §9 these are **nods fans will catch**: no character names, real riders' or hosts' names, logos or likenesses. Jordan confirmed Nov 19: keep them as nods.
 
 | Item | Nod to | What it is / does | Why it's funny | Zone | Rarity | Status |
 |---|---|---|---|---|---|---|
