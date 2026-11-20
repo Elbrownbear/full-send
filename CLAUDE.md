@@ -4,21 +4,20 @@ Read this first in every Full Send session. Keep it short: rules and the current
 
 ## Where we left off (updated 2026-11-19)
 
-- Project created Nov 19, 2026 as a **public** repo (Jordan asked for public). Only docs exist: [PRD.md](PRD.md) (draft 1), [CONTENT.md](CONTENT.md) (Jordan reviewed the 45 starter ideas Nov 19: 43 kept, 2 cut, all still 💡 ideas), SYSTEMS.md, README. No game code yet.
+- Project created Nov 19, 2026 as a **public** repo (Jordan asked for public), MIT licensed. Only docs exist: [PRD.md](PRD.md), [CONTENT.md](CONTENT.md) (51 items, all still 💡 ideas), SYSTEMS.md, README. No game code yet.
 - Decided: name **Full Send**; plain HTML + JS + canvas, no build step; GitHub Pages hosting; Open Slop gets a link, then an `/arcade` embed, then a crew leaderboard (PRD §11).
-- Decided: content (obstacles, people, references) gets its own milestones (M3, M7) and real design time. PRD §6 is the rule.
+- Decided Nov 19 (PRD §12): Ski Patrol snowmobile chaser (pass clipped); modern-retro palette; one rider with cosmetic outfit unlocks; skier jokes plenty but friendly; **rough playable prototype first, no art mock**.
+- New mechanic: **spray** (hard stop next to someone). Skiers: + clout, + heat. Snowboarders: − clout. Each person in CONTENT.md has a Rides column for this.
+- New content Nov 19: the Moto Gunslinger (six-shooter, motocross armor, shoots and briefly chases you), unstrapped hopper, sideslipper, gear snob, whiteout, wind hold, pow-morning rush, I-70 intro. Cut: uphill skinner, energy drink pickup.
+- Content gets its own milestones (M3, M7) and real design time. PRD §6 is the rule.
 - Not built: everything else. GitHub Pages isn't switched on yet (nothing to serve).
 
 ## Exactly where to pick up
 
-1. Open [PRD.md](PRD.md) §12 (open questions).
-2. Ask Jordan:
-   - "Should the chaser be Ski Patrol on a snowmobile (your pass gets clipped), or one of the others in CONTENT.md's Chasers table?"
-   - "Do you want an interactive claude.ai mock of the look (title screen, rider, a few obstacles) before I build the engine, or a rough playable prototype to test on your phone?"
-   - "Strict 16-color early-90s palette, or a slightly richer modern-retro palette?"
-   - "Add an MIT license (anyone can reuse the code) or keep it all-rights-reserved?"
-   - "Want these in the catalog: the unstrapped hopper, the sideslipper, the gear snob (parody brand), weather events (whiteout, wind hold, pow-morning rush), and an I-70 / Floyd Hill intro?" (pitched Nov 19, no answer yet)
-3. Build M1 (PRD §10): `index.html` + `src/` with the loop, steering, trees/rocks/people, crash, distance, chaser, end screen. Then switch on GitHub Pages (Settings → Pages → deploy from `main`, root) and test on a phone.
+1. Open [PRD.md](PRD.md) §5 (mechanics) and §10 (M0).
+2. Build the **M0 feel prototype**: `index.html` + `src/` with the fixed-timestep loop, placeholder shapes, steering (keys, touch, mouse), ollie, hard stop + spray on a test skier and a test snowboarder, trees/rocks, crashing, distance counter.
+3. Switch on GitHub Pages (Settings → Pages → deploy from `main`, root) so Jordan can play it on the phone, and ask how steering, ollie and spray feel.
+4. Then M1 (PRD §10): people, Ski Patrol chaser with heat, end screen.
 
 ## Project rules
 

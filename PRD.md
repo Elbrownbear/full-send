@@ -37,8 +37,11 @@ It's a time killer for the crew: open it on a phone in the lift line, get one mo
 5. Past a distance threshold, **the chaser** shows up and eventually catches you. That's the end of the run.
 6. End screen: distance, score, best trick, a "Jerry of the Day nominee" fail card, and **Again**.
 
-### The chaser (decision needed, §12)
-SkiFree's run ends when a monster eats you. Ours needs its own, original ender. The lead idea is **Ski Patrol on a snowmobile**: every Slow Zone you blast through and every person you clip raises your "heat", and past a set distance patrol comes for you no matter what. If they catch you, **your pass gets clipped** (game over screen: a pass with a hole punched in it). Alternates are listed in [CONTENT.md](CONTENT.md#chasers).
+### The chaser: Ski Patrol on a snowmobile (decided Nov 19)
+SkiFree's run ends when a monster eats you. Ours is original: **Ski Patrol on a snowmobile**. Every Slow Zone you blast through, every person you clip and every skier you spray raises your **heat**, and more heat brings patrol sooner. Past a set distance they come for you no matter what. If they catch you, **your pass gets clipped** (game over screen: a pass with a hole punched in it). The other chaser ideas in [CONTENT.md](CONTENT.md#chasers) can become modes or easter eggs.
+
+### The rider (decided Nov 19)
+One rider with the same stats for everyone, so leaderboards are fair. Outfits are cosmetic unlocks (for example a gaper suit with jeans, a banana suit, a neon one-piece) earned by distance, clout or finding things like the lost GoPro.
 
 ## 5. Snowboard mechanics
 
@@ -48,6 +51,7 @@ SkiFree's run ends when a monster eats you. Ours needs its own, original ender. 
 | **Edges** | Turning shows heelside (facing downhill) or toeside (facing uphill) sprites, and a carve leaves a line in the snow | The first thing that makes it read as a snowboard |
 | **Stance + switch** | Regular or goofy. Landing backwards means riding switch until you turn around; switch tricks score more | Real snowboard culture; a small skill ceiling |
 | **Stop / scrub** | Hold back (or both thumbs) to sideslip and dump speed | Lets you survive a tight tree section |
+| **Spray (hard stop)** | Slam a hard stop at speed right next to someone and you spray them with a wall of snow. **Skiers:** + clout (more for more speed and a closer stop) and + patrol heat. **Snowboarders:** − clout (you don't spray the homies). Each person in CONTENT.md says whether they ride skis or a board | The most snowboard-culture move there is, and a risk-reward choice: points now, patrol sooner |
 | **Ollie** | Jump button pops you off the ground anywhere: small hop, clears small things | Snowboards ollie; skis in the classic needed a ramp |
 | **Jumps (kickers)** | Ramps launch you high. While in the air: spin (left/right) and grab (a button or swipe) | The freestyle score engine |
 | **Spins and grabs** | 180s up to 1080+, plus grabs (indy, melon, method, stalefish, nose, tail). Land facing a clean direction or crash | Trick names are part of the joke ("Send it! 1080 Mute") |
@@ -80,7 +84,7 @@ The full idea backlog is in [CONTENT.md](CONTENT.md). The categories below set t
 ## 7. Content categories
 
 ### 7.1 People (moving obstacles)
-Jerries out of control, gapers in jeans with the gaper gap, Gaper Day costumes, park rats in oversized hoodies, the crew sitting in the middle of the run below a roller, ski school "pizza!" snake lines, the influencer filming a TikTok, uphill skinners, the Bluetooth-speaker guy, the tele skier, the dad yelling "SKI PATROL!", ski patrol themselves. Hitting people raises patrol heat.
+Jerries out of control, gapers in jeans with the gaper gap, Gaper Day costumes, park rats in oversized hoodies, the crew sitting in the middle of the run below a roller, ski school "pizza!" snake lines, the influencer filming a TikTok, uphill skinners, the Bluetooth-speaker guy, the tele skier, the dad yelling "SKI PATROL!", ski patrol themselves, and the Moto Gunslinger (a six-shooter cowboy in motocross armor who shoots at and briefly chases anyone who passes too close). Hitting people raises patrol heat. Spraying them is scored by whether they're a skier or a snowboarder (§5).
 
 ### 7.2 Terrain and objects (still or slow obstacles)
 Trees (pine, aspen), tree wells, rocks and hidden "sharks" under thin cover, stumps, moguls (a snowboarder's nightmare), ice, cat tracks and flats, Slow Zone signs, rope lines and closed areas, snowmaking guns, snowcats and groomers, lift towers, the chairlift overhead with hecklers, the $28 lodge burger stand.
@@ -105,7 +109,7 @@ Score is **clout**. Crash captions ("Yard sale!", "Jerry of the Day nominee", "S
 
 - **Plain HTML + JavaScript + `<canvas>`**, no framework and no build step. The game is one folder of static files: open `index.html` and it runs. This keeps it fast on phones and trivially embeddable.
 - **Fixed-timestep game loop** on `requestAnimationFrame` (update at 60 steps a second, draw whenever the screen refreshes), so speed is the same on a fast PC and a slow phone.
-- **Low-resolution pixel canvas** (for example 320×480 in portrait), scaled up with crisp, unblurred pixels. Small sprite sheets (PNG) with a limited, early-90s-style palette.
+- **Low-resolution pixel canvas** (for example 320×480 in portrait), scaled up with crisp, unblurred pixels. Small sprite sheets (PNG) in a **modern-retro palette** (decided Nov 19): chunky early-90s pixels, but with enough colors that neon one-pieces, roost guards and parody passes read clearly on a phone.
 - **Seeded random generator** for the slope, so a "seed" recreates the same mountain (needed for Daily send and fair leaderboards).
 - **Content as data:** obstacles, people and pickups are entries in a `content` file (sprite, behavior, collision result, caption, rarity, zone). The engine reads it. Adding a joke never needs engine changes.
 - **Saved locally:** best score and stance in `localStorage` (wrapped so a private browser still works).
@@ -124,7 +128,7 @@ Full Send is an original game **in the genre** SkiFree defined (endless downhill
 
 | # | Milestone | Done when |
 |---|---|---|
-| M0 | **Look and feel** | PRD agreed, chaser picked, an interactive mock (or a quick prototype) of the title screen, rider and a few obstacles signed off |
+| M0 | **Feel prototype** | A rough playable build with placeholder shapes, tested on Jordan's phone: steering, ollie, spray and crashing feel right (decided Nov 19: prototype before any mock) |
 | M1 | **Core loop** | A rider steers down an endless slope on phone and desktop, trees/rocks/people cause crashes, distance counts, the chaser ends the run, end screen + Again. Live on GitHub Pages |
 | M2 | **Snowboarding** | Edges, stance and switch, ollie, kickers with spins and grabs, rails, flats and skating, powder, tree wells, ice |
 | M3 | **Content pass 1** | 30+ items from CONTENT.md with sprites, behaviors and captions; zones by distance; crew playtest notes recorded |
@@ -143,14 +147,17 @@ Three steps, each useful on its own:
 
 Optional crossover: Open Slop passes today's conditions (did it snow?) so the game's Daily send is a pow day when the real mountains got pow.
 
-## 12. Open questions
+## 12. Decisions (Nov 19, 2026)
 
-1. **Chaser:** Ski Patrol on a snowmobile (pass gets clipped), or one of the alternates in CONTENT.md?
-2. **Look:** strict 16-color early-90s palette, or a slightly richer modern-retro pixel palette?
-3. **Mock first?** Build an interactive claude.ai mock of the look before the engine, or go straight to a playable prototype and test on the phone?
-4. **Who's the rider?** One default rider, or pick from a few (the park rat, the pow chaser, the gaper) with small stat differences?
-5. **License:** the repo is public with no license yet, which means "look, don't reuse". Add MIT (anyone can reuse the code) or keep it all-rights-reserved?
-6. **Skier jokes:** how hard do we roast skiers? (Proposal: plenty, but skiers in the crew should still laugh.)
+1. **Chaser:** Ski Patrol on a snowmobile; caught = pass clipped (§4).
+2. **Look:** modern-retro pixel palette, not strict 16-color (§8).
+3. **First build:** a rough playable prototype to test on the phone, before any art mock (M0).
+4. **Rider:** one rider, same stats for everyone, cosmetic outfit unlocks (§4).
+5. **License:** MIT (anyone can reuse the code with credit). See `LICENSE`.
+6. **Skier jokes:** plenty, but friendly. Skiers are the main target, snowboarders get roasted too, and every joke should still land with the skiers in the crew.
+7. **New content:** the Moto Gunslinger, the spray mechanic, the unstrapped hopper, the sideslipper, the gear snob, weather events and an I-70 intro (CONTENT.md).
+
+No open questions right now. New ones go here.
 
 ## 13. Success
 

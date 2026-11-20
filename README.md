@@ -24,3 +24,7 @@ Once it's live it will be at **https://elbrownbear.github.io/full-send/** (GitHu
 - [PRD.md](PRD.md): what we're building and why
 - [CONTENT.md](CONTENT.md): every person, obstacle, pickup and joke, with status
 - [SYSTEMS.md](SYSTEMS.md): plain-language guide to how it works
+
+## License
+
+[MIT](LICENSE): reuse and remix the code, with credit.
