@@ -4,7 +4,9 @@
   'use strict';
   const FS = window.FS;
 
-  FS.GRABS = ['Indy', 'Melon', 'Method', 'Stalefish', 'Mute', 'Nose grab', 'Tail grab'];
+  // Which grab you get depends on the direction you're holding as you grab (PRD §12 #10).
+  FS.GRAB_DIRS = { up: 'Nose grab', down: 'Tail grab', left: 'Method', right: 'Indy', none: 'Mute' };
+  FS.SKETCHY = ['Sketchy!', 'Saved it', 'Butt check', 'Hand drag', 'Barely']; // landed, but not pretty
 
   FS.CRASH_LINES = {
     tree: ['Tree: 1, you: 0', 'Hugged a tree', 'Jerry of the Day nominee', 'Sent it. Did not land it.'],
@@ -12,7 +14,8 @@
     stump: ['Stumped', 'Caught an edge'],
     person: ['Yard sale!', 'Yard sale!', 'Jerry of the Day nominee'],
     bullet: ['Got smoked by a cowboy', 'Shot by a guy in roost guards'],
-    spin: ['Over-rotated!', 'Caught an edge'],
+    spin: ['Over-rotated!', 'Caught an edge', 'Jerry flip'],
+    flip: ['Jerry flip', 'Landed on your head', 'Under-rotated the flip', 'Neck brace incoming'],
     shark: ['Core shot!', 'Shark attack', 'There was a rock under there'],
     rail: ['Racked on the rail', 'Ollie ONTO it', 'Rail: 1, you: 0'],
     box: ['Ate the box', 'Ollie ONTO it'],
