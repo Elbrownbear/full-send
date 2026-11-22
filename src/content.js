@@ -124,9 +124,10 @@
     // M3 (Nov 20): pickups, set pieces and new people added; their weight came out of empty snow.
     // lift = chance a band has a chairlift running down it.
     // Nov 21: rocks and stumps cut 35% everywhere (the difference went to empty snow).
+    // Nov 21: trees cut 40% everywhere (weights ×0.58, measured as 40% fewer trees over 30 mountains; the difference went to empty snow).
     groomer: {
       name: 'GROOMERS', count: 7, grow: 8, cluster: 0.15, jumpLine: 0.15, slowZone: 0.3, rope: 0.2, catwalk: 0.34, lift: 0.35,
-      weights: { tree: 19.5, rock: 5, stump: 3.9, kicker: 7, ice: 4, rail: 2, box: 2, snowgun: 1, burger: 0.6, hottub: 0.5, pickup: 3, person: 20, empty: 35.6 },
+      weights: { tree: 11.3, rock: 5, stump: 3.9, kicker: 7, ice: 4, rail: 2, box: 2, snowgun: 1, burger: 0.6, hottub: 0.5, pickup: 3, person: 20, empty: 43.8 },
       people: {
         skier: 10, boarder: 2.5, crew: 0.8, jerry: 2, gaper: 2, school: 1, dad: 1, influencer: 1, patrol: 0.4,
         speaker: 1, tele: 1, euro: 0.6, gaperday: 0.4, shotski: 0.4, lostkid: 0.5, hopper: 1, sideslipper: 0.8, academy: 0.6, podcast: 0.4, droneguy: 0.5, snowcat: 0.5,
@@ -135,19 +136,19 @@
     },
     park: {
       name: 'TERRAIN PARK', count: 8, grow: 4, cluster: 0, jumpLine: 0.7, slowZone: 0, rope: 0, catwalk: 0, lift: 0.2,
-      weights: { tree: 2.6, rock: 0.52, kicker: 26, rail: 14, box: 12, rv: 0.6, pickup: 3, person: 12, empty: 38.28 },
+      weights: { tree: 1.5, rock: 0.52, kicker: 26, rail: 14, box: 12, rv: 0.6, pickup: 3, person: 12, empty: 39.38 },
       people: { parkrat: 4, boarder: 3, skier: 4, crew: 0.8, influencer: 1, jerry: 1, speaker: 1, hopper: 1, podcast: 0.6, droneguy: 0.6, gaperday: 0.4 },
       pickups: { can: 3, wax: 2, waffle: 2, gopro: 1, bronze: 1 },
     },
     glades: {
       name: 'GLADES', count: 11, grow: 10, cluster: 0.45, jumpLine: 0, slowZone: 0, rope: 0.5, catwalk: 0.23, lift: 0.2,
-      weights: { tree: 51, rock: 3.3, stump: 5.2, kicker: 2, palm: 0.15, pickup: 2, person: 6, empty: 30.35 },
+      weights: { tree: 29.6, rock: 3.3, stump: 5.2, kicker: 2, palm: 0.15, pickup: 2, person: 6, empty: 51.75 },
       people: { skier: 4, boarder: 1, jerry: 1.5, gaper: 0.5, gunslinger: 0.6, tele: 1, euro: 0.5, sideslipper: 0.6, lostkid: 0.3 },
       pickups: { burrito: 2, wax: 2, gopro: 1, wavemedal: 0.5 },
     },
     pow: {
       name: 'POWDER · LEAN BACK', count: 8, grow: 8, cluster: 0.3, jumpLine: 0, slowZone: 0, rope: 0, catwalk: 0, lift: 0.2, pow: true,
-      weights: { tree: 23.8, shark: 6.8, stump: 2.6, kicker: 3, pickup: 2, person: 5, empty: 56.8 },
+      weights: { tree: 13.8, shark: 6.8, stump: 2.6, kicker: 3, pickup: 2, person: 5, empty: 66.8 },
       people: { boarder: 3, skier: 2, jerry: 1, splitboarder: 1.5, tele: 0.5 },
       pickups: { wax: 2, burrito: 2, bronze: 0.5, wavemedal: 0.5 },
     },
