@@ -2,7 +2,9 @@
 
 Read this first in every Full Send session. Keep it short: rules and the current handoff only.
 
-## Where we left off (updated 2026-11-21)
+## Where we left off (updated 2026-11-22)
+
+- **M4 embed live Nov 22 (built in the Open Slop repo, its R48):** 25 fast taps on Open Slop's Watch vibe button unlock Full Send, which opens full screen inside Open Slop in a frame loading this site with `?embed=openslop`. No code here changed (the game ignores the parameter for now). Anything that breaks framing (a header, a redirect, a move off GitHub Pages) breaks it, so keep `index.html` frameable. The leaderboard (M5) would build on this frame.
 
 - **Live:** https://elbrownbear.github.io/full-send/ (GitHub Pages, deploys on every push to `main`). Public repo, MIT. Placeholder art drawn in code.
 - **M1 (Nov 19):** code split into `src/core.js` (tunables `FS.C`), `content.js` (people, zones, lines), `rules.js` (scoring, unit tested), `world.js`, `sprites.js`, `game.js`. Ski Patrol snowmobile (max heat calls it, outrun it to shake it; past `PATROL_BASE_M` it always comes), pass-clipped end screen, radar Slow Zones, rope ducks, Jerry/gaper/crew/ski school/park rat/dad/patrol/influencer/Moto Gunslinger.
@@ -22,7 +24,7 @@ Read this first in every Full Send session. Keep it short: rules and the current
 1. Ask Jordan how the trick pieces that came back feel (sketchy landings, the meter's fill pace `SEND_PER_PT`, the names) and how the wider jumps, 40% fewer trees and fewer rocks/stumps play. Add nothing else to tricks until he's played it.
 2. Ask Jordan how M3 plays: which new people and set pieces are funny, which nobody noticed, and is the hill too busy now? Write the answers in CONTENT.md's Playtest notes (that's the M3 crew playtest the PRD asks for).
 3. Still open from M2: is patrol right now (`PATROL_*` in `core.js`), are rails easy to land on, do catwalks feel right?
-4. Then ask what's next: M4 (Open Slop link + embed), real pixel art, or content pass 2 (the 💡 items left in CONTENT.md: gear snob, moguls, lift line, weather, I-70 intro, bomb hole, Johnny Tsunami race, etc.).
+4. Ask how the game plays inside Open Slop (touch controls in the frame on iPhone). Then ask what's next: M5 (crew leaderboard through the frame), real pixel art, or content pass 2 (the 💡 items left in CONTENT.md: gear snob, moguls, lift line, weather, I-70 intro, bomb hole, Johnny Tsunami race, etc.).
 
 ## Project rules
 
