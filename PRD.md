@@ -6,7 +6,7 @@
 
 A retro, top-down "ride down an endless mountain and try not to eat it" game, in the genre the 1991 Windows classic SkiFree made famous, rebuilt around **snowboarding** and stuffed with **today's ski and snowboard culture**: Jerries, gapers, park rats, Gaper Day costumes, $300 lift tickets, Ikon-vs-Epic tribalism, the crew sitting in the middle of the run, the dad yelling "SKI PATROL!", the catwalk where every snowboarder has to unstrap.
 
-It's a time killer for the crew: open it on a phone in the lift line, get one more run in, compare scores. Long term it lives inside (or one tap from) [Open Slop](https://open-slop.vercel.app), the crew's mountain app.
+It's a time killer for the crew: open it on a phone in the lift line, get one more run in, compare scores. Long term it lives inside (or one tap from) Open Slop, the crew's mountain app.
 
 ## 2. Goals and non-goals
 
