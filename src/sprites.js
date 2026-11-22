@@ -31,13 +31,13 @@
   }
   function kicker(sx, sy) {
     for (let i = 0; i < 12; i++) {
-      const w = 8 + Math.round((i * 3) / 11);
+      const w = 13 + Math.round((i * 4) / 11); // 34 px wide at the lip (Nov 21: was 22)
       px(sx - w, sy - 12 + i, w * 2, 1, i < 2 ? '#f7fbff' : '#dce8f5');
       px(sx - w, sy - 12 + i, 1, 1, '#a9bdd6'); px(sx + w - 1, sy - 12 + i, 1, 1, '#a9bdd6');
     }
-    px(sx - 11, sy - 1, 22, 2, '#6f8fb8');
-    px(sx - 11, sy + 1, 22, 3, '#cfdcea');
-    px(sx - 12, sy - 3, 2, 3, '#ff7a1a'); px(sx + 10, sy - 3, 2, 3, '#ff7a1a');
+    px(sx - 17, sy - 1, 34, 2, '#6f8fb8');
+    px(sx - 17, sy + 1, 34, 3, '#cfdcea');
+    px(sx - 18, sy - 3, 2, 3, '#ff7a1a'); px(sx + 16, sy - 3, 2, 3, '#ff7a1a');
   }
   // A rail runs downhill from (sy - 48) to sy, on little legs; it casts a shadow to its right.
   function rail(sx, sy) {

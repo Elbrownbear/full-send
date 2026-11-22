@@ -55,38 +55,13 @@ test('radar Slow Zone: under the limit cools heat, over the limit pays clout and
   assert.match(over.text, /47 IN A 25/);
 });
 
-test('tricks: a clean switch backside 360 with a grab scores; over-rotation crashes', () => {
+test('tricks: a clean switch 360 with a grab scores; over-rotation crashes', () => {
   const t = rules.trick({ spin: 350, grabT: 0.4, grabName: 'Indy', airT: 1, wasSwitch: true });
   assert.ok(t.ok);
   assert.strictEqual(t.half, 2);
-  assert.strictEqual(t.quality, 'clean');
-  assert.strictEqual(t.name, 'Switch Back 360 Indy');
+  assert.strictEqual(t.name, 'Switch 360 Indy');
   assert.ok(t.pts > 0 && t.pts % 5 === 0);
   assert.strictEqual(rules.trick({ spin: 270, grabT: 0, grabName: '', airT: 1, wasSwitch: false }).ok, false);
-});
-
-test('landings: clean pays more than sketchy for the same trick', () => {
-  const clean = rules.trick({ spin: 365, airT: 1 });
-  const sketchy = rules.trick({ spin: 405, airT: 1 });
-  assert.strictEqual(clean.quality, 'clean');
-  assert.strictEqual(sketchy.quality, 'sketchy');
-  assert.ok(clean.pts > sketchy.pts);
-});
-
-test('trick names: frontside/backside flip with stance, Cab for switch frontside', () => {
-  assert.strictEqual(rules.trick({ spin: -540, airT: 1 }).name, 'Front 540');
-  assert.strictEqual(rules.trick({ spin: -540, airT: 1, goofy: true }).name, 'Back 540');
-  assert.strictEqual(rules.trick({ spin: -180, airT: 1, wasSwitch: true }).name, 'Half Cab');
-  assert.strictEqual(rules.trick({ spin: -720, airT: 1, wasSwitch: true }).name, 'Cab 720');
-});
-
-test('flips: backflips, rodeos, corks and doubles get named; a half flip crashes', () => {
-  assert.strictEqual(rules.trick({ flip: 360, airT: 1 }).name, 'Backflip');
-  assert.strictEqual(rules.trick({ flip: -360, airT: 1 }).name, 'Frontflip');
-  assert.strictEqual(rules.trick({ flip: 360, spin: 720, airT: 1 }).name, 'Back Rodeo 720');
-  assert.strictEqual(rules.trick({ flip: 720, spin: -1080, airT: 1, grabT: 0.5, grabName: 'Mute' }).name, 'Double Cork 1080 Mute');
-  assert.strictEqual(rules.trick({ flip: 180, airT: 1 }).ok, false);
-  assert.ok(rules.trick({ flip: 360, airT: 1 }).pts > rules.trick({ spin: 360, airT: 1 }).pts);
 });
 
 test('grinds pay more the longer you slide, and switch pays more', () => {

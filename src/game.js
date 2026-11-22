@@ -44,12 +44,12 @@
     Object.assign(S, {
       seed: URL_SEED ?? ((Math.random() * 2 ** 31) | 0),
       chunks: new Map(), spawned: new Set(), ropes: new Map(), catwalks: new Map(), lifts: new Map(),
-      buffs: { wax: 0, can: 0, burrito: false }, cloutBank: 0, send: 0, sendT: 0, heckleT: 0, whiteT: 0, cordWarned: false, palmSeen: false,
+      buffs: { wax: 0, can: 0, burrito: false }, cloutBank: 0, heckleT: 0, whiteT: 0, cordWarned: false, palmSeen: false,
       npcs: [], particles: [], popups: [], trail: [], bullets: [],
       rider: {
         x: 0, y: 0, z: 0, vz: 0, h: MID, speed: 0, mode: 'ride',
         stopping: false, stopDir: 0, stopSide: 1, stopSpeed: 0, sprayT: 0,
-        airVX: 0, airVY: 0, spin: 0, flip: 0, grabT: 0, grabName: '', airT: 0, wasSwitch: false,
+        airVX: 0, airVY: 0, spin: 0, grabT: 0, grabName: '', airT: 0, wasSwitch: false,
         sw: false, invuln: 0, crashT: 0, crashObj: null, turnT: 0,
         rail: null, grindT: 0, grindStyle: '', butterT: 0, butterSpin: 0, stuckT: 0, skateAnim: 0, pushT: 0,
       },
@@ -58,14 +58,13 @@
       clout: 0, heat: 0, dist: 0, caption: null, zoneToast: null, lastZone: null,
       hintT: 0, simT: 0, camX: 0, camY: 0, pruneT: 0, caughtT: 0,
       stash: { in: false, lastY: 0, bank: 0, earned: 0 },
-      stats: { sprayed: 0, homies: 0, plowed: 0, crashes: 0, speedTraps: 0, worstMph: 0, stashM: 0, bestTrick: null, topMph: 0, shaken: 0, shot: false, wells: 0, skated: 0, grinds: 0, found: [], tycoon: false, pickups: 0, liftTricks: 0, sends: 0, sketchy: 0 },
+      stats: { sprayed: 0, homies: 0, plowed: 0, crashes: 0, speedTraps: 0, worstMph: 0, stashM: 0, bestTrick: null, topMph: 0, shaken: 0, shot: false, wells: 0, skated: 0, grinds: 0, found: [], tycoon: false, pickups: 0, liftTricks: 0 },
     });
   }
 
-  const addHeat = (n) => { if (n > 0 && S.sendT > 0) return; S.heat = clamp(S.heat + n, 0, 100); }; // FULL SEND: no new heat
+  const addHeat = (n) => { S.heat = clamp(S.heat + n, 0, 100); };
   // frac = a trickle (like the drone filming you): bank fractions and pay out in fives.
   function addClout(n, frac) {
-    if (S.sendT > 0 && n > 0) n *= 2; // FULL SEND: double clout
     if (!frac) { S.clout += n; return; }
     S.cloutBank += n;
     if (S.cloutBank >= 5) { const k = Math.floor(S.cloutBank / 5) * 5; S.cloutBank -= k; S.clout += k; }
@@ -77,39 +76,15 @@
   FS.addClout = addClout;
 
   // ---------- Input ----------
-  const input = { left: false, right: false, stopHeld: false, downHeld: false, jumpHeld: false, jumpQueued: false, turnPulse: 0, downPulse: false, spinDir: 0, flipDir: 0, leanKey: false, mouseLean: false, butterFlick: 0 };
+  const input = { left: false, right: false, stopHeld: false, jumpHeld: false, jumpQueued: false, turnPulse: 0, downPulse: false, spinDir: 0, leanKey: false, mouseLean: false, butterFlick: 0 };
   const pointer = { mode: 'keys', mouse: null, touch: null };
   const isTouch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
 
   function resetInput() {
-    Object.assign(input, { left: false, right: false, stopHeld: false, downHeld: false, jumpHeld: false, jumpQueued: false, turnPulse: 0, downPulse: false, spinDir: 0, flipDir: 0, leanKey: false, mouseLean: false, butterFlick: 0 });
-    pointer.touch = null; pointer.grab = null;
+    Object.assign(input, { left: false, right: false, stopHeld: false, jumpHeld: false, jumpQueued: false, turnPulse: 0, downPulse: false, spinDir: 0, leanKey: false, mouseLean: false, butterFlick: 0 });
+    pointer.touch = null;
   }
-  // Grabbing: hold Space or the mouse button, or (phone) hold a second finger.
-  const grabHeld = () => input.jumpHeld || !!pointer.grab;
-  // Which grab: the direction held as you grab (PRD §12 #10).
-  function grabDir() {
-    if (pointer.grab) return pointer.grab.dir; // phone: where the second finger touched
-    if (pointer.mode === 'mouse' && pointer.mouse) {
-      const sp = toScreen(S.rider.x, S.rider.y - S.rider.z), dx = pointer.mouse.x - sp.x, dy = pointer.mouse.y - sp.y;
-      if (Math.hypot(dx, dy) < 20) return 'none';
-      return Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
-    }
-    if (input.stopHeld) return 'up';
-    if (input.downHeld) return 'down';
-    if (input.left) return 'left';
-    if (input.right) return 'right';
-    return 'none';
-  }
-  // Phone: the screen is split into grab zones for the second finger: top = nose, bottom = tail, left = Method, right = Indy, middle = Mute.
-  function touchGrabDir(x, y) {
-    const w = window.innerWidth, h = window.innerHeight;
-    if (y < h * 0.3) return 'up';
-    if (y > h * 0.7) return 'down';
-    if (x < w * 0.35) return 'left';
-    if (x > w * 0.65) return 'right';
-    return 'none';
-  }
+  const grabHeld = () => input.jumpHeld || (pointer.mode === 'touch' && pointer.touch !== null && !pointer.touch.lean);
   // Lean back: Shift, right mouse button, or pull your thumb down.
   const leanHeld = () => input.leanKey || input.mouseLean || !!(pointer.touch && pointer.touch.lean);
   // After a landing, stop or crash, steering by drag starts fresh from where the thumb is now.
@@ -135,12 +110,7 @@
     }
     if (r.mode === 'crash') { input.turnPulse = 0; input.downPulse = false; return; }
     if (r.mode === 'grind') { if (input.turnPulse) leaveRail(input.turnPulse, 50); input.turnPulse = 0; return; }
-    if (r.mode === 'air') {
-      input.spinDir = dir;
-      input.flipDir = (input.stopHeld ? 1 : 0) - (input.downHeld ? 1 : 0); // Up = backflip, Down = frontflip
-      input.turnPulse = 0; input.downPulse = false;
-      return;
-    }
+    if (r.mode === 'air') { input.spinDir = dir; input.turnPulse = 0; return; }
     if (input.stopHeld) requestStop();
     if (input.downPulse) { input.downPulse = false; if (!r.stopping) r.h = MID; }
     // Leaning back + a tap left or right = butter 180 on the snow.
@@ -198,7 +168,7 @@
     if (k === 'left') { input.left = true; input.turnPulse = -1; }
     else if (k === 'right') { input.right = true; input.turnPulse = 1; }
     else if (k === 'up') input.stopHeld = true;
-    else if (k === 'down') { input.downPulse = true; input.downHeld = true; }
+    else if (k === 'down') input.downPulse = true;
     else if (k === 'jump') { input.jumpHeld = true; input.jumpQueued = true; }
   });
   addEventListener('keydown', (e) => { if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') input.leanKey = true; });
@@ -208,7 +178,6 @@
     if (k === 'left') input.left = false;
     else if (k === 'right') input.right = false;
     else if (k === 'up') input.stopHeld = false;
-    else if (k === 'down') input.downHeld = false;
     else if (k === 'jump') input.jumpHeld = false;
   });
   addEventListener('blur', resetInput);
@@ -217,7 +186,7 @@
     if (state !== 'play') return;
     pointer.mode = 'mouse';
     pointer.mouse = { x: e.clientX, y: e.clientY };
-    if (S.rider.mode === 'air') { S.rider.spin += e.movementX * 1.5; S.rider.flip -= e.movementY * 1.5; }
+    if (S.rider.mode === 'air') S.rider.spin += e.movementX * 1.5;
   });
   canvas.addEventListener('mousedown', (e) => {
     if (state !== 'play') return;
@@ -239,12 +208,10 @@
     for (const t of e.changedTouches) {
       if (!pointer.touch) {
         const now = performance.now();
-        pointer.touch = { id: t.identifier, sx: t.clientX, sy: t.clientY, lx: t.clientX, ly: t.clientY, t0: now, baseH: S.rider.h, moved: false, flicked: false, lean: false, buttered: false, hist: [{ x: t.clientX, y: t.clientY, t: now }] };
+        pointer.touch = { id: t.identifier, sx: t.clientX, sy: t.clientY, lx: t.clientX, t0: now, baseH: S.rider.h, moved: false, flicked: false, lean: false, buttered: false, hist: [{ x: t.clientX, y: t.clientY, t: now }] };
         if (S.rider.mode === 'skate' || S.rider.mode === 'stuck') input.jumpQueued = true; // every tap is a push or a dig
-      } else if (S.rider.mode === 'air') {
-        pointer.grab = { id: t.identifier, dir: touchGrabDir(t.clientX, t.clientY) }; // a second finger in the air = grab
       } else {
-        input.jumpQueued = true; // a second finger on the ground is an instant ollie
+        input.jumpQueued = true; // a second finger is an instant ollie
       }
     }
   }, { passive: false });
@@ -266,16 +233,15 @@
       tp.lean = !tp.flicked && dy > C.LEAN_PX;
       if (!tp.lean) tp.buttered = false;
       else if (!tp.buttered && Math.abs(flickDx) > 40) { tp.buttered = true; input.butterFlick = Math.sign(flickDx); }
-      if (r.mode === 'air') { r.spin += (t.clientX - tp.lx) * C.TOUCH_SPIN; r.flip -= (t.clientY - tp.ly) * C.TOUCH_FLIP; } // swipe up = backflip
+      if (r.mode === 'air') r.spin += (t.clientX - tp.lx) * C.TOUCH_SPIN;
       else if (!tp.flicked && flickDy < -C.FLICK_PX && dy < 0 && Math.abs(t.clientX - tp.lx) < 20) { tp.flicked = true; requestStop(); }
       else if (!tp.flicked && r.mode === 'ride' && !r.stopping) r.h = limitHeading(tp.baseH + Math.round(dx / (C.TOUCH_STEP_PX * (1 + r.speed / 300))));
-      tp.lx = t.clientX; tp.ly = t.clientY;
+      tp.lx = t.clientX;
     }
   }, { passive: false });
 
   const endTouch = (e) => {
     e.preventDefault();
-    for (const t of e.changedTouches) if (pointer.grab && t.identifier === pointer.grab.id) pointer.grab = null;
     const tp = pointer.touch;
     if (!tp) return;
     for (const t of e.changedTouches) {
@@ -309,11 +275,6 @@
     if (r.butterSpin > 0) r.butterSpin = Math.max(0, r.butterSpin - C.BUTTER_SPIN * dt);
     terrainToasts();
     if (r.mode !== 'crash' && r.mode !== 'stuck') { checkPickups(); setPieces(dt); }
-    if (S.sendT > 0) {
-      S.sendT -= dt;
-      if (Math.random() < 0.7) S.particles.push({ x: r.x + (Math.random() - 0.5) * 8, y: r.y, z: 4 + r.z, vx: (Math.random() - 0.5) * 30, vy: -40, vz: 30, life: 0.5, c: pick(['#ff3d7f', '#ffd400', '#ffffff']) });
-      if (S.sendT <= 0) popup(r.x, r.y - 30, 'SEND OVER', 'say');
-    } else S.send = Math.max(0, S.send - C.SEND_DECAY * dt);
     if (S.buffs.wax > 0) S.buffs.wax -= dt;
     if (S.buffs.can > 0) S.buffs.can -= dt;
     if (S.whiteT > 0) S.whiteT -= dt;
@@ -360,8 +321,7 @@
       if (S.onIce) acc += C.ICE_GRIP * C.DRAG * r.speed; // ice is fast
       if (S.onCord) acc += 0.4 * C.DRAG * r.speed;       // so is fresh corduroy
       if (S.buffs.wax > 0) acc += 0.25 * C.DRAG * r.speed; // hot wax
-      if (S.sendT > 0 && pull > 0.3) acc += 80;             // FULL SEND: faster
-      r.speed = clamp(r.speed + acc * dt, 0, C.MAX + (S.buffs.wax > 0 ? 30 : 0) + (S.sendT > 0 ? C.SEND_SPEED : 0));
+      r.speed = clamp(r.speed + acc * dt, 0, C.MAX + (S.buffs.wax > 0 ? 30 : 0));
       // Out of speed on a catwalk: unstrap and skate.
       if (flat && r.speed < C.SKATE_AT) { startSkate(); return; }
       updateButter(dt, flat || pow);
@@ -373,7 +333,7 @@
     addTrail(r.stopping ? 4 : WORLD.inPow(r.x, r.y) && !leanHeld() ? 4 : S.stash.in ? 3 : 2);
     let launched = false, roof = null;
     WORLD.forNearbyStatics(r.x, r.y, (o) => {
-      if (o.type === 'kicker' && !r.stopping && !launched && r.speed > 40 && Math.abs(r.x - o.x) < 11 && prevY < o.y - 1 && r.y >= o.y - 1) {
+      if (o.type === 'kicker' && !r.stopping && !launched && r.speed > 40 && Math.abs(r.x - o.x) < FS.STATICS.kicker.w / 2 && prevY < o.y - 1 && r.y >= o.y - 1) {
         launched = true;
       }
       // The RV has a snow ramp up its back: ride up it and launch off the roof.
@@ -461,7 +421,7 @@
     if (!noButter && leanHeld() && canButter()) { r.butterT += dt; return; }
     if (r.butterT > 0) {
       const res = RULES.butter(r.butterT);
-      if (res.pts > 0) { addClout(res.pts); fillSend(res.pts * C.SEND_PER_PT); popup(r.x, r.y - 26, `${res.name} +${res.pts}`, 'trick'); }
+      if (res.pts > 0) { addClout(res.pts); popup(r.x, r.y - 26, `${res.name} +${res.pts}`, 'trick'); }
       r.butterT = 0;
     }
   }
@@ -470,7 +430,6 @@
     r.sw = !r.sw;
     r.butterSpin = 180;
     addClout(RULES.BUTTER_180);
-    fillSend(RULES.BUTTER_180 * C.SEND_PER_PT);
     popup(r.x, r.y - 26, `${r.sw ? 'Butter 180 to switch' : 'Butter 180'} +${RULES.BUTTER_180}`, 'trick');
   }
 
@@ -526,12 +485,10 @@
   }
   function startGrind(o) {
     const r = S.rider;
-    const res = RULES.trick(trickInput(), landTolerance());
-    input.stopHeld = false; input.downHeld = false;
-    if (!res.ok) { r.spin = 0; r.flip = 0; crash(pick(FS.CRASH_LINES.spin), o); return; }
+    const res = RULES.trick(r, S.buffs.can > 0 ? 35 : 55);
+    if (!res.ok) { r.spin = 0; crash(pick(FS.CRASH_LINES.spin), o); return; }
     if (res.half % 2 === 1) r.sw = !r.sw;
-    scoreTrick(res);
-    r.flip = 0;
+    if (res.pts > 0) { addClout(res.pts); popup(r.x, r.y - 30, `${res.name} +${res.pts}`, 'trick'); }
     r.speed = Math.max(90, Math.hypot(r.airVX, r.airVY));
     r.mode = 'grind'; r.rail = o; r.z = o.ht; r.vz = 0; r.x = o.x; r.grindT = 0; r.spin = 0;
     const straight = r.h === MID;
@@ -551,7 +508,6 @@
     const r = S.rider;
     const res = RULES.grind(r.grindT, r.grindStyle, r.wasSwitch);
     addClout(res.pts);
-    fillSend(res.pts * C.SEND_PER_PT);
     S.stats.grinds++;
     popup(r.x, r.y - 30, `${res.name} +${res.pts}`, 'trick');
     if (!S.stats.bestTrick || res.pts > S.stats.bestTrick.pts) S.stats.bestTrick = { name: res.name, pts: res.pts };
@@ -568,7 +524,7 @@
     r.liftAir = WORLD.underLift(r.x, r.y);
     r.mode = 'air'; r.vz = vz; r.z = 0.01;
     r.airVX = Math.sin(a) * r.speed; r.airVY = Math.cos(a) * r.speed;
-    r.spin = 0; r.flip = 0; r.grabT = 0; r.airT = 0; r.wasSwitch = r.sw; r.grabName = '';
+    r.spin = 0; r.grabT = 0; r.airT = 0; r.wasSwitch = r.sw; r.grabName = pick(FS.GRABS);
     S.trail.push(null);
   }
 
@@ -578,11 +534,7 @@
     r.x += r.airVX * dt; r.y += r.airVY * dt;
     r.vz -= C.GZ * dt; r.z += r.vz * dt;
     if (input.spinDir) r.spin += input.spinDir * C.SPIN_RATE * dt;
-    if (input.flipDir) r.flip += input.flipDir * C.FLIP_RATE * dt;
-    if (grabHeld()) {
-      if (!r.grabName) r.grabName = FS.GRAB_DIRS[grabDir()]; // the grab is decided the moment you reach for it
-      r.grabT += dt;
-    }
+    if (grabHeld()) r.grabT += dt;
     WORLD.forNearbyStatics(r.x, r.y, (o) => {
       if (o.type === 'slowzone') checkRadar(o, prevY); // radar still clocks you in the air
       // Out Cold nod: clear the hot tub.
@@ -603,43 +555,21 @@
   function land() {
     const r = S.rider;
     r.z = 0; r.vz = 0;
-    const res = RULES.trick(trickInput(), landTolerance());
-    input.stopHeld = false; input.downHeld = false; // holding Up for a backflip shouldn't hard stop you on landing
-    if (!res.ok) { r.spin = 0; r.flip = 0; crash(pick(res.flips || Math.abs(r.flip) > 90 ? FS.CRASH_LINES.flip : FS.CRASH_LINES.spin), null); return; }
+    const res = RULES.trick(r, S.buffs.can > 0 ? 35 : 55); // liquid courage: wobblier landings
+    if (!res.ok) { r.spin = 0; crash(pick(FS.CRASH_LINES.spin), null); return; }
     r.mode = 'ride';
     if (res.half % 2 === 1) r.sw = !r.sw;
-    scoreTrick(res);
-    r.spin = 0; r.flip = 0;
-    S.trail.push(null);
-    rebaseTouch();
-  }
-
-  // Everything the trick rule needs, including stance (for frontside/backside names).
-  const trickInput = () => Object.assign({}, S.rider, { goofy: stance === 'goofy' });
-  const landTolerance = () => (S.buffs.can > 0 ? 35 : C.LAND_TOL); // liquid courage: wobblier landings
-  function scoreTrick(res) {
-    const r = S.rider;
-    if (res.quality === 'sketchy') { popup(r.x, r.y - 40, pick(FS.SKETCHY), 'bad'); S.stats.sketchy++; }
-    if (res.pts <= 0) return;
-    if (r.liftAir || WORLD.underLift(r.x, r.y)) { // the chairlift saw it: double points
+    if (res.pts > 0 && (r.liftAir || WORLD.underLift(r.x, r.y))) { // the chairlift saw it: double points
       res.pts *= 2; res.name = 'UNDER THE LIFT: ' + res.name; S.stats.liftTricks++;
     }
-    const label = `${res.quality === 'clean' ? 'CLEAN ' : ''}${res.name} +${S.sendT > 0 ? res.pts * 2 : res.pts}`;
-    addClout(res.pts);
-    popup(r.x, r.y - 26, label, 'trick');
-    fillSend(res.pts * C.SEND_PER_PT + (res.quality === 'clean' ? C.SEND_CLEAN : 0));
-    if (!S.stats.bestTrick || res.pts > S.stats.bestTrick.pts) S.stats.bestTrick = { name: res.name, pts: res.pts };
-  }
-
-  // ---------- The Full Send meter ----------
-  function fillSend(n) {
-    if (S.sendT > 0) return; // already sending
-    S.send = Math.min(100, S.send + n);
-    if (S.send >= 100) {
-      S.send = 0; S.sendT = C.SEND_T; S.stats.sends++;
-      say('FULL SEND!', 1.8);
-      burst(S.rider.x, S.rider.y, 24);
+    if (res.pts > 0) {
+      addClout(res.pts);
+      popup(r.x, r.y - 26, `${res.name} +${res.pts}`, 'trick');
+      if (!S.stats.bestTrick || res.pts > S.stats.bestTrick.pts) S.stats.bestTrick = { name: res.name, pts: res.pts };
     }
+    r.spin = 0;
+    S.trail.push(null);
+    rebaseTouch();
   }
 
   function requestStop() {
@@ -675,9 +605,8 @@
     if (obj && obj.type === 'burger') { addClout(-28); popup(obj.x, obj.y - 30, '-28', 'bad'); }
     if (obj && obj.type === 'hottub') { addHeat(10); popup(obj.x, obj.y - 30, 'SPLASH', 'say'); }
     r.mode = 'crash'; r.crashT = C.CRASH_T; r.speed = 0; r.z = 0; r.vz = 0;
-    r.stopping = false; r.spin = 0; r.flip = 0; r.crashObj = obj; r.rail = null; r.butterT = 0;
+    r.stopping = false; r.spin = 0; r.crashObj = obj; r.rail = null; r.butterT = 0;
     S.stats.crashes++;
-    S.send = Math.floor(S.send / 2); // crashing halves the Full Send meter
     say(text);
     burst(r.x, r.y, 18);
     S.trail.push(null);
@@ -955,17 +884,6 @@
     if (r.mode === 'air') deg += r.spin;
     if (r.mode === 'grind') deg = r.grindStyle.includes('50-50') ? 0 : 90;
     deg += r.butterSpin;
-    // Flipping: seen from above, the rider squashes as they go sideways and is upside down past halfway.
-    if (r.mode === 'air' && Math.abs(r.flip) > 15) {
-      const c = Math.cos(r.flip * DEG);
-      const tall = Math.max(3, Math.round(Math.abs(c) * 16));
-      const feet = c >= 0 ? by : by - tall, head = c >= 0 ? by - tall : by;
-      DRAW.board(sx, feet, deg, '#ffd23f');
-      px(sx - 3, Math.min(feet, head) + Math.round(tall / 2) - 3, 6, 6, jacket);
-      if (grabHeld()) px(sx + 3, Math.min(feet, head) + 2, 1, Math.max(2, tall - 4), jacket);
-      px(sx - 2, head - (c >= 0 ? 2 : 0), 4, 4, helmet);
-      return;
-    }
     if (!sunk) DRAW.board(sx, by, deg, '#ffd23f');
     else px(sx - 7, sy - 3, 14, 3, '#ffffff');
     // Facing downhill (heelside) shows the goggles; toeside shows the back of the helmet.
@@ -1163,14 +1081,6 @@
     ctx.fillStyle = S.heat > 70 ? '#e53935' : S.heat > 35 ? '#ff9800' : '#ffc107';
     ctx.fillRect(bx + 2, T + 14, ((bw - 4) * S.heat) / 100, 6);
 
-    // The Full Send meter: fills with tricks; when it's full you're sending (it drains as the 8 s run out).
-    const sending = S.sendT > 0, blink = Math.floor(S.simT * 8) % 2 === 0;
-    text(sending ? 'FULL SEND!' : 'FULL SEND', bx, T + 28, 7, sending && blink ? '#ff3d7f' : '#41557a');
-    ctx.fillStyle = '#0f1a2e'; ctx.fillRect(bx, T + 40, bw, 10);
-    ctx.fillStyle = '#ffffff'; ctx.fillRect(bx + 2, T + 42, bw - 4, 6);
-    ctx.fillStyle = sending ? (blink ? '#ff3d7f' : '#ffd400') : '#ff3d7f';
-    ctx.fillRect(bx + 2, T + 42, ((bw - 4) * (sending ? S.sendT / C.SEND_T : S.send / 100)), 6);
-
     // Patrol coming from behind: an arrow at the top edge.
     if (S.patrol) {
       const s = toScreen(S.patrol.x, S.patrol.y);
@@ -1262,8 +1172,6 @@
       ['Homies sprayed', st.homies],
       ['Speed traps', st.speedTraps],
       ['Stash meters', Math.round(st.stashM)],
-      ['Full sends', st.sends],
-      ['Sketchy landings', st.sketchy],
       ['Rails and boxes', st.grinds],
       ['Under-the-lift tricks', st.liftTricks],
       ['Pickups', st.pickups],

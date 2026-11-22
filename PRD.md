@@ -165,14 +165,7 @@ Optional crossover: Open Slop passes today's conditions (did it snow?) so the ga
 
 9. **M1 heat sources** (Nov 19): the **radar Slow Zone** (blow through over 25 mph for clout and heat, or slow down to cool off) and the **rope duck** (closed stash with bonus clout and heavy heat). Designs in CONTENT.md's Heat sources table. They join spraying, plowing and hitting people.
 
-10. **Tricks** (Nov 21):
-    - **Free spinning** stays: you spin as long as you hold or swipe, and you have to stop the rotation yourself.
-    - **Flips are in.** Up/Down in the air on a keyboard; swipe up (backflip) or down (frontflip) on a phone. Flips plus spins make corks, rodeos and mistys.
-    - **Directional grabs:** the grab depends on the direction you hold as you grab: nose, tail, Method, Indy, or Mute with no direction. On a phone, **a second finger grabs**, and where it touches picks the grab, so one thumb can swipe to spin without grabbing by accident.
-    - **Real trick names:** frontside and backside by stance and spin direction, Cab for switch frontside spins, corks, rodeos and doubles.
-    - **Clean or sketchy landings:** within 20° of square is clean (×1.2); up to 55° (35° on liquid courage) is sketchy (×0.6, with a roast); worse is a crash.
-    - **Full Send meter:** tricks, grinds and butters fill it. When it's full, **FULL SEND** mode lasts 8 s: double clout, a speed boost, and no new heat. Crashing halves the meter.
-    - **Not doing:** combos and stale-trick penalties.
+10. **Tricks stay simple** (Nov 21): a trick update (flips and corks, directional grabs, real trick names, clean/sketchy landings, a Full Send meter) was built, felt like it broke the game, and was reverted. **No flips or corks.** Tricks stay as M0 built them: free spins and a held grab. Any later trick change comes back one piece at a time.
 
 ## 12b. Open questions
 

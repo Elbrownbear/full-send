@@ -39,46 +39,18 @@
       return { heat: Math.round(10 + over * 0.5), clout: over * 5, text: `${mph} IN A ${lim}! +${over * 5}`, over };
     },
 
-    // Landing. spin = yaw degrees (+ = clockwise from above), flip = pitch degrees (+ = backflip).
-    // Spins must end near a multiple of 180 and flips near a multiple of 360:
-    // within CLEAN_DEG = clean (×1.2), within `tolerance` = sketchy (×0.6), worse = crash.
-    // goofy and wasSwitch decide frontside/backside and Cab (switch frontside).
-    trick({ spin = 0, flip = 0, grabT = 0, grabName = '', airT = 0, wasSwitch = false, goofy = false }, tolerance = FS.C.LAND_TOL) {
-      const n = Math.round(spin / 180), m = Math.round(flip / 360);
-      const err = Math.max(Math.abs(spin - n * 180), Math.abs(flip - m * 360));
-      if (err > tolerance) return { ok: false, err };
-      const quality = err <= FS.C.CLEAN_DEG ? 'clean' : 'sketchy';
-      const half = Math.abs(n), flips = Math.abs(m);
-      let pts = half * 90 + flips * 250;
-      if (grabT > 0.12) pts += Math.round(40 + grabT * 150);
+    // Landing: spins must finish within `tolerance` degrees (55, or 35 on liquid courage) of a clean 180, or it's a crash.
+    trick({ spin, grabT, grabName, airT, wasSwitch }, tolerance = 55) {
+      const n = Math.round(spin / 180);
+      if (Math.abs(spin - n * 180) > tolerance) return { ok: false };
+      const half = Math.abs(n);
+      let pts = 0;
+      const names = [];
+      if (half > 0) { pts += half * 90; names.push(String(half * 180)); }
+      if (grabT > 0.12) { pts += Math.round(40 + grabT * 150); names.push(grabName); }
       if (airT > 0.8) pts += Math.round((airT - 0.8) * 100);
-      if (pts > 0 && wasSwitch) pts *= 1.25;
-      if (pts > 0) pts *= quality === 'clean' ? 1.2 : 0.6;
-      return { ok: true, half, flips, quality, err, pts: r5(pts), name: FS.rules.trickName({ half, n, flips, m, grabT, grabName, wasSwitch, goofy }) };
-    },
-
-    // Real-ish trick names. Regular riders spinning counterclockwise (seen from above) are frontside; goofy is the mirror.
-    trickName({ half, n, flips, m, grabT, grabName, wasSwitch, goofy }) {
-      const deg = half * 180;
-      const front = half > 0 && ((n < 0) !== goofy);
-      const parts = [];
-      if (flips > 0) {
-        const times = flips === 1 ? '' : flips === 2 ? 'Double ' : flips === 3 ? 'Triple ' : `${flips}x `;
-        const back = m > 0;
-        let move;
-        if (half === 0) move = back ? 'Backflip' : 'Frontflip';
-        else if (back && !front) move = `Rodeo ${deg}`;          // backside + backflip
-        else if (!back && front) move = `Misty ${deg}`;          // frontside + frontflip
-        else move = `Cork ${deg}`;                                 // the other two: off-axis corks
-        let prefix = wasSwitch ? 'Switch ' : '';
-        if (move.startsWith('Rodeo')) prefix += 'Back ';           // "Back Rodeo 720", "Back Double Rodeo 1080"
-        parts.push(prefix + times + move);
-      } else if (half > 0) {
-        if (wasSwitch) parts.push(front ? (deg === 180 ? 'Half Cab' : `Cab ${deg}`) : `Switch Back ${deg}`);
-        else parts.push(`${front ? 'Front' : 'Back'} ${deg}`);
-      }
-      if (grabT > 0.12) parts.push(grabName || 'Mute');
-      return parts.join(' ') || 'Big air';
+      if (pts > 0 && wasSwitch) { pts *= 1.25; names.unshift('Switch'); }
+      return { ok: true, half, pts: r5(pts), name: names.join(' ') || 'Big air' };
     },
 
     // Sliding a rail or box for `secs` seconds. style: '50-50', 'Boardslide', 'Box 50-50', 'Box slide'.
