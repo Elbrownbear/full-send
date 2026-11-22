@@ -123,6 +123,11 @@
       if (inStash(x, y) && (type !== 'tree' || (Math.round(x) * 7 + Math.round(y) * 13) & 1)) return false;
       const d = FS.STATICS[type];
       if (inFlat(y) || inFlat(y - d.h)) return false; // catwalks are groomed and clear
+      // Early on, thin the trees out so the first stretch is easy to get going on.
+      if (type === 'tree' && y < C.EARLY_TREE_M * C.PX_PER_M) {
+        const h = ((Math.round(x) * 73856093) ^ (Math.round(y) * 19349663)) >>> 0;
+        if (h % 1000 >= C.EARLY_TREE_KEEP * 1000) return false;
+      }
       // Keep things apart by their sizes (boxes centered on each one's footprint).
       for (const s of statics) {
         if (Math.abs(s.x - x) < (s.w + d.w) / 2 + 8 && Math.abs((s.y - s.h / 2) - (y - d.h / 2)) < (s.h + d.h) / 2 + 10) return false;

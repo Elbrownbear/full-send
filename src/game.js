@@ -23,8 +23,9 @@
     dpr = Math.min(window.devicePixelRatio || 1, 3);
     const vw = window.innerWidth, vh = window.innerHeight;
     scale = Math.max(1, Math.min(vw / 320, vh / 420));
-    W = Math.min(480, Math.floor(vw / scale));
-    H = Math.min(720, Math.floor(vh / scale));
+    // At least 1 px: a hidden tab or a collapsed embed can report a 0-size window, and drawing a 0-size canvas throws.
+    W = Math.max(1, Math.min(480, Math.floor(vw / scale)));
+    H = Math.max(1, Math.min(720, Math.floor(vh / scale)));
     low.width = W; low.height = H;
     canvas.width = Math.round(vw * dpr); canvas.height = Math.round(vh * dpr);
     canvas.style.width = vw + 'px'; canvas.style.height = vh + 'px';

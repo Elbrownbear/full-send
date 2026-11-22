@@ -33,6 +33,9 @@
     MPH: 0.25,           // px/s to the mph shown on screen
     PX_PER_M: 8,
     CHUNK: 256,
+    EARLY_TREE_M: 500,     // before this distance...
+    EARLY_TREE_KEEP: 0.35, // ...only this share of tree spots are used. Measured: 0.35 gives half the trees (171 → 83),
+                           // because skipped spots free up room that other trees then fill. (Jordan, Nov 21: "50% less trees before 500 m")
     ZONE_ROWS: 2,        // chunks per zone band (2 × 256 px = 64 m)
 
     // Heat and Ski Patrol (PRD §4)
@@ -56,11 +59,13 @@
     // M2: snowboard feel
     LEAN_PX: 28,           // pull your thumb this far down to lean back
     // Catwalks eased twice Nov 20: first 35% (3.9–5.1 s → 2.5–3.3 s), then about 25% more (average ~2.9 s → ~2.15 s).
+    // Nov 21: catwalk drag cut 25% (32 → 24), skating pushes 15% stronger (push 32 → 37, top skate speed 110 → 126),
+    // and you unstrap sooner (SKATE_AT 40). Slow entries now take ~2.2 s instead of ~2.8 s.
     // Hit one at full speed and you coast across; come in slow and you still skate.
-    FLAT_FRICTION: 32,     // catwalks: no pull, extra drag
-    SKATE_AT: 14,          // below this speed on a catwalk you unstrap and skate
-    SKATE_PUSH: 32,        // each push adds this much speed
-    SKATE_MAX: 110,
+    FLAT_FRICTION: 24,     // catwalks: no pull, extra drag
+    SKATE_AT: 40,          // below this speed on a catwalk you unstrap and skate (was 14; raised Nov 21 so you stop crawling and start pushing sooner)
+    SKATE_PUSH: 37,        // each push adds this much speed
+    SKATE_MAX: 126,
     POW_DRAG: 0.9,         // deep snow bogs you down...
     POW_DRAG_LEAN: 0.05,   // ...unless you lean back and float
     WELL_T: 2.4,           // stuck in a tree well this long, minus digging
