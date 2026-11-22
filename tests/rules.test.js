@@ -55,11 +55,29 @@ test('radar Slow Zone: under the limit cools heat, over the limit pays clout and
   assert.match(over.text, /47 IN A 25/);
 });
 
+test('landings: clean pays more than sketchy for the same trick', () => {
+  const clean = rules.trick({ spin: 365, airT: 1 });
+  const sketchy = rules.trick({ spin: 405, airT: 1 });
+  assert.strictEqual(clean.quality, 'clean');
+  assert.strictEqual(sketchy.quality, 'sketchy');
+  assert.ok(clean.pts > sketchy.pts);
+});
+
+test('trick names: frontside/backside flip with stance, Cab for switch frontside, Tweaked for long grabs', () => {
+  assert.strictEqual(rules.trick({ spin: -540, airT: 1 }).name, 'Front 540');
+  assert.strictEqual(rules.trick({ spin: -540, airT: 1, goofy: true }).name, 'Back 540');
+  assert.strictEqual(rules.trick({ spin: -180, airT: 1, wasSwitch: true }).name, 'Half Cab');
+  assert.strictEqual(rules.trick({ spin: -720, airT: 1, wasSwitch: true }).name, 'Cab 720');
+  assert.strictEqual(rules.trick({ spin: 0, airT: 1, grabT: 0.8, grabName: 'Method' }).name, 'Tweaked Method');
+  assert.strictEqual(rules.trick({ spin: 0, airT: 1, grabT: 0.3, grabName: 'Japan', wasSwitch: true }).name, 'Switch Japan');
+});
+
 test('tricks: a clean switch 360 with a grab scores; over-rotation crashes', () => {
   const t = rules.trick({ spin: 350, grabT: 0.4, grabName: 'Indy', airT: 1, wasSwitch: true });
   assert.ok(t.ok);
   assert.strictEqual(t.half, 2);
-  assert.strictEqual(t.name, 'Switch 360 Indy');
+  assert.strictEqual(t.name, 'Switch Back 360 Indy');
+  assert.strictEqual(t.quality, 'clean');
   assert.ok(t.pts > 0 && t.pts % 5 === 0);
   assert.strictEqual(rules.trick({ spin: 270, grabT: 0, grabName: '', airT: 1, wasSwitch: false }).ok, false);
 });

@@ -166,6 +166,7 @@ Optional crossover: Open Slop passes today's conditions (did it snow?) so the ga
 9. **M1 heat sources** (Nov 19): the **radar Slow Zone** (blow through over 25 mph for clout and heat, or slow down to cool off) and the **rope duck** (closed stash with bonus clout and heavy heat). Designs in CONTENT.md's Heat sources table. They join spraying, plowing and hitting people.
 
 10. **Tricks stay simple** (Nov 21): a trick update (flips and corks, directional grabs, real trick names, clean/sketchy landings, a Full Send meter) was built, felt like it broke the game, and was reverted. **No flips or corks.** Tricks stay as M0 built them: free spins and a held grab. Any later trick change comes back one piece at a time.
+    - **Back the same day (Nov 21):** clean/sketchy/crash landings, the Full Send meter, and real names: Front/Back by spin direction and stance, Half Cab / Cab / Switch Back, 15 grab names (Japan, Roast Beef, Crail, Canadian Bacon, Tindy…) and "Tweaked" for a long grab. Still no flips, and the grab is still picked at random (no directional grab controls).
 
 ## 12b. Open questions
 

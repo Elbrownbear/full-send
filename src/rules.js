@@ -39,18 +39,35 @@
       return { heat: Math.round(10 + over * 0.5), clout: over * 5, text: `${mph} IN A ${lim}! +${over * 5}`, over };
     },
 
-    // Landing: spins must finish within `tolerance` degrees (55, or 35 on liquid courage) of a clean 180, or it's a crash.
-    trick({ spin, grabT, grabName, airT, wasSwitch }, tolerance = 55) {
+    // Landing. spin = degrees turned in the air (+ = clockwise seen from above). It must end near a multiple of 180:
+    // within CLEAN_DEG = clean (×1.2), within `tolerance` = sketchy (×0.6), worse = crash.
+    // Liquid courage tightens the tolerance. No flips (PRD §12 #10).
+    trick({ spin = 0, grabT = 0, grabName = '', airT = 0, wasSwitch = false, goofy = false }, tolerance = FS.C.LAND_TOL) {
       const n = Math.round(spin / 180);
-      if (Math.abs(spin - n * 180) > tolerance) return { ok: false };
+      const err = Math.abs(spin - n * 180);
+      if (err > tolerance) return { ok: false, err };
+      const quality = err <= FS.C.CLEAN_DEG ? 'clean' : 'sketchy';
       const half = Math.abs(n);
-      let pts = 0;
-      const names = [];
-      if (half > 0) { pts += half * 90; names.push(String(half * 180)); }
-      if (grabT > 0.12) { pts += Math.round(40 + grabT * 150); names.push(grabName); }
+      let pts = half * 90;
+      if (grabT > 0.12) pts += Math.round(40 + grabT * 150);
       if (airT > 0.8) pts += Math.round((airT - 0.8) * 100);
-      if (pts > 0 && wasSwitch) { pts *= 1.25; names.unshift('Switch'); }
-      return { ok: true, half, pts: r5(pts), name: names.join(' ') || 'Big air' };
+      if (pts > 0 && wasSwitch) pts *= 1.25;
+      if (pts > 0) pts *= quality === 'clean' ? 1.2 : 0.6;
+      return { ok: true, half, quality, err, pts: r5(pts), name: FS.rules.trickName({ half, n, grabT, grabName, wasSwitch, goofy }) };
+    },
+
+    // Real trick names. A regular rider spinning counterclockwise (seen from above) is frontside; goofy is the mirror.
+    // Switch frontside is a Cab (Half Cab for 180), switch backside is "Switch Back". A grab held long gets "Tweaked".
+    trickName({ half, n, grabT = 0, grabName = '', wasSwitch = false, goofy = false }) {
+      const deg = half * 180;
+      const front = half > 0 && ((n < 0) !== goofy);
+      const parts = [];
+      if (half > 0) {
+        if (wasSwitch) parts.push(front ? (deg === 180 ? 'Half Cab' : `Cab ${deg}`) : `Switch Back ${deg}`);
+        else parts.push(`${front ? 'Front' : 'Back'} ${deg}`);
+      } else if (wasSwitch && grabT > 0.12) parts.push('Switch');
+      if (grabT > 0.12) parts.push((grabT >= FS.C.TWEAK_T ? 'Tweaked ' : '') + (grabName || 'Mute'));
+      return parts.join(' ') || 'Big air';
     },
 
     // Sliding a rail or box for `secs` seconds. style: '50-50', 'Boardslide', 'Box 50-50', 'Box slide'.

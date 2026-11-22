@@ -25,6 +25,14 @@
     KICK_GAIN: 0.45,
     GZ: 320,             // gravity in the air
     SPIN_RATE: 600,      // degrees per second while holding a spin key
+    CLEAN_DEG: 20,       // land within this many degrees of square: clean (×1.2)
+    LAND_TOL: 55,        // ...within this: sketchy (×0.6). Worse: crash. Liquid courage tightens it to 35.
+    TWEAK_T: 0.6,        // hold a grab this long (s) and it's "Tweaked"
+    SEND_PER_PT: 0.1,    // Full Send meter: fill per trick point
+    SEND_CLEAN: 5,       // extra fill for a clean landing
+    SEND_DECAY: 1.5,     // meter lost per second
+    SEND_T: 8,           // FULL SEND mode length (s): double clout, faster, no new heat
+    SEND_SPEED: 40,      // extra top speed in FULL SEND mode
     TOUCH_SPIN: 1.6,     // degrees per pixel of swipe in the air
     TOUCH_STEP_PX: 18,   // pixels of drag per steering step
     FLICK_PX: 30,        // upward flick distance (in ~150 ms) for a hard stop

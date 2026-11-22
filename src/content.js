@@ -4,7 +4,9 @@
   'use strict';
   const FS = window.FS;
 
-  FS.GRABS = ['Indy', 'Melon', 'Method', 'Stalefish', 'Mute', 'Nose grab', 'Tail grab'];
+  // Real grab names; one is picked each time you leave the ground. Tindy (the half-tail, half-Indy grab everyone does by accident) is the joke one.
+  FS.GRABS = ['Indy', 'Melon', 'Method', 'Stalefish', 'Mute', 'Nose grab', 'Tail grab', 'Japan', 'Roast Beef', 'Crail', 'Seatbelt', 'Lien', 'Truck Driver', 'Canadian Bacon', 'Tindy'];
+  FS.SKETCHY = ['Sketchy!', 'Saved it', 'Butt check', 'Hand drag', 'Barely']; // landed, but not pretty
 
   FS.CRASH_LINES = {
     tree: ['Tree: 1, you: 0', 'Hugged a tree', 'Jerry of the Day nominee', 'Sent it. Did not land it.'],
@@ -12,7 +14,7 @@
     stump: ['Stumped', 'Caught an edge'],
     person: ['Yard sale!', 'Yard sale!', 'Jerry of the Day nominee'],
     bullet: ['Got smoked by a cowboy', 'Shot by a guy in roost guards'],
-    spin: ['Over-rotated!', 'Caught an edge'],
+    spin: ['Over-rotated!', 'Caught an edge', 'Under-rotated!', 'Landed sideways'],
     shark: ['Core shot!', 'Shark attack', 'There was a rock under there'],
     rail: ['Racked on the rail', 'Ollie ONTO it', 'Rail: 1, you: 0'],
     box: ['Ate the box', 'Ollie ONTO it'],

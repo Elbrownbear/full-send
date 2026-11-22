@@ -44,7 +44,7 @@
     Object.assign(S, {
       seed: URL_SEED ?? ((Math.random() * 2 ** 31) | 0),
       chunks: new Map(), spawned: new Set(), ropes: new Map(), catwalks: new Map(), lifts: new Map(),
-      buffs: { wax: 0, can: 0, burrito: false }, cloutBank: 0, heckleT: 0, whiteT: 0, cordWarned: false, palmSeen: false,
+      buffs: { wax: 0, can: 0, burrito: false }, cloutBank: 0, send: 0, sendT: 0, heckleT: 0, whiteT: 0, cordWarned: false, palmSeen: false,
       npcs: [], particles: [], popups: [], trail: [], bullets: [],
       rider: {
         x: 0, y: 0, z: 0, vz: 0, h: MID, speed: 0, mode: 'ride',
@@ -58,13 +58,14 @@
       clout: 0, heat: 0, dist: 0, caption: null, zoneToast: null, lastZone: null,
       hintT: 0, simT: 0, camX: 0, camY: 0, pruneT: 0, caughtT: 0,
       stash: { in: false, lastY: 0, bank: 0, earned: 0 },
-      stats: { sprayed: 0, homies: 0, plowed: 0, crashes: 0, speedTraps: 0, worstMph: 0, stashM: 0, bestTrick: null, topMph: 0, shaken: 0, shot: false, wells: 0, skated: 0, grinds: 0, found: [], tycoon: false, pickups: 0, liftTricks: 0 },
+      stats: { sprayed: 0, homies: 0, plowed: 0, crashes: 0, speedTraps: 0, worstMph: 0, stashM: 0, bestTrick: null, topMph: 0, shaken: 0, shot: false, wells: 0, skated: 0, grinds: 0, found: [], tycoon: false, pickups: 0, liftTricks: 0, sends: 0, sketchy: 0 },
     });
   }
 
-  const addHeat = (n) => { S.heat = clamp(S.heat + n, 0, 100); };
+  const addHeat = (n) => { if (n > 0 && S.sendT > 0) return; S.heat = clamp(S.heat + n, 0, 100); }; // FULL SEND: no new heat
   // frac = a trickle (like the drone filming you): bank fractions and pay out in fives.
   function addClout(n, frac) {
+    if (S.sendT > 0 && n > 0) n *= 2; // FULL SEND: double clout
     if (!frac) { S.clout += n; return; }
     S.cloutBank += n;
     if (S.cloutBank >= 5) { const k = Math.floor(S.cloutBank / 5) * 5; S.cloutBank -= k; S.clout += k; }
@@ -275,6 +276,11 @@
     if (r.butterSpin > 0) r.butterSpin = Math.max(0, r.butterSpin - C.BUTTER_SPIN * dt);
     terrainToasts();
     if (r.mode !== 'crash' && r.mode !== 'stuck') { checkPickups(); setPieces(dt); }
+    if (S.sendT > 0) {
+      S.sendT -= dt;
+      if (Math.random() < 0.7) S.particles.push({ x: r.x + (Math.random() - 0.5) * 8, y: r.y, z: 4 + r.z, vx: (Math.random() - 0.5) * 30, vy: -40, vz: 30, life: 0.5, c: pick(['#ff3d7f', '#ffd400', '#ffffff']) });
+      if (S.sendT <= 0) popup(r.x, r.y - 30, 'SEND OVER', 'say');
+    } else S.send = Math.max(0, S.send - C.SEND_DECAY * dt);
     if (S.buffs.wax > 0) S.buffs.wax -= dt;
     if (S.buffs.can > 0) S.buffs.can -= dt;
     if (S.whiteT > 0) S.whiteT -= dt;
@@ -321,7 +327,8 @@
       if (S.onIce) acc += C.ICE_GRIP * C.DRAG * r.speed; // ice is fast
       if (S.onCord) acc += 0.4 * C.DRAG * r.speed;       // so is fresh corduroy
       if (S.buffs.wax > 0) acc += 0.25 * C.DRAG * r.speed; // hot wax
-      r.speed = clamp(r.speed + acc * dt, 0, C.MAX + (S.buffs.wax > 0 ? 30 : 0));
+      if (S.sendT > 0 && pull > 0.3) acc += 80;             // FULL SEND: faster
+      r.speed = clamp(r.speed + acc * dt, 0, C.MAX + (S.buffs.wax > 0 ? 30 : 0) + (S.sendT > 0 ? C.SEND_SPEED : 0));
       // Out of speed on a catwalk: unstrap and skate.
       if (flat && r.speed < C.SKATE_AT) { startSkate(); return; }
       updateButter(dt, flat || pow);
@@ -421,7 +428,7 @@
     if (!noButter && leanHeld() && canButter()) { r.butterT += dt; return; }
     if (r.butterT > 0) {
       const res = RULES.butter(r.butterT);
-      if (res.pts > 0) { addClout(res.pts); popup(r.x, r.y - 26, `${res.name} +${res.pts}`, 'trick'); }
+      if (res.pts > 0) { addClout(res.pts); fillSend(res.pts * C.SEND_PER_PT); popup(r.x, r.y - 26, `${res.name} +${res.pts}`, 'trick'); }
       r.butterT = 0;
     }
   }
@@ -430,6 +437,7 @@
     r.sw = !r.sw;
     r.butterSpin = 180;
     addClout(RULES.BUTTER_180);
+    fillSend(RULES.BUTTER_180 * C.SEND_PER_PT);
     popup(r.x, r.y - 26, `${r.sw ? 'Butter 180 to switch' : 'Butter 180'} +${RULES.BUTTER_180}`, 'trick');
   }
 
@@ -485,10 +493,10 @@
   }
   function startGrind(o) {
     const r = S.rider;
-    const res = RULES.trick(r, S.buffs.can > 0 ? 35 : 55);
+    const res = RULES.trick(trickInput(), landTolerance());
     if (!res.ok) { r.spin = 0; crash(pick(FS.CRASH_LINES.spin), o); return; }
     if (res.half % 2 === 1) r.sw = !r.sw;
-    if (res.pts > 0) { addClout(res.pts); popup(r.x, r.y - 30, `${res.name} +${res.pts}`, 'trick'); }
+    scoreTrick(res);
     r.speed = Math.max(90, Math.hypot(r.airVX, r.airVY));
     r.mode = 'grind'; r.rail = o; r.z = o.ht; r.vz = 0; r.x = o.x; r.grindT = 0; r.spin = 0;
     const straight = r.h === MID;
@@ -508,6 +516,7 @@
     const r = S.rider;
     const res = RULES.grind(r.grindT, r.grindStyle, r.wasSwitch);
     addClout(res.pts);
+    fillSend(res.pts * C.SEND_PER_PT);
     S.stats.grinds++;
     popup(r.x, r.y - 30, `${res.name} +${res.pts}`, 'trick');
     if (!S.stats.bestTrick || res.pts > S.stats.bestTrick.pts) S.stats.bestTrick = { name: res.name, pts: res.pts };
@@ -555,21 +564,44 @@
   function land() {
     const r = S.rider;
     r.z = 0; r.vz = 0;
-    const res = RULES.trick(r, S.buffs.can > 0 ? 35 : 55); // liquid courage: wobblier landings
+    const res = RULES.trick(trickInput(), landTolerance());
     if (!res.ok) { r.spin = 0; crash(pick(FS.CRASH_LINES.spin), null); return; }
     r.mode = 'ride';
     if (res.half % 2 === 1) r.sw = !r.sw;
-    if (res.pts > 0 && (r.liftAir || WORLD.underLift(r.x, r.y))) { // the chairlift saw it: double points
-      res.pts *= 2; res.name = 'UNDER THE LIFT: ' + res.name; S.stats.liftTricks++;
-    }
-    if (res.pts > 0) {
-      addClout(res.pts);
-      popup(r.x, r.y - 26, `${res.name} +${res.pts}`, 'trick');
-      if (!S.stats.bestTrick || res.pts > S.stats.bestTrick.pts) S.stats.bestTrick = { name: res.name, pts: res.pts };
-    }
+    scoreTrick(res);
     r.spin = 0;
     S.trail.push(null);
     rebaseTouch();
+  }
+
+  // Everything the trick rule needs, including stance (for frontside/backside names).
+  const trickInput = () => Object.assign({}, S.rider, { goofy: stance === 'goofy' });
+  const landTolerance = () => (S.buffs.can > 0 ? 35 : C.LAND_TOL); // liquid courage: wobblier landings
+  function scoreTrick(res) {
+    const r = S.rider;
+    if (res.quality === 'sketchy') { popup(r.x, r.y - 40, pick(FS.SKETCHY), 'bad'); S.stats.sketchy++; }
+    if (res.pts <= 0) return;
+    if (res.quality === 'clean') res.name = 'CLEAN ' + res.name;
+    if (r.liftAir || WORLD.underLift(r.x, r.y)) { // the chairlift saw it: double points
+      res.pts *= 2; res.name = 'UNDER THE LIFT: ' + res.name; S.stats.liftTricks++;
+    }
+    const label = `${res.name} +${S.sendT > 0 ? res.pts * 2 : res.pts}`;
+    addClout(res.pts);
+    popup(r.x, r.y - 26, label, 'trick');
+    fillSend(res.pts * C.SEND_PER_PT + (res.quality === 'clean' ? C.SEND_CLEAN : 0));
+    if (!S.stats.bestTrick || res.pts > S.stats.bestTrick.pts) S.stats.bestTrick = { name: res.name, pts: res.pts };
+  }
+
+  // ---------- The Full Send meter ----------
+  // Tricks, grinds and butters fill it. Full = FULL SEND mode: double clout, extra speed, no new heat for SEND_T seconds.
+  function fillSend(n) {
+    if (S.sendT > 0) return; // already sending
+    S.send = Math.min(100, S.send + n);
+    if (S.send >= 100) {
+      S.send = 0; S.sendT = C.SEND_T; S.stats.sends++;
+      say('FULL SEND!', 1.8);
+      burst(S.rider.x, S.rider.y, 24);
+    }
   }
 
   function requestStop() {
@@ -607,6 +639,7 @@
     r.mode = 'crash'; r.crashT = C.CRASH_T; r.speed = 0; r.z = 0; r.vz = 0;
     r.stopping = false; r.spin = 0; r.crashObj = obj; r.rail = null; r.butterT = 0;
     S.stats.crashes++;
+    S.send = Math.floor(S.send / 2); // crashing halves the Full Send meter
     say(text);
     burst(r.x, r.y, 18);
     S.trail.push(null);
@@ -1081,6 +1114,14 @@
     ctx.fillStyle = S.heat > 70 ? '#e53935' : S.heat > 35 ? '#ff9800' : '#ffc107';
     ctx.fillRect(bx + 2, T + 14, ((bw - 4) * S.heat) / 100, 6);
 
+    // The Full Send meter: fills with tricks; when it's full you're sending (it drains as the 8 s run out).
+    const sending = S.sendT > 0, blink = Math.floor(S.simT * 8) % 2 === 0;
+    text(sending ? 'FULL SEND!' : 'FULL SEND', bx, T + 28, 7, sending && blink ? '#ff3d7f' : '#41557a');
+    ctx.fillStyle = '#0f1a2e'; ctx.fillRect(bx, T + 40, bw, 10);
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(bx + 2, T + 42, bw - 4, 6);
+    ctx.fillStyle = sending ? (blink ? '#ff3d7f' : '#ffd400') : '#ff3d7f';
+    ctx.fillRect(bx + 2, T + 42, ((bw - 4) * (sending ? S.sendT / C.SEND_T : S.send / 100)), 6);
+
     // Patrol coming from behind: an arrow at the top edge.
     if (S.patrol) {
       const s = toScreen(S.patrol.x, S.patrol.y);
@@ -1093,7 +1134,20 @@
     for (const p of S.popups) {
       const s = toScreen(p.x, p.y), k = 1 - p.t / p.life;
       ctx.globalAlpha = Math.min(1, p.t * 2.5);
-      text(p.text, s.x, s.y - k * 24, p.kind === 'say' ? 8 : 9, POP_COLORS[p.kind], 'center');
+      // Long trick names wrap onto two lines and shrink to fit a phone screen
+      // (the font is monospace: each letter is `size` wide), and stay on screen.
+      const room = gw - 16, big = p.kind === 'say' ? 8 : 9;
+      let lines = [p.text];
+      if (p.text.length * 7 > room) {
+        const mid = p.text.length / 2;
+        let cut = -1;
+        for (let i = 0; i < p.text.length; i++) if (p.text[i] === ' ' && (cut < 0 || Math.abs(i - mid) < Math.abs(cut - mid))) cut = i;
+        if (cut > 0) lines = [p.text.slice(0, cut), p.text.slice(cut + 1)];
+      }
+      const longest = Math.max(...lines.map((l) => l.length));
+      const size = Math.max(6, Math.min(big, Math.floor(room / longest)));
+      const half = (longest * size) / 2, px0 = clamp(s.x, offX + 8 + half, offX + gw - 8 - half);
+      lines.forEach((l, i) => text(l, px0, s.y - k * 24 + (i - lines.length + 1) * (size + 4), size, POP_COLORS[p.kind], 'center'));
     }
     ctx.globalAlpha = 1;
 
@@ -1172,6 +1226,8 @@
       ['Homies sprayed', st.homies],
       ['Speed traps', st.speedTraps],
       ['Stash meters', Math.round(st.stashM)],
+      ['Full sends', st.sends],
+      ['Sketchy landings', st.sketchy],
       ['Rails and boxes', st.grinds],
       ['Under-the-lift tricks', st.liftTricks],
       ['Pickups', st.pickups],
